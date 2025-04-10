@@ -34,6 +34,13 @@ sodium library
 
 `composer require nwidart/laravel-modules`
 
+[Laravel Modules With Livewire](https://github.com/mhmiton/laravel-modules-livewire)
+```
+composer require mhmiton/laravel-modules-livewire
+php artisan vendor:publish --provider="Mhmiton\LaravelModulesLivewire\LaravelModulesLivewireServiceProvider"
+```
+
+
 ### Laravel Ciphersweet
 
 [Laravel Ciphersweet](https://github.com/spatie/laravel-ciphersweet)
