@@ -1,6 +1,5 @@
 {
     "IAM": true,
     "Core": true,
-    "Auth": true,
-    "NCDRA": true
+    "Auth": true
 }
