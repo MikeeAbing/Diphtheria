@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\IAM\Http\Controllers\RoleController;
 use Modules\IAM\Http\Controllers\PermissionController;
 use Modules\IAM\Http\Controllers\UserController;
+use Modules\IAM\Http\Controllers\IAMController;
 
 Route::prefix('iam')
     ->name('iam.')
@@ -14,4 +15,5 @@ Route::prefix('iam')
         // Permissions Resource
         Route::resource('permissions', PermissionController::class);
         Route::resource('users', UserController::class);
+        Route::resource('tests', IAMController::class);
     });
