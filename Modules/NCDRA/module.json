@@ -1,0 +1,11 @@
+{
+    "name": "NCDRA",
+    "alias": "ncdra",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\NCDRA\\Providers\\NCDRAServiceProvider"
+    ],
+    "files": []
+}

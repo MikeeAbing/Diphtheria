@@ -1,0 +1,30 @@
+{
+    "name": "doh/ncdra",
+    "description": "",
+    "authors": [
+        {
+            "name": "DOH KMITS",
+            "email": "noreply.ihomis@doh.gov.ph"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\NCDRA\\": "app/",
+            "Modules\\NCDRA\\Database\\Factories\\": "database/factories/",
+            "Modules\\NCDRA\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\NCDRA\\Tests\\": "tests/"
+        }
+    }
+}
