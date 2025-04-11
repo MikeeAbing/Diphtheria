@@ -4,9 +4,14 @@ import laravel from 'laravel-vite-plugin';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 //import obfuscatorPlugin from "vite-plugin-javascript-obfuscator";
-import { viteObfuscateFile } from "vite-plugin-obfuscator";
+import { viteObfuscateFile } from 'vite-plugin-obfuscator';
 
 export default defineConfig({
+
+    // comment this block if cors error occurred
+    server: {
+        host: 'localhost',
+    },
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
@@ -24,7 +29,7 @@ export default defineConfig({
             debugProtection: false,
             debugProtectionInterval: 0,
             disableConsoleOutput: true,
-            identifierNamesGenerator: "hexadecimal",
+            identifierNamesGenerator: 'hexadecimal',
             log: false,
             numbersToExpressions: true,
             renameGlobals: false,
@@ -33,14 +38,14 @@ export default defineConfig({
             splitStrings: true,
             splitStringsChunkLength: 10,
             stringArray: true,
-            stringArrayEncoding: ["base64"],
+            stringArrayEncoding: ['base64'],
             stringArrayIndexShift: true,
             stringArrayRotate: true,
             stringArrayShuffle: true,
             stringArrayWrappersCount: 2,
             stringArrayWrappersChainedCalls: true,
             stringArrayWrappersParametersMaxCount: 4,
-            stringArrayWrappersType: "function",
+            stringArrayWrappersType: 'function',
             stringArrayThreshold: 0.75,
             transformObjectKeys: true,
             unicodeEscapeSequence: false,
