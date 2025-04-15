@@ -1,0 +1,11 @@
+{
+    "name": "DIPH",
+    "alias": "diph",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\DIPH\\Providers\\DIPHServiceProvider"
+    ],
+    "files": []
+}

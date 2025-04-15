@@ -60,7 +60,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('User::User/Create');
+        return Inertia::render('IAM::User/create');
     }
 
     /**

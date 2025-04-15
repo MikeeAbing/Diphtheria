@@ -1,0 +1,30 @@
+{
+    "name": "doh/diph",
+    "description": "",
+    "authors": [
+        {
+            "name": "DOH KMITS",
+            "email": "noreply.ihomis@doh.gov.ph"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\DIPH\\": "app/",
+            "Modules\\DIPH\\Database\\Factories\\": "database/factories/",
+            "Modules\\DIPH\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\DIPH\\Tests\\": "tests/"
+        }
+    }
+}

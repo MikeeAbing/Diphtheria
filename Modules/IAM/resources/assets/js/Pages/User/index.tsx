@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, User } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 
 import {
     ColumnDef,
@@ -146,6 +146,7 @@ export default function User() {
             rowSelection,
         },
     });
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Users" />
@@ -158,10 +159,13 @@ export default function User() {
                         setParams={setParams}
                         setTimeDebounce={setTimeDebounce}
                     />
-                    <Button className="h-8 px-2 lg:px-3">
-                        <PlusCircleIcon className="h-4 w-4" />
-                        Add
-                    </Button>
+                    <Link href="/iam/users/create">
+                        <Button className="h-8 px-2 lg:px-3">
+                            <PlusCircleIcon className="h-4 w-4" />
+                            Add
+                        </Button>
+                    </Link>
+
                     {/* <Input
                         placeholder="Filter user..."
                         value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}

@@ -4201,16 +4201,16 @@
         },
         {
             "name": "spatie/laravel-csp",
-            "version": "3.8.0",
+            "version": "3.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-csp.git",
-                "reference": "395ec40d2e7aa9713af1d45096b73a3a57c7b2c4"
+                "reference": "b187ff9adde0986509c51c2d4519bde0b2e74e21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-csp/zipball/395ec40d2e7aa9713af1d45096b73a3a57c7b2c4",
-                "reference": "395ec40d2e7aa9713af1d45096b73a3a57c7b2c4",
+                "url": "https://api.github.com/repos/spatie/laravel-csp/zipball/b187ff9adde0986509c51c2d4519bde0b2e74e21",
+                "reference": "b187ff9adde0986509c51c2d4519bde0b2e74e21",
                 "shasum": ""
             },
             "require": {
@@ -4274,7 +4274,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/laravel-csp/tree/3.8.0"
+                "source": "https://github.com/spatie/laravel-csp/tree/3.8.1"
             },
             "funding": [
                 {
@@ -4282,7 +4282,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2025-04-08T13:13:05+00:00"
+            "time": "2025-04-10T12:38:38+00:00"
         },
         {
             "name": "spatie/laravel-package-tools",
@@ -10270,12 +10270,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
