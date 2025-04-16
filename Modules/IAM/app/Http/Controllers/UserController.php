@@ -87,7 +87,7 @@ class UserController extends Controller
             $user->assignRole($roleIds);
         } */
 
-        return redirect(route('admin.users.index'))->with('success', 'User created.');
+        return redirect(route('iam.users.index'))->with('success', 'User created.');
     }
 
     /**
@@ -98,7 +98,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return Inertia::render('User::User/Edit', [
+        return Inertia::render('IAM::User/edit', [
             'user' => $user->load('roles:id,name'),
         ]);
     }

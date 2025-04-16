@@ -28,6 +28,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 import useDebouncedSearch from '@/hooks/use-debounced-search';
 import useSorting from '@/hooks/use-sorting';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -36,7 +38,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function User() {
+export default function User({success}) {
+    useEffect(()=>{
+        if(success){
+            toast('User is successfully registered!');
+        }
+    }, [success])
+
     const { data: users, links, meta } = usePage().props.users;
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -118,7 +126,7 @@ export default function User() {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
+                            <Link href="/iam/users/edit"><DropdownMenuItem>Edit</DropdownMenuItem></Link>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>Delete</DropdownMenuItem>
                         </DropdownMenuContent>

@@ -4,19 +4,23 @@ import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { UserForm, userFormSchema } from './data/schema';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Add User',
-        href: '/iam/users/create',
+        title: 'Edit User',
+        href: '/iam/users/edit',
     },
 ];
 
-export default function create() {
+export default function edit() {
+    const { user } = usePage().props;
+
+    // console.log(user);
+
     const form = useForm<UserForm>({
         resolver: zodResolver(userFormSchema),
         defaultValues: {
@@ -41,9 +45,9 @@ export default function create() {
                 toast('User is successfully registered!');
                 form.reset();
             },
-            onError: (errors)=> {
-                console.log("Validation failed:", errors);
-            }
+            onError: (errors) => {
+                console.log('Validation failed:', errors);
+            },
         });
     }
 
