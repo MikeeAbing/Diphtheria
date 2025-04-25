@@ -39,7 +39,7 @@ class UserFormRequest extends FormRequest
             'sex' => ['nullable'],
             //'gender' => ['nullable'],
             'birthdate' => ['nullable'],
-            'email' => ['required', new CipherUserUnique($this->user)], //Rule::unique('users', 'email')->ignore($this->user)
+            'email' => ['required', Rule::unique('users', 'email')->ignore($this->user)], //['required', new CipherUserUnique($this->user)]
             'mobile_number' => ['required'],
             //'phone_number' => ['nullable'],
             'photo' => ['nullable', 'image'],

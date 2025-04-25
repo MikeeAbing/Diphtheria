@@ -38,12 +38,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function User({success}) {
-    useEffect(()=>{
-        if(success){
+export default function User({ success }) {
+    useEffect(() => {
+        if (success) {
             toast('User is successfully registered!');
         }
-    }, [success])
+    }, [success]);
 
     const { data: users, links, meta } = usePage().props.users;
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -126,7 +126,9 @@ export default function User({success}) {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <Link href="/iam/users/edit"><DropdownMenuItem>Edit</DropdownMenuItem></Link>
+                            <Link href={`/iam/users/${row.original.id}/edit`}>
+                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                            </Link>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>Delete</DropdownMenuItem>
                         </DropdownMenuContent>

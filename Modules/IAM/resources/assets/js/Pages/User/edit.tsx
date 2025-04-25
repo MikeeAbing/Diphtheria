@@ -9,26 +9,29 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { UserForm, userFormSchema } from './data/schema';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Edit User',
-        href: '/iam/users/edit',
-    },
-];
+
 
 export default function edit() {
-    const { user } = usePage().props;
 
-    // console.log(user);
+    const {user} = usePage().props;
+
+    console.log(user);
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Edit User',
+            href: `/iam/users/${user.id}/edit`,
+        },
+    ];
 
     const form = useForm<UserForm>({
         resolver: zodResolver(userFormSchema),
         defaultValues: {
-            first_name: '',
-            last_name: '',
-            mobile_number: '',
-            username: '',
-            email: '',
+            first_name: user.first_name || '',
+            last_name: user.last_name || '',
+            mobile_number: user.mobile_number || '',
+            username: user.username || '',
+            email: user.email || '',
             password: '',
             retype_password: '',
         },
@@ -40,9 +43,9 @@ export default function edit() {
             password_confirmation: values.retype_password,
         };
 
-        router.post('/iam/users', payload, {
+        router.put(`/iam/users/${user.id}`, payload, {
             onSuccess: () => {
-                toast('User is successfully registered!');
+                toast('User updated successfully!');
                 form.reset();
             },
             onError: (errors) => {
@@ -53,7 +56,7 @@ export default function edit() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create Users" />
+            <Head title="Edit Users" />
             <div className="w-full space-y-4 p-4">
                 <div className="flex justify-start">
                     <div className="align-start flex w-full max-w-5xl flex-col space-y-4">
@@ -145,7 +148,7 @@ export default function edit() {
                                 />
                                 <div className="flex justify-center">
                                     <Button className="bg-blue-500 text-white hover:bg-blue-600" type="submit">
-                                        Register User
+                                        Update User
                                     </Button>
                                 </div>
                             </form>

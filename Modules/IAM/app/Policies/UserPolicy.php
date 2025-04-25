@@ -78,7 +78,6 @@ class UserPolicy
         if ($user->can('update user')) {
             return true;
         }
-
         return $user->id === $model->id;
     }
 

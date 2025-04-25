@@ -125,7 +125,7 @@ class UserController extends Controller
         } */
 
         // return redirect()->back();
-        return redirect(route('admin.users.index'))->with('success', 'User updated.');
+        return redirect(route('iam.users.index'))->with('success', 'User updated.');
     }
 
     /**
@@ -138,7 +138,7 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect(route('admin.users.index'))->with('success', 'User deleted.');
+        return redirect(route('iam.users.index'))->with('success', 'User deleted.');
     }
 
     /**
@@ -151,7 +151,7 @@ class UserController extends Controller
     {
         $user->restore();
 
-        return redirect(route('admin.users.index'))->with('success', 'User restored.');
+        return redirect(route('iam.users.index'))->with('success', 'User restored.');
     }
 
     /**
