@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class labresult extends Model
+class Labresult extends Model
 {
     protected $table = 'ref_lab_result';
     protected $fillable = [

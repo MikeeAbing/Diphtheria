@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Database\Seeders\DB;
+use App\Models\TestType;
 class TestTypeSeeder extends Seeder
 {
     /**
@@ -12,11 +12,23 @@ class TestTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('ref_type_test')->insert([
-            ['id' => 4, 'test_id' => 'PCR', 'test_description' => 'Polymerase Chain Reaction', 'disease ' => 'AFP,PERTUSSIS,SARI,ROTAVIRUS,NON_NTETANUS,NTETANUS,LEPTO,ILI,CHIKUNGUNYA,HEPA,MEASLES,HFMD,DIPH,MENINGO,DENGUE'],
-            ['id' => 5, 'test_id' => 'VI', 'test_description' => 'Virus Isolation', 'disease ' => 'AFP,PERTUSSIS,SARI,ROTAVIRUS,NON_NTETANUS,NTETANUS,ILI,CHIKUNGUNYA,MEASLES,RABIES,HFMD,DIPH,DENGUE'],
+        $testtypes = [
+            ['id' => 4, 'test_id' => 'PCR', 'test_description' => 'Polymerase Chain Reaction', 'disease' => 'DIPH,DENGUE'],
+            ['id' => 5, 'test_id' => 'VI', 'test_description' => 'Virus Isolation', 'disease' => 'DIPH,DENGUE'],
        
            
-        ]);
+        ];
+
+        foreach ($testtypes as $testtype) {
+            TestType::insert([
+                'id' => $testtype['id'],
+                'test_id' => $testtype['test_id'],
+                'test_description' => $testtype['test_description'],
+                'disease' => $testtype['disease'],
+   
+            ]);
+        }
+
+
     }
 }
