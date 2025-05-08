@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem, User } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import type { BreadcrumbItem } from '@/types';
+import { Head, Link } from '@inertiajs/react';
 
 import {
     ColumnDef,
@@ -14,110 +14,117 @@ import {
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table';
-import { MoreHorizontal, PlusCircleIcon } from 'lucide-react';
+import { MoreHorizontal, PencilLine, PlusCircleIcon, Trash2 } from 'lucide-react';
 import * as React from 'react';
 
-import { DataTablePagination } from '@/components/data-table/data-table-pagination';
 import TableSortHeader from '@/components/data-table/data-table-sort-header.jsx';
-import TableToolbar from '@/components/data-table/data-table-toolbar.jsx';
 import { DataTableViewOptions } from '@/components/data-table/data-table-view-options';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-import useDebouncedSearch from '@/hooks/use-debounced-search';
-import useSorting from '@/hooks/use-sorting';
-import { useEffect } from 'react';
-import { toast } from 'sonner';
+import { useState } from 'react';
+import TableNoSortHeader from '../../../../../../resources/js/components/data-table/data-table-no-sort-header';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Diphtheria',
-        href: '/diph',
+        href: '/patient',
     },
 ];
 
-export default function User({ success }) {
-    useEffect(() => {
-        if (success) {
-            toast('User is successfully registered!');
-        }
-    }, [success]);
-
-    const { data: users, links, meta } = usePage().props.users;
+export default function Patient() {
+    // const { links, meta } = usePage().props;
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
-    const { filters, roles } = usePage().props;
-    const { params, setParams, setTimeDebounce } = useDebouncedSearch('/iam/users', filters);
-    const { sort } = useSorting(filters, setParams);
+    // const { params, setParams, setTimeDebounce } = useDebouncedSearch('/diph/', filters);
+    // const { sort } = useSorting(filters, setParams);
 
-    const columns: ColumnDef<User>[] = [
+    type Patient = {
+        encoded_by: string;
+        case_id: string;
+        epi_id: string;
+        patient_no: string;
+        first_name: string;
+        middle_name: string | null;
+        last_name: string;
+        suffix_name: string | null;
+        sex: string;
+        dob: string;
+        age_in_years: number;
+        current_addr_region: string | null;
+        current_addr_province: string | null;
+        current_addr_city: string | null;
+        current_addr_barangay: string | null;
+        current_addr_purok: string | null;
+    };
+
+    const [data, setData] = useState<Patient[]>([
         {
-            id: 'select',
-            header: ({ table }) => (
-                <Checkbox
-                    checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />
-            ),
-            enableSorting: false,
-            enableHiding: false,
+            encoded_by: 'John Doe',
+            case_id: '2024-1234704RP29M',
+            epi_id: '0000639-DIP-041824-24-1063',
+            patient_no: '24-1063',
+            first_name: 'REY MARK',
+            middle_name: 'SUNIT',
+            last_name: 'PELARIOS',
+            suffix_name: '',
+            sex: 'Male',
+            dob: '04/14/1995',
+            age_in_years: 29,
+            current_addr_region: 'Region XII (SOCCSKSARGEN)',
+            current_addr_province: 'Cotabato',
+            current_addr_city: 'Makilala',
+            current_addr_barangay: 'Taluntalunan',
+            current_addr_purok: 'Purok 3A',
         },
         {
-            accessorKey: 'full_name',
-            header: ({ column }) => (
-                <TableSortHeader
-                    title="Full Name"
-                    onClick={() => {
-                        setTimeDebounce(50);
-                        sort('full_name');
-                    }}
-                    sort={params.col === 'full_name' ? params.sort : null}
-                />
-            ),
-            //cell: ({ row }) => <div className="capitalize">{row.getValue('full_name')}</div>,
+            encoded_by: 'John Doe',
+            case_id: '2024-1234704RP29M',
+            epi_id: '0000639-DIP-041824-24-1063',
+            patient_no: '24-1063',
+            first_name: 'REY MARK',
+            middle_name: 'SUNIT',
+            last_name: 'PELARIOS',
+            suffix_name: '',
+            sex: 'Male',
+            dob: '04/14/1995',
+            age_in_years: 29,
+            current_addr_region: 'Region XII (SOCCSKSARGEN)',
+            current_addr_province: 'Cotabato',
+            current_addr_city: 'Makilala',
+            current_addr_barangay: 'Taluntalunan',
+            current_addr_purok: 'Purok 3A',
         },
         {
-            accessorKey: 'username',
-            header: ({ column }) => (
-                <TableSortHeader
-                    title="Username"
-                    onClick={() => {
-                        setTimeDebounce(50);
-                        sort('username');
-                    }}
-                    sort={params.col === 'username' ? params.sort : null}
-                />
-            ),
-            //cell: ({ row }) => <div className="capitalize">{row.getValue('email')}</div>,
+            encoded_by: 'John Doe',
+            case_id: '2024-1234704RP29M',
+            epi_id: '0000639-DIP-041824-24-1063',
+            patient_no: '24-1063',
+            first_name: 'REY MARK',
+            middle_name: 'SUNIT',
+            last_name: 'PELARIOS',
+            suffix_name: '',
+            sex: 'Male',
+            dob: '04/14/1995',
+            age_in_years: 29,
+            current_addr_region: 'Region XII (SOCCSKSARGEN)',
+            current_addr_province: 'Cotabato',
+            current_addr_city: 'Makilala',
+            current_addr_barangay: 'Taluntalunan',
+            current_addr_purok: 'Purok 3A',
         },
-        {
-            accessorKey: 'email',
-            header: ({ column }) => (
-                <TableSortHeader
-                    title="Email"
-                    onClick={() => {
-                        setTimeDebounce(50);
-                        sort('email');
-                    }}
-                    sort={params.col === 'email' ? params.sort : null}
-                />
-            ),
-            //cell: ({ row }) => <div className="capitalize">{row.getValue('email')}</div>,
-        },
+    ]);
+
+    const columns: ColumnDef<Patient>[] = [
         {
             id: 'actions',
-            enableHiding: false,
-            cell: ({ row }) => {
-                return (
+            header: ({}) => <TableNoSortHeader title="Actions" />,
+            cell: ({ row }) => (
+                <center>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -126,20 +133,262 @@ export default function User({ success }) {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <Link href={`/iam/users/${row.original.id}/edit`}>
-                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                            <Link href="/diph/create">
+                                <DropdownMenuItem>
+                                    <PlusCircleIcon className="h-4 w-4" />
+                                    Add Case
+                                </DropdownMenuItem>
                             </Link>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
+                            <Link href="/iam/users/create">
+                                <DropdownMenuItem>
+                                    <PencilLine className="h-4 w-4" />
+                                    Edit
+                                </DropdownMenuItem>
+                            </Link>
+                            <DropdownMenuSeparator />
+                            <Link href="/iam/users/create">
+                                <DropdownMenuItem>
+                                    <Trash2 className="h-4 w-4" />
+                                    Delete
+                                </DropdownMenuItem>
+                            </Link>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                );
-            },
+                </center>
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'encoded_by',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Encoded By"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('encoded_by');
+                    }}
+                    // sort={params.col === 'encoded_by' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('encoded_by')}</div>,
+        },
+        {
+            accessorKey: 'case_id',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Case ID"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('case_id');
+                    }}
+                    // sort={params.col === 'case_id' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('case_id')}</div>,
+        },
+        {
+            accessorKey: 'epi_id',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="EPI ID"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('epi_id');
+                    }}
+                    // sort={params.col === 'epi_id' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('epi_id')}</div>,
+        },
+        {
+            accessorKey: 'patient_no',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Patient No.(*)"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('patient_no');
+                    }}
+                    // sort={params.col === 'patient_no' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('patient_no')}</div>,
+        },
+        {
+            accessorKey: 'first_name',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="First Name (*)"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('first_name');
+                    }}
+                    // sort={params.col === 'first_name' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('first_name')}</div>,
+        },
+        {
+            accessorKey: 'middle_name',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Middle Name (*)"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('middle_name');
+                    }}
+                    // sort={params.col === 'middle_name' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('middle_name')}</div>,
+        },
+        {
+            accessorKey: 'last_name',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Last Name (*)"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('last_name');
+                    }}
+                    // sort={params.col === 'last_name' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('last_name')}</div>,
+        },
+        {
+            accessorKey: 'suffix_name',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Suffix Name (*)"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('suffix_name');
+                    }}
+                    // sort={params.col === 'suffix_name' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('suffix_name')}</div>,
+        },
+        {
+            accessorKey: 'sex',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Sex"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('sex');
+                    }}
+                    // sort={params.col === 'sex' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('sex')}</div>,
+        },
+        {
+            accessorKey: 'dob',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Date of Birth"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('dob');
+                    }}
+                    // sort={params.col === 'dob' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('dob')}</div>,
+        },
+        {
+            accessorKey: 'age_in_years',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Age In Years"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('age_in_years');
+                    }}
+                    // sort={params.col === 'age_in_years' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('age_in_years')}</div>,
+        },
+        {
+            accessorKey: 'current_addr_region',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="(Current Address) Region"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('current_addr_region');
+                    }}
+                    // sort={params.col === 'current_addr_region' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('current_addr_region')}</div>,
+        },
+
+        {
+            accessorKey: 'current_addr_province',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="(Current Address) Province"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('current_addr_province');
+                    }}
+                    // sort={params.col === 'current_addr_province' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('current_addr_province')}</div>,
+        },
+        {
+            accessorKey: 'current_addr_city',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="(Current Address) City / Municipality"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('current_addr_city');
+                    }}
+                    // sort={params.col === 'current_addr_city' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('current_addr_city')}</div>,
+        },
+        {
+            accessorKey: 'current_addr_barangay',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="(Current Address) Barangay"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('current_addr_barangay');
+                    }}
+                    // sort={params.col === 'current_addr_barangay' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('current_addr_barangay')}</div>,
+        },
+        {
+            accessorKey: 'current_addr_purok',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="(Current Address) Sitio / Purok"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('current_addr_purok');
+                    }}
+                    // sort={params.col === 'current_addr_purok' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('current_addr_purok')}</div>,
         },
     ];
 
     const table = useReactTable({
-        data: users,
+        data: data,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -162,19 +411,19 @@ export default function User({ success }) {
             <Head title="Users" />
             <div className="w-full space-y-4 p-4">
                 <div className="flex items-center gap-2">
-                    <TableToolbar
+                    {/* <TableToolbar
                         placeholder="Search user"
                         search={params?.search}
                         params={params}
                         setParams={setParams}
                         setTimeDebounce={setTimeDebounce}
-                    />
-                    <Link href="/iam/users/create">
+                    /> */}
+                    {/* <Link href="/iam/users/create">
                         <Button className="h-8 px-2 lg:px-3">
                             <PlusCircleIcon className="h-4 w-4" />
-                            Add
+                            Add Patient
                         </Button>
-                    </Link>
+                    </Link> */}
 
                     {/* <Input
                         placeholder="Filter user..."
@@ -242,14 +491,14 @@ export default function User({ success }) {
                         </TableBody>
                     </Table>
                 </div>
-                <DataTablePagination
+                {/* <DataTablePagination
                     table={table}
                     params={params}
                     setParams={setParams}
                     setTimeDebounce={setTimeDebounce}
                     links={links}
                     meta={meta}
-                />
+                /> */}
                 {/* <div className="flex items-center justify-end space-x-2 py-4">
                         <div className="text-muted-foreground flex-1 text-sm">
                             {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.

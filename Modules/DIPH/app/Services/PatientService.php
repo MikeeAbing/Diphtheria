@@ -2,7 +2,7 @@
 
 namespace Modules\DIPH\Services;
 
-class DIPHService
+class PatientService
 {
     public function handle() {}
 }
