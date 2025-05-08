@@ -157,6 +157,12 @@ export default function User({ success }) {
         },
     });
 
+    // table.getHeaderGroups().map((headergroup) =>{
+    //     headergroup.headers.map((header)=>{
+    //         console.log(header)
+    //     })
+    // })
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Users" />

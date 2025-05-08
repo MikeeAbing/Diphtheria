@@ -2,14 +2,33 @@
 
 namespace Modules\DIPH\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Modules\Core\Http\Controllers\CoreController as Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Modules\DIPH\Services\DIPHService;
+use Modules\DIPH\Models\DIPH;
 
 class DIPHController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // protected DIPHService $dIPHService;
+    // /**
+    //  * Create the controller instance.
+    //  *
+    //  * @return void
+    //  */
+    // public function __construct(DIPHService $dIPHService)
+    // {
+    //     $this->authorizeResource(DIPH::class, 'user');
+    //     $this->dIPHService = $dIPHService;
+    // }
+
+    // /**
+    //  * Display a listing of the resource.
+    //  *
+    //  * @param  Request  $request
+    //  * @return Inertia
+    //  */
+
     public function index()
     {
         return inertia('DIPH::index');
@@ -20,7 +39,7 @@ class DIPHController extends Controller
      */
     public function create()
     {
-        return view('diph::create');
+        return Inertia::render('DIPH::create');
     }
 
     /**
