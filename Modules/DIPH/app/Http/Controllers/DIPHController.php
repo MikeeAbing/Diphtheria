@@ -10,24 +10,24 @@ use Modules\DIPH\Models\DIPH;
 
 class DIPHController extends Controller
 {
-    // protected DIPHService $dIPHService;
-    // /**
-    //  * Create the controller instance.
-    //  *
-    //  * @return void
-    //  */
-    // public function __construct(DIPHService $dIPHService)
-    // {
-    //     $this->authorizeResource(DIPH::class, 'user');
-    //     $this->dIPHService = $dIPHService;
-    // }
+    protected DIPHService $dIPHService;
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct(DIPHService $dIPHService)
+    {
+        $this->authorizeResource(DIPH::class, 'user');
+        $this->dIPHService = $dIPHService;
+    }
 
-    // /**
-    //  * Display a listing of the resource.
-    //  *
-    //  * @param  Request  $request
-    //  * @return Inertia
-    //  */
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  Request  $request
+     * @return Inertia
+     */
 
     public function index()
     {
