@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ref_outcome', function (Blueprint $table) {
             $table->id();
             $table->string('outcome_code');
-            $table->string('outcome_desciption');
+            $table->string('outcome_description');
         });
     }
 
