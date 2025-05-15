@@ -2,17 +2,22 @@ import { z } from 'zod';
 
 // We're keeping a simple non-relational schema here.
 // IRL, you will have a schema for your data models.
-export const userSchema = z.object({
-    id: z.string(),
-    full_name: z.string(),
-    username: z.string(),
-    email: z.string(),
-});
+// export const userSchema = z.object({
+//     id: z.string(),
+//     full_name: z.string(),
+//     username: z.string(),
+//     email: z.string(),
+// });
 
-export type User = z.infer<typeof userSchema>;
 
-export const userFormSchema = z
+// export type User = z.infer<typeof userSchema>;
+
+const datetimeRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+export const diphFormSchema = z
     .object({
+        // case_id: z.string().max(50).optional(),
+        // patient_number: z.string().max(30).optional(),
+        disease_age: z.number().int().max(100),
         admitted: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }),
         date_admitted: z
             .string()
@@ -31,9 +36,9 @@ export const userFormSchema = z
             .optional(),
         date_report: z
             .string()
-            // .refine((val) => /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(val), {
-            //     message: 'Invalid date format. Please use YYYY-MM-DD.',
-            // })
+            .refine((val) => /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(val), {
+                message: 'Invalid date format. Please use YYYY-MM-DD.',
+            })
             .optional(),
         reporter: z.string({ invalid_type_error: 'Name of Reporter must be of type string' }).max(150).optional(),
         reporter_no: z
@@ -152,6 +157,72 @@ export const userFormSchema = z
         //     })
         //     .optional(),
         final_classi: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)], z.literal('')).optional(),
+        // user_id: z.string().max(100).optional(),
+        // timestamp: z
+        //     .string()
+        //     .regex(datetimeRegex, {
+        //         message: "Invalid datetime format. Use 'yyyy-mm-dd hh:mm:ss'.",
+        //     })
+        //     .optional(),
+        // verification_level: z.union([z.literal(1), z.literal(2), z.literal(3)]).optional(),
+        // case_code: z.string().max(50).optional(),
+        // last_modified_by: z
+        //     .string()
+        //     .regex(datetimeRegex, {
+        //         message: "Invalid datetime format. Use 'yyyy-mm-dd hh:mm:ss'.",
+        //     })
+        //     .optional(),
+        // last_modified_date_patient: z
+        //     .string()
+        //     .regex(datetimeRegex, {
+        //         message: "Invalid datetime format. Use 'yyyy-mm-dd hh:mm:ss'.",
+        //     })
+        //     .optional(),
+        // last_modified_date_disease: z
+        //     .string()
+        //     .regex(datetimeRegex, {
+        //         message: "Invalid datetime format. Use 'yyyy-mm-dd hh:mm:ss'.",
+        //     })
+        //     .optional(),
+        // last_modified_date_lab: z
+        //     .string()
+        //     .regex(datetimeRegex, {
+        //         message: "Invalid datetime format. Use 'yyyy-mm-dd hh:mm:ss'.",
+        //     })
+        //     .optional(),
+        // hfhudcode: z.string().max(255).optional(),
+        // datevalidated_resu: z
+        //     .string()
+        //     .regex(datetimeRegex, {
+        //         message: "Invalid datetime format. Use 'yyyy-mm-dd hh:mm:ss'.",
+        //     })
+        //     .optional(),
+        // user_citycode: z
+        //     .number()
+        //     .int()
+        //     .min(-2147483648, { message: 'Value must be >= -2,147,483,648' })
+        //     .max(2147483647, { message: 'Value must be <= 2,147,483,647' }),
+        // user_provcode: z
+        //     .number()
+        //     .int()
+        //     .min(-2147483648, { message: 'Value must be >= -2,147,483,648' })
+        //     .max(2147483647, { message: 'Value must be <= 2,147,483,647' }),
+        // user_regcode: z
+        //     .number()
+        //     .int()
+        //     .min(-2147483648, { message: 'Value must be >= -2,147,483,648' })
+        //     .max(2147483647, { message: 'Value must be <= 2,147,483,647' }),
+        // charteredcity: z.string().max(20),
+        // dohretained: z.string().max(20),
+        // hfhudcode_pesu: z.string().max(255).optional(),
+        // hfhudcode_resu: z.string().max(255).optional(),
+        // duplicate: z.union([z.literal('T'), z.literal('NULL')]).optional(),
+        // timelapse_dateadmittodateencode: z.string().max(50).optional(),
+        // timelapse_dateonsettodateencode: z.string().max(50).optional(),
+        // timelapse_dateencodetodatevalidatedresu: z.string().max(50).optional(),
+        // ageinmonths: z.number().min(1).max(12),
+        // ageindays: z.number().min(1).max(31),
+        // morbiditymonth: z.number().min(1).max(12),
     })
     .superRefine((values, ctx) => {
         // if (!values.total_dose && values.diphtheria_dose === 'Y') {
@@ -205,4 +276,4 @@ export const userFormSchema = z
         // }
     });
 
-export type UserForm = z.infer<typeof userFormSchema>;
+export type DIPHForm = z.infer<typeof diphFormSchema>;

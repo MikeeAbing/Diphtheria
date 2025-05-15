@@ -12,6 +12,14 @@ class DIPHResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'firstname' => $this->firstname,
+            'middlename' => $this->middlename,
+            'lastname' => $this->lastname,
+            'suffixname' => $this->suffixname,
+            'date_admitted' => $this->date_admitted->format('Y-m-d'),
+            'encounter_type' => 'Admission',
+        ];
     }
 }

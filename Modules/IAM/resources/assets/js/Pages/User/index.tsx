@@ -25,6 +25,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
 
 import useDebouncedSearch from '@/hooks/use-debounced-search';
 import useSorting from '@/hooks/use-sorting';
@@ -182,12 +183,12 @@ export default function User({ success }) {
                         </Button>
                     </Link>
 
-                    {/* <Input
+                    <Input
                         placeholder="Filter user..."
                         value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
                         onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
                         className="max-w-sm"
-                    /> */}
+                    />
                     <DataTableViewOptions table={table} />
                     {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>

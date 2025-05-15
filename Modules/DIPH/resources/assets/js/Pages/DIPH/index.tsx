@@ -24,7 +24,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 import { useState } from 'react';
-import TableNoSortHeader from '../../../../../../resources/js/components/data-table/data-table-no-sort-header';
+import TableNoSortHeader from '../../../../../../../resources/js/components/data-table/data-table-no-sort-header';
+import {useEffect} from 'react';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,7 +35,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Patient() {
+export default function Patient({success}) {
+    useEffect(()=>{
+        if(success){
+            toast('Case Investigation Form successfully saved');
+        }
+    },[success]);
+
     // const { links, meta } = usePage().props;
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -133,12 +141,12 @@ export default function Patient() {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <Link href="/diph/create">
+                            {/* <Link href="/diph/create">
                                 <DropdownMenuItem>
                                     <PlusCircleIcon className="h-4 w-4" />
                                     Add Case
                                 </DropdownMenuItem>
-                            </Link>
+                            </Link> */}
                             <DropdownMenuSeparator />
                             <Link href="/iam/users/create">
                                 <DropdownMenuItem>
@@ -418,12 +426,18 @@ export default function Patient() {
                         setParams={setParams}
                         setTimeDebounce={setTimeDebounce}
                     /> */}
-                    {/* <Link href="/iam/users/create">
+                    <Link href="/patient/create">
                         <Button className="h-8 px-2 lg:px-3">
                             <PlusCircleIcon className="h-4 w-4" />
                             Add Patient
                         </Button>
-                    </Link> */}
+                    </Link>
+                    <Link href="/diph/create">
+                        <Button className="h-8 px-2 lg:px-3">
+                            <PlusCircleIcon className="h-4 w-4" />
+                            Add Diphtheria
+                        </Button>
+                    </Link>
 
                     {/* <Input
                         placeholder="Filter user..."

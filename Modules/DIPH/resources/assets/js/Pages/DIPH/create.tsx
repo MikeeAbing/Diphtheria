@@ -9,21 +9,24 @@ import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
-import { UserForm, userFormSchema } from './data/schema';
+import { DIPHForm, diphFormSchema } from './data/schema';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Add Diphtheria Case',
-        href: '/diph/create',
+        href: '/diph/diph/create',
     },
 ];
 
 export default function create() {
-    const form = useForm<UserForm>({
-        resolver: zodResolver(userFormSchema),
+    const form = useForm<DIPHForm>({
+        resolver: zodResolver(diphFormSchema),
         defaultValues: {
+            // case_id: '',
+            // patient_number: '',
+            disease_age: 0,
             admitted: 'Y',
             date_admitted: '2025-12-12',
             caregiver: 'John Doe',
@@ -59,10 +62,34 @@ export default function create() {
             diphtheriatoxin: 'Y',
             diphtheriatoxin_date: '2025-12-12',
             final_classi: 1,
+            // user_id: undefined,
+            // timestamp: undefined,
+            // verification_level: undefined,
+            // case_code: undefined,
+            // last_modified_by: undefined,
+            // last_modified_date_patient: undefined,
+            // last_modified_date_disease: undefined,
+            // last_modified_date_lab: undefined,
+            // hfhudcode: undefined,
+            // datevalidated_resu: undefined,
+            // user_citycode: undefined,
+            // user_provcode: undefined,
+            // user_regcode: undefined,
+            // charteredcity: undefined,
+            // dohretained: undefined,
+            // hfhudcode_pesu: undefined,
+            // hfhudcode_resu: undefined,
+            // duplicate: undefined,
+            // timelapse_dateadmittodateencode: undefined,
+            // timelapse_dateonsettodateencode: undefined,
+            // timelapse_dateencodetodatevalidatedresu: undefined,
+            // ageinmonths: undefined,
+            // ageindays: undefined,
+            // morbiditymonth: undefined,
         },
     });
 
-    function onSubmit(values: UserForm) {
+    function onSubmit(values: DIPHForm) {
         const payload = { ...values };
 
         if (payload.admitted === 'N') {
@@ -98,15 +125,14 @@ export default function create() {
         }
         console.log(payload);
 
-        // router.post('/diph', payload, {
-        //     onSuccess: () => {
-        //         toast('User is successfully registered!');
-        //         form.reset();
-        //     },
-        //     onError: (errors) => {
-        //         console.log('Validation failed:', errors);
-        //     },
-        // });
+        router.post('/diph', payload, {
+            onSuccess: () => {
+                form.reset();
+            },
+            onError: (errors) => {
+                console.log('Validation failed:', errors);
+            },
+        });
     }
 
     const admitted = form.watch('admitted');
@@ -940,7 +966,11 @@ export default function create() {
                                                         </FormLabel>
                                                     </div>
                                                     <FormControl>
-                                                        <Textarea {...field} placeholder="Write here..." className="min-w-100 border-2 border-black" />
+                                                        <Textarea
+                                                            {...field}
+                                                            placeholder="Write here..."
+                                                            className="min-w-100 border-2 border-black"
+                                                        />
                                                     </FormControl>
                                                 </div>
                                                 <FormMessage /> {/* Shows validation errors if any */}
@@ -963,7 +993,12 @@ export default function create() {
                                                         </FormLabel>
                                                     </div>
                                                     <FormControl>
-                                                        <Textarea disabled {...field} placeholder="Write here..." className="min-w-100 border-2 border-black" />
+                                                        <Textarea
+                                                            disabled
+                                                            {...field}
+                                                            placeholder="Write here..."
+                                                            className="min-w-100 border-2 border-black"
+                                                        />
                                                     </FormControl>
                                                 </div>
                                                 <FormMessage /> {/* Shows validation errors if any */}
