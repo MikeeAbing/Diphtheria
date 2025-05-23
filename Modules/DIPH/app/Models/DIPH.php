@@ -185,6 +185,10 @@ class DIPH extends Model implements IsFilterable
     //         ->addBlindIndex('final_classi', new BlindIndex('final_classi_index'));
     // }
 
+    public function provider(){
+        return $this->belongsTo(Patient::class, 'patient_number', 'patient_number');
+    }
+
     public function getCanAttribute()
     {
         return [

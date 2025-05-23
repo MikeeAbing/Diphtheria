@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\DIPH\Transformers;
+namespace Modules\DIPH\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

@@ -34,11 +34,10 @@ function calculateAgeComponents(dob: Date) {
 
 export const patientFormSchema = z
     .object({
-        patient_number: z.string().max(30),
         firstname: z.string().max(50),
         middlename: z.string().max(50),
         lastname: z.string().max(50),
-        suffixname: z.string().max(5),
+        suffixname: z.string().max(5).optional(),
         sex: z.enum(['M', 'F']),
         dateofbirth: z.string().regex(dateRegex, {
             message: 'Date must be in YYYY-MM-DD format',
@@ -62,20 +61,20 @@ export const patientFormSchema = z
             invalid_type_error: 'Must be of type string',
             required_error: 'Must choose whether patient is an indigenous person or not',
         }),
-        IP_tribe: z.number().int({ message: 'Must be an integer' }).min(1).max(33).optional(),
-        IP_tribe_specify: z.string({invalid_type_error:'Must be of type string'}).max(255).optional(),
-        pat_address_reg: z.number().int({ message: 'Must be an integer' }).min(0).max(15).optional(),
-        pat_address_prov: z.number().int({ message: 'Must be an integer' }).min(0).max(1759).optional(),
-        pat_address_city: z.number().int({ message: 'Must be an integer' }).min(124701).max(128007).optional(),
-        pat_address_brgy: z.number().int({ message: 'Must be an integer' }).min(0).max(175917006).optional(),
-        pat_address_street_name: z.string({invalid_type_error: 'Must be of type string'}).max(255).optional(),
-        pat_perm_address_reg: z.number().int({ message: 'Must be an integer' }).min(0).max(15).optional(),
-        pat_perm_address_prov: z.number().int({ message: 'Must be an integer' }).min(0).max(1759).optional(),
-        pat_perm_address_city: z.number().int({ message: 'Must be an integer' }).min(124701).max(128007).optional(),
-        pat_perm_address_brgy: z.number().int({ message: 'Must be an integer' }).min(0).max(175917006).optional(),
-        pat_perm_address_street_name: z.string({invalid_type_error: 'Must be of type string'}).max(255).optional(),
+        IP_tribe: z.number({ message: 'Must be an integer' }).min(1).max(33).optional(),
+        IP_tribe_specify: z.string({ invalid_type_error: 'Must be of type string' }).max(255).optional(),
+        pat_address_reg: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(10).optional(),
+        pat_address_prov: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(10).optional(),
+        pat_address_city: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
+        pat_address_brgy: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
+        pat_address_street_name: z.string({ invalid_type_error: 'Must be of type string' }).max(255).optional(),
+        pat_perm_address_reg: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
+        pat_perm_address_prov: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
+        pat_perm_address_city: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
+        pat_perm_address_brgy: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
+        pat_perm_address_street_name: z.string({ invalid_type_error: 'Must be of type string' }).max(255).optional(),
         facilityname: z.string().max(150),
-        occupation: z.string({invalid_type_error: 'Must be of type string'}).max(150).optional(),
+        occupation: z.string({ invalid_type_error: 'Must be of type string' }).max(150).optional(),
         phone_no: z
             .string({
                 invalid_type_error: 'Parent/Caregiver contact number must be a string',
@@ -98,26 +97,31 @@ export const patientFormSchema = z
 
         const ages = calculateAgeComponents(dob);
 
+        if(data.suffixname === ''){
+            data.suffixname = 'N/A';
+        }
+
         return {
             ...data,
             ageinyears: ages.ageInYears,
             ageinmonths: ages.ageInMonths,
             ageindays: ages.ageInDays,
         };
-    }).superRefine((values, ctx)=>{
-        if(values.member_of_IP === 'Y' && !values.IP_tribe){
+    })
+    .superRefine((values, ctx) => {
+        if (values.member_of_IP === 'Y' && !values.IP_tribe) {
             ctx.addIssue({
                 path: ['IP_tribe'],
                 code: z.ZodIssueCode.custom,
-                message: 'Must provide Indigenous Person Tribe'
-            })
+                message: 'Must provide Indigenous Person Tribe',
+            });
         }
-        if(values.member_of_IP === 'Y' && values.IP_tribe === 33){
+        if ((values.member_of_IP === 'Y' && values.IP_tribe === 33) && !values.IP_tribe_specify) {
             ctx.addIssue({
                 path: ['IP_tribe_specify'],
                 code: z.ZodIssueCode.custom,
-                message: 'Must specify Indigenous Person Tribe'
-            })
+                message: 'Must specify Indigenous Person Tribe',
+            });
         }
     });
 

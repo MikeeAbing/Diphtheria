@@ -2,10 +2,12 @@
 
 namespace Modules\DIPH\Http\Controllers;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
 use Modules\Core\Http\Controllers\CoreController as Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Modules\DIPH\Models\Patient;
 use Modules\DIPH\Services\DIPHService;
 use Modules\DIPH\Models\DIPH;
 use Modules\IAM\Models\User;
@@ -13,17 +15,17 @@ use Modules\DIPH\Http\Requests\DIPHFormRequest;
 use Illuminate\Support\Facades\Auth;
 class DIPHController extends Controller
 {
-    protected DIPHService $diphService;
-    /**
-     * Create the controller instance.
-     *
-     * @return void
-     */
-    public function __construct(DIPHService $diphService)
-    {
-        $this->authorizeResource(User::class, 'user');
-        $this->diphService = $diphService;
-    }
+    // protected DIPHService $diphService;
+    // /**
+    //  * Create the controller instance.
+    //  *
+    //  * @return void
+    //  */
+    // public function __construct(DIPHService $diphService)
+    // {
+    //     $this->authorizeResource(User::class, 'user');
+    //     $this->diphService = $diphService;
+    // }
 
     /**
      * Display a listing of the resource.
@@ -34,16 +36,23 @@ class DIPHController extends Controller
 
     public function index()
     {
-        return inertia('DIPH::DIPH/index');
+        // return inertia('DIPH::Patient/index');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        $search = $request->query('search');
 
-        return Inertia::render('DIPH::DIPH/create');
+        if ($search) {
+            $patient_number = Patient::where('patient_number', 'like', "%{$search}%")->select('patient_number')->get();
+            return Inertia::render(
+                'DIPH::DIPH/create',
+                ['patient_number' => $patient_number]
+            );
+        }
     }
 
     /**
@@ -57,9 +66,7 @@ class DIPHController extends Controller
 
         $diph = DIPH::create($request->validated());
 
-        return redirect(route('diph.diph.index'))->with('success', 'Diphtheria case investigation form submitted.');
-
-        ;
+        return redirect(route('patient.index'))->with('success', 'Diphtheria case investigation form submitted.');
     }
 
     /**
@@ -73,16 +80,25 @@ class DIPHController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(DIPH $diph)
     {
-        return view('diph::edit');
+        return Inertia::render('DIPH::DIPH/edit', [
+            'diph'=>$diph
+        ]);
     }
 
-    /**
+   /**
      * Update the specified resource in storage.
+     *
+     * @param  DIPHFormRequest  $request
+     * @param  DIPH  $diph
+     * @return Redirect
      */
-    public function update(Request $request, $id)
+    public function update(DIPHFormRequest  $request, DIPH  $diph):RedirectResponse
     {
+        $diph->update($request->validated());
+
+        return redirect(route('patient.index'))->with('success', 'Case report updated.');
     }
 
     /**
