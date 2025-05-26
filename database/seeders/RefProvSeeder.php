@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 
 class RefProvSeeder extends Seeder
 {
-   /**
+    /**
      * Run the database seeds.
      *
      * @return void
@@ -89,39 +89,39 @@ class RefProvSeeder extends Seeder
             ['old_id' => 516, 'id' => 5016, 'region_id' => 5, '10digitPSGC' => '501600000', 'province_name' => 'Camarines Norte', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
             ['old_id' => 517, 'id' => 5017, 'region_id' => 5, '10digitPSGC' => '501700000', 'province_name' => 'Camarines Sur', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
             ['old_id' => 520, 'id' => 5020, 'region_id' => 5, '10digitPSGC' => '502000000', 'province_name' => 'Catanduanes', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 541, 'id' => 5041, 'region_id' => 5, '10digitPSGC' => '504100000', 'province_name' => 'Masbate', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 562, 'id' => 5062, 'region_id' => 5, '10digitPSGC' => '506200000', 'province_name' => 'Sorsogon', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 604, 'id' => 6004, 'region_id' => 6, '10digitPSGC' => '600400000', 'province_name' => 'Aklan', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 606, 'id' => 6006, 'region_id' => 6, '10digitPSGC' => '600600000', 'province_name' => 'Antique', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 619, 'id' => 6019, 'region_id' => 6, '10digitPSGC' => '601900000', 'province_name' => 'Capiz', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 630, 'id' => 6030, 'region_id' => 6, '10digitPSGC' => '603000000', 'province_name' => 'Iloilo', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 645, 'id' => 6045, 'region_id' => 6, '10digitPSGC' => '604500000', 'province_name' => 'Negros Occidental', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 679, 'id' => 6079, 'region_id' => 6, '10digitPSGC' => '607900000', 'province_name' => 'Guimaras', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => null, 'id' => 6310, 'region_id' => 6, '10digitPSGC' => '631000000', 'province_name' => 'City of Iloilo', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 712, 'id' => 7012, 'region_id' => 7, '10digitPSGC' => '701200000', 'province_name' => 'Bohol', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 722, 'id' => 7022, 'region_id' => 7, '10digitPSGC' => '702200000', 'province_name' => 'Cebu', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 746, 'id' => 7046, 'region_id' => 7, '10digitPSGC' => '704600000', 'province_name' => 'Negros Oriental', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 761, 'id' => 7061, 'region_id' => 7, '10digitPSGC' => '706100000', 'province_name' => 'Siquijor', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => null, 'id' => 7306, 'region_id' => 7, '10digitPSGC' => '730600000', 'province_name' => 'City of Cebu', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => null, 'id' => 7311, 'region_id' => 7, '10digitPSGC' => '731100000', 'province_name' => 'City of Lapu-Lapu', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => null, 'id' => 7313, 'region_id' => 7, '10digitPSGC' => '731300000', 'province_name' => 'City of Mandaue', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 826, 'id' => 8026, 'region_id' => 8, '10digitPSGC' => '802600000', 'province_name' => 'Eastern Samar', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 837, 'id' => 8037, 'region_id' => 8, '10digitPSGC' => '803700000', 'province_name' => 'Leyte', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 848, 'id' => 8048, 'region_id' => 8, '10digitPSGC' => '804800000', 'province_name' => 'Northern Samar', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 860, 'id' => 8060, 'region_id' => 8, '10digitPSGC' => '806000000', 'province_name' => 'Samar', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 864, 'id' => 8064, 'region_id' => 8, '10digitPSGC' => '806400000', 'province_name' => 'Southern Leyte', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 878, 'id' => 8078, 'region_id' => 8, '10digitPSGC' => '807800000', 'province_name' => 'Biliran', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => null, 'id' => 8316, 'region_id' => 8, '10digitPSGC' => '831600000', 'province_name' => 'City of Tacloban', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 972, 'id' => 9072, 'region_id' => 9, '10digitPSGC' => '907200000', 'province_name' => 'Zamboanga del Norte', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 973, 'id' => 9073, 'region_id' => 9, '10digitPSGC' => '907300000', 'province_name' => 'Zamboanga del Sur', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 983, 'id' => 9083, 'region_id' => 9, '10digitPSGC' => '908300000', 'province_name' => 'Zamboanga Sibugay', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => null, 'id' => 9317, 'region_id' => 9, '10digitPSGC' => '931700000', 'province_name' => 'City of Zamboanga', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => 997, 'id' => 9901, 'region_id' => 9, '10digitPSGC' => '990100000', 'province_name' => 'City of Isabela (Not a Province)', 'geographic_level' =>'Dist', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    
-    ['old_id' => null, 'id' => 19999, 'region_id' => 19, '10digitPSGC' => '1999900000', 'province_name' => 'BARMM, Special Government Unit', 'geographic_level' => 'SGU', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
-    ['old_id' => null, 'id' => 6302, 'region_id' => 6, '10digitPSGC' => '630200000', 'province_name' => 'City of Bacolod', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],        
-    // Add the rest of the rows as needed...
-         
+            ['old_id' => 541, 'id' => 5041, 'region_id' => 5, '10digitPSGC' => '504100000', 'province_name' => 'Masbate', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 562, 'id' => 5062, 'region_id' => 5, '10digitPSGC' => '506200000', 'province_name' => 'Sorsogon', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 604, 'id' => 6004, 'region_id' => 6, '10digitPSGC' => '600400000', 'province_name' => 'Aklan', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 606, 'id' => 6006, 'region_id' => 6, '10digitPSGC' => '600600000', 'province_name' => 'Antique', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 619, 'id' => 6019, 'region_id' => 6, '10digitPSGC' => '601900000', 'province_name' => 'Capiz', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 630, 'id' => 6030, 'region_id' => 6, '10digitPSGC' => '603000000', 'province_name' => 'Iloilo', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 645, 'id' => 6045, 'region_id' => 6, '10digitPSGC' => '604500000', 'province_name' => 'Negros Occidental', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 679, 'id' => 6079, 'region_id' => 6, '10digitPSGC' => '607900000', 'province_name' => 'Guimaras', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => null, 'id' => 6310, 'region_id' => 6, '10digitPSGC' => '631000000', 'province_name' => 'City of Iloilo', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 712, 'id' => 7012, 'region_id' => 7, '10digitPSGC' => '701200000', 'province_name' => 'Bohol', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 722, 'id' => 7022, 'region_id' => 7, '10digitPSGC' => '702200000', 'province_name' => 'Cebu', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 746, 'id' => 7046, 'region_id' => 7, '10digitPSGC' => '704600000', 'province_name' => 'Negros Oriental', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 761, 'id' => 7061, 'region_id' => 7, '10digitPSGC' => '706100000', 'province_name' => 'Siquijor', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => null, 'id' => 7306, 'region_id' => 7, '10digitPSGC' => '730600000', 'province_name' => 'City of Cebu', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => null, 'id' => 7311, 'region_id' => 7, '10digitPSGC' => '731100000', 'province_name' => 'City of Lapu-Lapu', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => null, 'id' => 7313, 'region_id' => 7, '10digitPSGC' => '731300000', 'province_name' => 'City of Mandaue', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 826, 'id' => 8026, 'region_id' => 8, '10digitPSGC' => '802600000', 'province_name' => 'Eastern Samar', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 837, 'id' => 8037, 'region_id' => 8, '10digitPSGC' => '803700000', 'province_name' => 'Leyte', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 848, 'id' => 8048, 'region_id' => 8, '10digitPSGC' => '804800000', 'province_name' => 'Northern Samar', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 860, 'id' => 8060, 'region_id' => 8, '10digitPSGC' => '806000000', 'province_name' => 'Samar', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 864, 'id' => 8064, 'region_id' => 8, '10digitPSGC' => '806400000', 'province_name' => 'Southern Leyte', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 878, 'id' => 8078, 'region_id' => 8, '10digitPSGC' => '807800000', 'province_name' => 'Biliran', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => null, 'id' => 8316, 'region_id' => 8, '10digitPSGC' => '831600000', 'province_name' => 'City of Tacloban', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 972, 'id' => 9072, 'region_id' => 9, '10digitPSGC' => '907200000', 'province_name' => 'Zamboanga del Norte', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 973, 'id' => 9073, 'region_id' => 9, '10digitPSGC' => '907300000', 'province_name' => 'Zamboanga del Sur', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 983, 'id' => 9083, 'region_id' => 9, '10digitPSGC' => '908300000', 'province_name' => 'Zamboanga Sibugay', 'geographic_level' => 'Prov', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => null, 'id' => 9317, 'region_id' => 9, '10digitPSGC' => '931700000', 'province_name' => 'City of Zamboanga', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => 997, 'id' => 9901, 'region_id' => 9, '10digitPSGC' => '990100000', 'province_name' => 'City of Isabela (Not a Province)', 'geographic_level' => 'Dist', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+
+            ['old_id' => null, 'id' => 19999, 'region_id' => 19, '10digitPSGC' => '1999900000', 'province_name' => 'BARMM, Special Government Unit', 'geographic_level' => 'SGU', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            ['old_id' => null, 'id' => 6302, 'region_id' => 6, '10digitPSGC' => '630200000', 'province_name' => 'City of Bacolod', 'geographic_level' => 'City/HUC', 'income_class' => null, 'population' => null, 'created_at' => null, 'updated_at' => null],
+            // Add the rest of the rows as needed...
+
         ];
 
         foreach ($provinces as $province) {
