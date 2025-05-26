@@ -14,12 +14,12 @@ class DIPHResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'firstname' => $this->firstname,
-            'middlename' => $this->middlename,
-            'lastname' => $this->lastname,
-            'suffixname' => $this->suffixname,
-            'date_admitted' => $this->date_admitted->format('Y-m-d'),
-            'encounter_type' => 'Admission',
+            'case_id' => $this->case_id,
+            'admitted' => $this->admitted,
+            'date_admitted' => $this->date_admitted,
+            'patient' => $this->whenLoaded('patient', function () {
+                return PatientDataResource::collection($this->patient);
+            })
         ];
     }
 }

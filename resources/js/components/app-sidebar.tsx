@@ -13,14 +13,26 @@ const mainNavItems: NavItem[] = [
         href: '/dashboard',
         icon: LayoutGrid,
     },
-    {
-        title: 'DIPH',
-        href: '/patient',
-        icon: Folder,
-    }
 ];
 
 const footerNavItems: NavItem[] = [
+    
+    {
+        title: 'DIPH',
+        href: '#',
+        icon: Folder,
+        isActive: true,
+        items: [
+            {
+                title: 'Patients',
+                href: '/patient',
+            },
+            {
+                title: 'Diphtheria Cases',
+                href: '/diph',
+            },
+        ],
+    },
     {
         title: 'Identity Access Mgmt',
         href: '#',

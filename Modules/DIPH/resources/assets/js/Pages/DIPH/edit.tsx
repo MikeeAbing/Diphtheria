@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
 import { DIPHForm, diphFormSchema } from './data/schema';
 
@@ -30,7 +30,7 @@ interface Diph {
     total_dose: 1 | 2 | 3 | 'None' | 'Unknown' | undefined;
     date_last_vaccination: string | undefined;
     sourceinformation: 1 | 2 | 3 | '' | undefined;
-    known_exposure: 1 | 2 | 3 | 4 | undefined;
+    known_exposure: 1 | 2 | 3 | 4 | '';
     exposure_other: string | undefined;
     name_school: string | undefined;
     travel14days: 'Y' | 'N' | undefined;
@@ -44,7 +44,7 @@ interface Diph {
     breathing: 'Y' | 'N';
     other_symptoms: 'Y' | 'N';
     other_symptoms_specify: string | undefined;
-    outcome: 1 | 2 | 3 | undefined;
+    outcome: 1 | 2 | 3 | '';
     datedied: string | undefined;
     antibiotic: 'Y' | 'N' | undefined;
     antibiotic_date: string | undefined;
@@ -88,7 +88,7 @@ export default function edit() {
             exposure_other: case_report.exposure_other || undefined,
             name_school: case_report.name_school || undefined,
             travel14days: case_report.travel14days || undefined,
-            travel_detail: case_report.travel_detail || undefined,
+            travel_detail: case_report.travel_detail || '',
             date_onset: case_report.date_onset || undefined,
             fever: case_report.fever || undefined,
             cough: case_report.cough || undefined,
@@ -167,14 +167,14 @@ export default function edit() {
             payload.diphtheriatoxin_date = '';
         }
 
-        // router.put(`/diph/${case_report.id}`, payload, {
-        //     onSuccess: () => {
-        //         form.reset();
-        //     },
-        //     onError: (errors) => {
-        //         console.log('Validation failed:', errors);
-        //     },
-        // });
+        router.put(`/diph/${case_report.id}`, payload, {
+            onSuccess: () => {
+                form.reset();
+            },
+            onError: (errors) => {
+                console.log('Validation failed:', errors);
+            },
+        });
     }
 
     const admitted = form.watch('admitted');
@@ -187,15 +187,13 @@ export default function edit() {
     const antibiotic = form.watch('antibiotic');
     const diphtheriatoxin = form.watch('diphtheriatoxin');
 
-    console.log(typeof form.watch('final_classi'));
-
     const onError = (errors: any) => {
         console.log('Form validation errors:', errors);
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Add Diphtheria Case" />
+            <Head title="Edit Diphtheria Case" />
             <div className="overflow-x flex w-full space-y-4 p-4">
                 <div className="flex w-full flex-row justify-start">
                     <Form {...form}>
@@ -392,7 +390,7 @@ export default function edit() {
                                         <FormItem>
                                             <FormLabel>Name of parent/caregiver:</FormLabel>
                                             <FormControl>
-                                                <Input {...field} placeholder="Write here..." className="min-w-149 border-2 border-black" />
+                                                <Input value={form.watch('caregiver') ?? ''} onChange={(e) => form.setValue('caregiver', e.target.value)} placeholder="Write here..." className="min-w-149 border-2 border-black" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -405,7 +403,7 @@ export default function edit() {
                                         <FormItem>
                                             <FormLabel>Parent/caregiver contact number:</FormLabel>
                                             <FormControl>
-                                                <Input {...field} placeholder="Write here..." className="min-w-149 border-2 border-black" />
+                                                <Input value={form.watch('caregiver_no') ?? ''} onChange={(e) => form.setValue('caregiver_no', e.target.value)} placeholder="Write here..." className="min-w-149 border-2 border-black" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -437,7 +435,7 @@ export default function edit() {
                                         </FormItem>
                                     )}
                                 />
-                                {date_report !== '' ? (
+                                {date_report !== '' && date_report !== undefined ? (
                                     <div className="flex flex-row items-start gap-x-32">
                                         <FormField
                                             control={form.control}
@@ -446,7 +444,7 @@ export default function edit() {
                                                 <FormItem>
                                                     <FormLabel>Name of Reporter:</FormLabel>
                                                     <FormControl>
-                                                        <Input {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input value={form.watch('reporter') ?? ''} onChange={(e) => form.setValue('reporter', e.target.value)} className="min-w-149 border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -459,7 +457,7 @@ export default function edit() {
                                                 <FormItem>
                                                     <FormLabel>Reporter Contact Number:</FormLabel>
                                                     <FormControl>
-                                                        <Input {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input value={form.watch('reporter_no') ?? ''} onChange={(e) => form.setValue('reporter_no', e.target.value)} className="min-w-149 border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -475,7 +473,7 @@ export default function edit() {
                                                 <FormItem>
                                                     <FormLabel>Name of Reporter:</FormLabel>
                                                     <FormControl>
-                                                        <Input disabled {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input disabled value={form.watch('reporter') ?? ''} onChange={(e) => form.setValue('reporter', e.target.value)} className="min-w-149 border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -488,7 +486,7 @@ export default function edit() {
                                                 <FormItem>
                                                     <FormLabel>Reporter Contact Number:</FormLabel>
                                                     <FormControl>
-                                                        <Input disabled {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input disabled value={form.watch('reporter_no') ?? ''} onChange={(e) => form.setValue('reporter_no', e.target.value)} className="min-w-149 border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -522,7 +520,7 @@ export default function edit() {
                                         </FormItem>
                                     )}
                                 />
-                                {date_investigation !== '' ? (
+                                {date_investigation !== '' && date_investigation !== undefined ? (
                                     <div className="flex flex-row items-start gap-x-32">
                                         <FormField
                                             control={form.control}
@@ -531,7 +529,7 @@ export default function edit() {
                                                 <FormItem>
                                                     <FormLabel>Name of Investigator:</FormLabel>
                                                     <FormControl>
-                                                        <Input {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input value={form.watch('investigator') ?? ''} onChange={(e) => form.setValue('investigator', e.target.value)} className="min-w-149 border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -544,7 +542,7 @@ export default function edit() {
                                                 <FormItem>
                                                     <FormLabel>Investigator Contact Number:</FormLabel>
                                                     <FormControl>
-                                                        <Input {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input value={form.watch('investigator_no') ?? ''} onChange={(e) => form.setValue('investigator_no', e.target.value)} className="min-w-149 border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -560,7 +558,7 @@ export default function edit() {
                                                 <FormItem>
                                                     <FormLabel>Name of Investigator:</FormLabel>
                                                     <FormControl>
-                                                        <Input disabled {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input disabled value={form.watch('investigator') ?? ''} onChange={(e) => form.setValue('investigator', e.target.value)} className="min-w-149 border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -573,7 +571,7 @@ export default function edit() {
                                                 <FormItem>
                                                     <FormLabel>Investigator Contact Number:</FormLabel>
                                                     <FormControl>
-                                                        <Input disabled {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input disabled value={form.watch('investigator_no') ?? ''} onChange={(e) => form.setValue('investigator_no', e.target.value)} className="min-w-149 border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -851,7 +849,7 @@ export default function edit() {
                                                 </div>
 
                                                 <RadioGroup
-                                                    value={form.watch('sourceinformation') ?? ''}
+                                                    value={Number(form.watch('sourceinformation')) ?? ''}
                                                     onValueChange={(val) => form.setValue('sourceinformation', Number(val) as 1 | 2 | 3)}
                                                     className="flex flex-row space-x-4"
                                                 >
@@ -900,7 +898,7 @@ export default function edit() {
 
                                                 <RadioGroup
                                                     disabled
-                                                    value={form.watch('sourceinformation') ?? ''}
+                                                    value={Number(form.watch('sourceinformation') )?? ''}
                                                     onValueChange={(val) => form.setValue('sourceinformation', Number(val) as 1 | 2 | 3)}
                                                     className="flex flex-row space-x-4"
                                                 >
@@ -1135,7 +1133,7 @@ export default function edit() {
                                                         <FormLabel className="mb-1">Other symptoms, specify</FormLabel>
                                                     </div>
                                                     <FormControl>
-                                                        <Input className="border-2 border-black" type="text" placeholder="Write here..." {...field} />
+                                                        <Input className="border-2 border-black" type="text" placeholder="Write here..." value={form.watch('other_symptoms_specify') ?? ''} onChange={(e) => form.setValue('other_symptoms_specify', e.target.value)} />
                                                     </FormControl>
                                                 </div>
                                                 <FormMessage />
@@ -1158,7 +1156,7 @@ export default function edit() {
                                                             disabled
                                                             type="text"
                                                             placeholder="Write here..."
-                                                            {...field}
+                                                            value={form.watch('other_symptoms_specify') ?? ''} onChange={(e) => form.setValue('other_symptoms_specify', e.target.value)}
                                                         />
                                                     </FormControl>
                                                 </div>
@@ -1368,8 +1366,8 @@ export default function edit() {
                                                     </FormLabel>
                                                 </div>
                                                 <RadioGroup
-                                                    value={Number(form.watch('final_classi'))}
-                                                    onValueChange={(val) => form.setValue('final_classi', Number(val) as 1 | 2 | 3 | 4 | 5)}
+                                                    value={Number(form.watch('final_classi')) ?? ''}
+                                                    onValueChange={(val) => form.setValue('final_classi', parseInt(val) as 1 | 2 | 3 | 4 | 5)}
                                                     className="flex flex-row space-x-4"
                                                 >
                                                     {(
@@ -1383,7 +1381,7 @@ export default function edit() {
                                                     ).map((option) => (
                                                         <FormItem key={option.value} className="flex items-center space-x-2">
                                                             <FormControl>
-                                                                <RadioGroupItem value={Number(option.value)} id={option.value} />
+                                                                <RadioGroupItem value={option.value} id={option.value} />
                                                             </FormControl>
                                                             <FormLabel htmlFor={option.value}>{option.label}</FormLabel>
                                                         </FormItem>
@@ -1397,7 +1395,7 @@ export default function edit() {
                             </div>
                             <div className="flex justify-center">
                                 <Button className="bg-blue-500 text-white hover:bg-blue-600" type="submit">
-                                    Register User
+                                    Update Diphtheria Case
                                 </Button>
                             </div>
                         </form>

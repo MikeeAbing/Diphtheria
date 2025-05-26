@@ -34,13 +34,13 @@ import TableNoSortHeader from '../../../../../../../resources/js/components/data
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Patient List',
-        href: '/patient',
+        title: 'Diphtheria Cases List',
+        href: '/diph',
     },
 ];
 
-export default function Patient() {
-    const {flash} = usePage().props;
+export default function Diph() {
+    const { flash } = usePage().props;
 
     useEffect(() => {
         if (flash?.success) {
@@ -48,21 +48,23 @@ export default function Patient() {
         }
     }, [flash?.success]);
 
-    const { data: patients } = usePage().props.patients;
+    const { data: diph } = usePage().props.diph;
 
-    type Patient = {
+    type Diph = {
         id: string;
-        patient_number: string;
-        full_name: string;
-        created_at: string;
-        diph: {
+        case_id: number;
+        admitted: string;
+        date_admitted: string,
+        patient: {
             id: string;
-            user_id: string;
+            patient_number: string,
             full_name: string;
         } | null;
     };
 
-    const [data, setData] = useState<Patient[]>([...patients]);
+    const [data, setData] = useState<Diph[]>([...diph]);
+
+    console.log(data);
 
     // const { links, meta } = usePage().props;
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -70,13 +72,13 @@ export default function Patient() {
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
-    const { filters, diph, users } = usePage().props;
-    const { params, setParams, setTimeDebounce } = useDebouncedSearch('/patient', filters);
+    const { filters, users } = usePage().props;
+    const { params, setParams, setTimeDebounce } = useDebouncedSearch('/diph', filters);
     const { sort } = useSorting(filters, setParams);
 
     const [search, setSearch] = useState('');
 
-    const columns: ColumnDef<Patient>[] = [
+    const columns: ColumnDef<Diph>[] = [
         {
             id: 'actions',
             header: ({ }) => <TableNoSortHeader title="Actions" />,
@@ -90,27 +92,21 @@ export default function Patient() {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <Link href={`/patient/${row.original.id}/edit`}>
+                            <Link href={`/diph/${row.original.id}/edit`}>
                                 <DropdownMenuItem>
                                     <PencilLine className="h-4 w-4" />
-                                    Edit Patient Data
+                                    Edit Diphtheria Case
                                 </DropdownMenuItem>
                             </Link>
                             <DropdownMenuSeparator />
-                            {/* <Link href={`/diph/create?search=${row.original.patient_number}`}>
+                            <sub><u>Laboratory</u></sub>
+                            <Link href='/lab/create'>
                                 <DropdownMenuItem>
-                                    <PlusCircleIcon className="h-4 w-4" />
-                                    Add Diphtheria Case
+                                    <PencilLine className="h-4 w-4" />
+                                    Add Laboratory Data
                                 </DropdownMenuItem>
-                            </Link> */}
-                            <Link href={`/consultation/?id=${row.original.patient_number}`}>
-                                <DropdownMenuItem>
-                                    <PlusCircleIcon className="h-4 w-4" />
-                                    View Consultation
-                                </DropdownMenuItem>
-                            </Link> 
+                            </Link>
                             <DropdownMenuSeparator />
-
                             {/* {row.original.diph?.[0]?.id && (
                                 <div><Link href={`/diph/${row.original.diph?.[0]?.id}/edit`}>
                                     <DropdownMenuItem>
@@ -134,61 +130,61 @@ export default function Patient() {
             enableHiding: false,
         },
         {
-            accessorKey: 'patient_number',
+            accessorKey: 'case_id',
             header: ({ column }) => (
                 <TableSortHeader
-                    title="Patient Number"
+                    title="Case ID"
                     onClick={() => {
                         setTimeDebounce(50);
-                        sort('patient_number');
+                        sort('encoded_by');
                     }}
-                    sort={params.col === 'patient_number' ? params.sort : null}
+                    sort={params.col === 'encoded_by' ? params.sort : null}
                 />
             ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue('patient_number')}</div>,
+            cell: ({ row }) => <div className="capitalize">{row.getValue('case_id')}</div>,
         },
         {
-            accessorKey: 'full_name',
+            accessorKey: 'admitted',
             header: ({ column }) => (
                 <TableSortHeader
-                    title="Patient Name"
+                    title="Admitted(Y/N)"
                     onClick={() => {
                         setTimeDebounce(50);
-                        sort('full_name');
+                        sort('encoded_by');
                     }}
-                    sort={params.col === 'full_name' ? params.sort : null}
+                    sort={params.col === 'encoded_by' ? params.sort : null}
                 />
             ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue('full_name')}</div>,
+            cell: ({ row }) => <div className="capitalize">{row.getValue('admitted')}</div>,
         },
         {
-            accessorKey: 'created_at',
+            accessorKey: 'date_admitted',
             header: ({ column }) => (
                 <TableSortHeader
-                    title="Date Encoded"
+                    title="Date Admitted"
                     onClick={() => {
                         setTimeDebounce(50);
-                        sort('created_at');
+                        sort('encoded_by');
                     }}
-                    sort={params.col === 'created_at' ? params.sort : null}
+                    sort={params.col === 'encoded_by' ? params.sort : null}
                 />
             ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue('created_at')}</div>,
+            cell: ({ row }) => <div className="capitalize">{row.getValue('date_admitted')}</div>,
         },
         {
-            accessorKey: 'diph',
+            accessorKey: 'patient',
             header: ({ column }) => (
                 <TableSortHeader
-                    title="Encoded By"
+                    title="Name of Patient"
                     onClick={() => {
                         setTimeDebounce(50);
-                        sort('diph');
+                        sort('epi_id');
                     }}
-                sort={params.col === 'diph' ? params.sort : null}
+                    sort={params.col === 'epi_id' ? params.sort : null}
                 />
             ),
             cell: ({ row }) => {
-                return <div className="capitalize">{row.original.diph?.user_id}</div>;
+                return <div className="capitalize">{row.original.patient?.full_name}</div>;
             },
         },
     ];
@@ -224,12 +220,12 @@ export default function Patient() {
                         setParams={setParams}
                         setTimeDebounce={setTimeDebounce}
                     /> */}
-                    <Link href="/patient/create">
+                    {/* <Link href="/patient/create">
                         <Button className="h-8 px-2 lg:px-3">
                             <PlusCircleIcon className="h-4 w-4" />
                             Add Patient
                         </Button>
-                    </Link>
+                    </Link> */}
                     {/* <Dialog>
                         <DialogTrigger asChild>
                             <Button className="h-8 px-2 lg:px-3">
@@ -264,12 +260,12 @@ export default function Patient() {
                         </DialogContent>
                     </Dialog> */}
 
-                    <Input
+                    {/* <Input
                         placeholder="Search using patient's full name..."
                         value={(table.getColumn('full_name')?.getFilterValue() as string) ?? ''}
                         onChange={(event) => table.getColumn('full_name')?.setFilterValue(event.target.value)}
                         className="max-w-sm"
-                    />
+                    /> */}
                     <DataTableViewOptions table={table} />
                     {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>

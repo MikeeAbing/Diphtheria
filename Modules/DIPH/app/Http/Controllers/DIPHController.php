@@ -15,17 +15,17 @@ use Modules\DIPH\Http\Requests\DIPHFormRequest;
 use Illuminate\Support\Facades\Auth;
 class DIPHController extends Controller
 {
-    // protected DIPHService $diphService;
+    protected DIPHService $diphService;
     // /**
     //  * Create the controller instance.
     //  *
     //  * @return void
     //  */
-    // public function __construct(DIPHService $diphService)
-    // {
-    //     $this->authorizeResource(User::class, 'user');
-    //     $this->diphService = $diphService;
-    // }
+    public function __construct(DIPHService $diphService)
+    {
+        // $this->authorizeResource(User::class, 'user');
+        $this->diphService = $diphService;
+    }
 
     /**
      * Display a listing of the resource.
@@ -34,9 +34,23 @@ class DIPHController extends Controller
      * @return Inertia
      */
 
-    public function index()
+    public function index(Request $request)
     {
-        // return inertia('DIPH::Patient/index');
+        $diph = $this->diphService->index();
+        return inertia(
+            'DIPH::DIPH/index',
+            ['diph' => $diph]
+        );
+    }
+
+    public function getDiphList(Request $request){
+        $patient_number = $request->query('id');
+
+        $diph = DIPH::where('patient_number', 'EQUALS', $patient_number);
+        return inertia(
+            'DIPH::diph/index',
+            [$diph]
+        );
     }
 
     /**
@@ -83,21 +97,24 @@ class DIPHController extends Controller
     public function edit(DIPH $diph)
     {
         return Inertia::render('DIPH::DIPH/edit', [
-            'diph'=>$diph
+            'diph' => $diph
         ]);
     }
 
-   /**
+    /**
      * Update the specified resource in storage.
      *
      * @param  DIPHFormRequest  $request
      * @param  DIPH  $diph
      * @return Redirect
      */
-    public function update(DIPHFormRequest  $request, DIPH  $diph):RedirectResponse
+    public function update(DIPHFormRequest $request, DIPH $diph): RedirectResponse
     {
-        $diph->update($request->validated());
-
+        $diph->update(
+            collect($request->validated())
+                ->except('case_id', 'patient_number')
+                ->toArray()
+        );
         return redirect(route('patient.index'))->with('success', 'Case report updated.');
     }
 

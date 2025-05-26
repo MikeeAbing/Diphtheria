@@ -61,7 +61,7 @@ export const patientFormSchema = z
             invalid_type_error: 'Must be of type string',
             required_error: 'Must choose whether patient is an indigenous person or not',
         }),
-        IP_tribe: z.number({ message: 'Must be an integer' }).min(1).max(33).optional(),
+        IP_tribe: z.coerce.number({ message: 'Must be an integer' }).min(1).max(33).optional(),
         IP_tribe_specify: z.string({ invalid_type_error: 'Must be of type string' }).max(255).optional(),
         pat_address_reg: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(10).optional(),
         pat_address_prov: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(10).optional(),
@@ -97,7 +97,7 @@ export const patientFormSchema = z
 
         const ages = calculateAgeComponents(dob);
 
-        if(data.suffixname === ''){
+        if (data.suffixname === '') {
             data.suffixname = 'N/A';
         }
 

@@ -189,6 +189,10 @@ class DIPH extends Model implements IsFilterable
         return $this->belongsTo(Patient::class, 'patient_number', 'patient_number');
     }
 
+    public function patient(){
+        return $this->belongsTo(Patient::class, 'patient_number', 'patient_number');
+    }
+
     public function getCanAttribute()
     {
         return [
