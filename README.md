@@ -88,6 +88,8 @@ npm install @tanstack/react-table
 
 `npx shadcn@latest add toast`
 
+'npx shadcn@latest add sonner'
+
 `npx shadcn@latest add popover`
 
 `npx shadcn@latest add command`

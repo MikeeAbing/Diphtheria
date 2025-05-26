@@ -15,7 +15,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'DIPH',
-        href: '/diph',
+        href: '/patient',
         icon: Folder,
     }
 ];

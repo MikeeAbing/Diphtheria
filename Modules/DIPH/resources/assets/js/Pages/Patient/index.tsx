@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem, User } from '@/types';
+import type { BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 
 import {
@@ -14,111 +14,76 @@ import {
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table';
-import { MoreHorizontal, PlusCircleIcon } from 'lucide-react';
+import { MoreHorizontal, PencilLine, PlusCircleIcon, Trash2 } from 'lucide-react';
 import * as React from 'react';
 
-import { DataTablePagination } from '@/components/data-table/data-table-pagination';
+import { Input } from '@/components/ui/input';
+
 import TableSortHeader from '@/components/data-table/data-table-sort-header.jsx';
-import TableToolbar from '@/components/data-table/data-table-toolbar.jsx';
 import { DataTableViewOptions } from '@/components/data-table/data-table-view-options';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
 
 import useDebouncedSearch from '@/hooks/use-debounced-search';
 import useSorting from '@/hooks/use-sorting';
-import { useEffect } from 'react';
-import { toast } from 'sonner';
+
+import { useEffect, useState } from 'react';
+import TableNoSortHeader from '../../../../../../../resources/js/components/data-table/data-table-no-sort-header';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Users',
-        href: '/iam/users',
+        title: 'Diphtheria',
+        href: '/patient',
     },
 ];
 
-export default function User({ success }) {
+export default function Patient({ success }) {
     useEffect(() => {
         if (success) {
-            toast('User is successfully registered!');
+            // toast('Case Investigation Form successfully saved');
+            console.log(success);
         }
     }, [success]);
 
-    const { data: users, links, meta } = usePage().props.users;
+    const { data: patients } = usePage().props.patients;
+
+    type Patient = {
+        id: string;
+        patient_number: string;
+        full_name: string;
+        created_at: string;
+        diph: {
+            id: string;
+            user_id: string;
+            full_name: string;
+        } | null;
+    };
+
+    const [data, setData] = useState<Patient[]>([...patients]);
+
+    console.log(data);
+
+    console.log(data);
+
+    // const { links, meta } = usePage().props;
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
-    const { filters, roles } = usePage().props;
-    const { params, setParams, setTimeDebounce } = useDebouncedSearch('/iam/users', filters);
+    const { filters, diph, users } = usePage().props;
+    const { params, setParams, setTimeDebounce } = useDebouncedSearch('/patient', filters);
     const { sort } = useSorting(filters, setParams);
 
-    const columns: ColumnDef<User>[] = [
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <Checkbox
-                    checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
-            accessorKey: 'full_name',
-            header: ({ column }) => (
-                <TableSortHeader
-                    title="Full Name"
-                    onClick={() => {
-                        setTimeDebounce(50);
-                        sort('full_name');
-                    }}
-                    sort={params.col === 'full_name' ? params.sort : null}
-                />
-            ),
-            //cell: ({ row }) => <div className="capitalize">{row.getValue('full_name')}</div>,
-        },
-        {
-            accessorKey: 'username',
-            header: ({ column }) => (
-                <TableSortHeader
-                    title="Username"
-                    onClick={() => {
-                        setTimeDebounce(50);
-                        sort('username');
-                    }}
-                    sort={params.col === 'username' ? params.sort : null}
-                />
-            ),
-            //cell: ({ row }) => <div className="capitalize">{row.getValue('email')}</div>,
-        },
-        {
-            accessorKey: 'email',
-            header: ({ column }) => (
-                <TableSortHeader
-                    title="Email"
-                    onClick={() => {
-                        setTimeDebounce(50);
-                        sort('email');
-                    }}
-                    sort={params.col === 'email' ? params.sort : null}
-                />
-            ),
-            //cell: ({ row }) => <div className="capitalize">{row.getValue('email')}</div>,
-        },
+    const [search, setSearch] = useState('');
+
+    const columns: ColumnDef<Patient>[] = [
         {
             id: 'actions',
-            enableHiding: false,
-            cell: ({ row }) => {
-                return (
+            header: ({}) => <TableNoSortHeader title="Actions" />,
+            cell: ({ row }) => (
+                <center>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -127,20 +92,97 @@ export default function User({ success }) {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <Link href={`/iam/users/${row.original.id}/edit`}>
-                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                            <Link href={`/diph/create?search=${row.original.patient_number}`}>
+                                <DropdownMenuItem>
+                                    <PlusCircleIcon className="h-4 w-4" />
+                                    Add Diphtheria Case
+                                </DropdownMenuItem>
                             </Link>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
+                            {row.original.diph?.[0]?.id && (
+                                <Link href={`/diph/${row.original.diph?.[0]?.id}/edit`}>
+                                    <DropdownMenuItem>
+                                        <PencilLine className="h-4 w-4" />
+                                        Edit Diphtheria Case
+                                    </DropdownMenuItem>
+                                </Link>
+                            )}
+                            <DropdownMenuSeparator />
+                            <Link href="/iam/users/create">
+                                <DropdownMenuItem>
+                                    <Trash2 className="h-4 w-4" />
+                                    Delete
+                                </DropdownMenuItem>
+                            </Link>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                );
+                </center>
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'patient_number',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Patient Number"
+                    onClick={() => {
+                        setTimeDebounce(50);
+                        sort('encoded_by');
+                    }}
+                    sort={params.col === 'encoded_by' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('patient_number')}</div>,
+        },
+        {
+            accessorKey: 'full_name',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Patient Name"
+                    onClick={() => {
+                        setTimeDebounce(50);
+                        sort('encoded_by');
+                    }}
+                    sort={params.col === 'encoded_by' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('full_name')}</div>,
+        },
+        {
+            accessorKey: 'created_at',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Date Encoded"
+                    onClick={() => {
+                        setTimeDebounce(50);
+                        sort('case_id');
+                    }}
+                    sort={params.col === 'case_id' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('created_at')}</div>,
+        },
+        {
+            accessorKey: 'diph',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Encoded By"
+                    onClick={() => {
+                        // setTimeDebounce(50);
+                        // sort('epi_id');
+                    }}
+                    // sort={params.col === 'epi_id' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => {
+                return <div className="capitalize">{row.original.diph?.user_id}</div>;
             },
         },
     ];
 
     const table = useReactTable({
-        data: users,
+        data: data,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -158,35 +200,62 @@ export default function User({ success }) {
         },
     });
 
-    // table.getHeaderGroups().map((headergroup) =>{
-    //     headergroup.headers.map((header)=>{
-    //         console.log(header)
-    //     })
-    // })
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Users" />
             <div className="w-full space-y-4 p-4">
                 <div className="flex items-center gap-2">
-                    <TableToolbar
+                    {/* <TableToolbar
                         placeholder="Search user"
                         search={params?.search}
                         params={params}
                         setParams={setParams}
                         setTimeDebounce={setTimeDebounce}
-                    />
-                    <Link href="/iam/users/create">
+                    /> */}
+                    <Link href="/patient/create">
                         <Button className="h-8 px-2 lg:px-3">
                             <PlusCircleIcon className="h-4 w-4" />
-                            Add
+                            Add Patient
                         </Button>
                     </Link>
+                    {/* <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="h-8 px-2 lg:px-3">
+                                <PlusCircleIcon className="h-4 w-4" />
+                                Add Diphtheria
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>Search for Patient</DialogTitle>
+                                <DialogDescription>Type the patient number of first name/middle name/last name of the patient.</DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="name" className="text-right">
+                                        Search:
+                                    </Label>
+                                    <Input
+                                        id="search"
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        placeholder="Search..."
+                                        className="col-span-3"
+                                    />
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <Link href={`/diph/create?search=${search}`}>
+                                    <Button>Search patient</Button>
+                                </Link>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog> */}
 
                     <Input
-                        placeholder="Filter user..."
-                        value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-                        onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
+                        placeholder="Search using patient's full name..."
+                        value={(table.getColumn('full_name')?.getFilterValue() as string) ?? ''}
+                        onChange={(event) => table.getColumn('full_name')?.setFilterValue(event.target.value)}
                         className="max-w-sm"
                     />
                     <DataTableViewOptions table={table} />
@@ -249,14 +318,14 @@ export default function User({ success }) {
                         </TableBody>
                     </Table>
                 </div>
-                <DataTablePagination
+                {/* <DataTablePagination
                     table={table}
                     params={params}
                     setParams={setParams}
                     setTimeDebounce={setTimeDebounce}
                     links={links}
                     meta={meta}
-                />
+                /> */}
                 {/* <div className="flex items-center justify-end space-x-2 py-4">
                         <div className="text-muted-foreground flex-1 text-sm">
                             {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
