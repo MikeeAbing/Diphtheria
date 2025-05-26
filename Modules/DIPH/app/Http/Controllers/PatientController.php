@@ -28,7 +28,7 @@ class PatientController extends Controller
      */
     public function __construct(PatientService $patientService)
     {
-        $this->authorizeResource(User::class, 'user');
+        // $this->authorizeResource(User::class, 'user');
         $this->patientService = $patientService;
     }
     /**
@@ -46,6 +46,15 @@ class PatientController extends Controller
         );
     }
 
+    public function consultation(Request $request)
+    {
+        $patient_number = $request->query('id');
+        return inertia(
+            'DIPH::Consultation/index',
+            ['patient_number' => $patient_number]
+        );
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -53,8 +62,8 @@ class PatientController extends Controller
     {
         $provinces = Province::select('id', 'province_name', 'region_id')->get();
         $regions = Region::select('id', 'region_name')->get();
-        $citymun = Municipality::select('id', 'city_name', 'region_id', 'province_id')->get();
-        return inertia('DIPH::Patient/create', ['provinces' => $provinces, 'regions' => $regions, 'citymun' => $citymun]);
+        $citymuns = Municipality::select('id', 'city_name', 'region_id', 'province_id')->get();
+        return inertia('DIPH::Patient/create', ['provinces' => $provinces, 'regions' => $regions, 'citymuns' => $citymuns]);
     }
 
     /**
@@ -77,16 +86,37 @@ class PatientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Patient $patient)
     {
-        return view('diph::edit');
+        $provinces = Province::select('id', 'province_name', 'region_id')->get();
+        $regions = Region::select('id', 'region_name')->get();
+        $citymuns = Municipality::select('id', 'city_name', 'region_id', 'province_id')->get();
+
+        return Inertia::render('DIPH::Patient/edit', [
+            'patient' => $patient,
+            'provinces' => $provinces,
+            'regions' => $regions,
+            'citymuns' => $citymuns
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param  PatientFormRequest  $request
+     * @param  Patient  $patient
+     * @return Redirect
      */
-    public function update(Request $request, $id)
+    public function update(PatientFormRequest $request, Patient $patient): RedirectResponse
     {
+        // $patient->update($request->validated());
+        $patient->update(
+            collect($request->validated())
+                ->except('patient_number')
+                ->toArray()
+        );
+
+        return redirect(route('patient.index'))->with('success', 'Patient data updated.');
     }
 
     /**

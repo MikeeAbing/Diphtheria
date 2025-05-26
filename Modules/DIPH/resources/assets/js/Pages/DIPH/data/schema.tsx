@@ -76,7 +76,7 @@ export const diphFormSchema = z
             })
             .optional(),
         total_dose: z
-            .union([z.literal('None'), z.literal(1), z.literal(2), z.literal(3), z.literal('Unknown'), z.literal('')], {
+            .union([z.literal('None'), z.literal(1), z.literal(2), z.literal(3), z.literal('Unknown')], {
                 invalid_type_error: 'Must either be None, 1, 2, 3, or Unknown',
             })
             .optional(),
@@ -87,15 +87,37 @@ export const diphFormSchema = z
             })
             .optional(),
         sourceinformation: z
-            .union([z.literal(1), z.literal(2), z.literal(3), z.literal('')], {
-                invalid_type_error: 'Source of Information must be only from among the following choices: Card, Recall, TCL',
+            .coerce
+            .number()
+            .refine((val) => [1, 2, 3].includes(val), {
+                message: 'Source of Information must be only from among the following choices: Card, Recall, TCL',
             })
             .optional(),
-        known_exposure: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal('')], {
-            required_error: 'Known Exposure is required',
-            invalid_type_error:
-                'Known Exposure must only be from among the following choices: Confirmed Case, Probable Case, Carrier, or International Traveler',
-        }),
+        // z
+        //     .union([z.literal(1), z.literal(2), z.literal(3)], {
+        //         invalid_type_error: 'Source of Information must be only from among the following choices: Card, Recall, TCL',
+        //     })
+        //     .optional(),
+        known_exposure:
+            z
+                .coerce
+                .number()
+                .refine((val) => [1, 2, 3, 4].includes(val), {
+                    message: 'Known Exposure must only be from among the following choices: Confirmed Case, Probable Case, Carrier, or International Traveler',
+                })
+                .optional(),
+        // z.preprocess(
+        //     (val) => Number(val),
+        //     z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]), {
+        //     required_error: 'Known Exposure is required',
+        //     invalid_type_error:
+        //         'Known Exposure must only be from among the following choices: Confirmed Case, Probable Case, Carrier, or International Traveler',
+        // }),
+        // z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)], {
+        //     required_error: 'Known Exposure is required',
+        //     invalid_type_error:
+        //         'Known Exposure must only be from among the following choices: Confirmed Case, Probable Case, Carrier, or International Traveler',
+        // }),
         exposure_other: z
             .string({
                 invalid_type_error: 'Other means of exposure must be a string',
@@ -132,7 +154,16 @@ export const diphFormSchema = z
         breathing: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),
         other_symptoms: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),
         other_symptoms_specify: z.string().max(150).optional(),
-        outcome: z.union([z.literal(1), z.literal(2), z.literal(3)], z.literal('')).optional(),
+        outcome:
+            z
+                .coerce
+                .number()
+                .refine((val) => [1, 2, 3].includes(val))
+                .optional(),
+        // z.preprocess(
+        //     (val) => Number(val),
+        //     z.union([z.literal(1), z.literal(2), z.literal(3)])).optional(),
+        // z.union([z.literal(1), z.literal(2), z.literal(3)]).optional(),
         datedied: z
             .string()
             .refine((val) => val === '' || /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(val), {
@@ -159,7 +190,18 @@ export const diphFormSchema = z
         //         message: 'Invalid date format. Please use YYYY-MM-DD.',
         //     })
         //     .optional(),
-        final_classi: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)], z.literal('')).optional(),
+        final_classi:
+            z
+                .coerce
+                .number()
+                .refine((val) => [1, 2, 3, 4, 5].includes(val), {
+                    message: 'Must be one of 1, 2, 3, 4, or 5',
+                })
+                .optional()
+        // z.preprocess(
+        //     (val) => Number(val),
+        //     z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)])).optional(),
+        // z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]).optional()
         // user_id: z.string().max(100).optional(),
         // timestamp: z
         //     .string()

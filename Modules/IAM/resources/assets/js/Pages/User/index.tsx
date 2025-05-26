@@ -39,12 +39,14 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function User({ success }) {
+export default function User() {
+    const {flash} = usePage().props;
+
     useEffect(() => {
-        if (success) {
-            toast('User is successfully registered!');
+        if (flash?.success) {
+            toast(flash?.success);
         }
-    }, [success]);
+    }, [flash?.success]);
 
     const { data: users, links, meta } = usePage().props.users;
     const [sorting, setSorting] = React.useState<SortingState>([]);

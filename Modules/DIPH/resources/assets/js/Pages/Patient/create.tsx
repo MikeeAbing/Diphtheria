@@ -11,15 +11,21 @@ import { Head, router } from '@inertiajs/react';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PatientForm, patientFormSchema } from './data/schema';
+import { title } from 'process';
 
 const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Patient List',
+        href: '/patient'
+    },
     {
         title: 'Add Patient',
         href: '/diph/patient/create',
     },
+
 ];
 
-export default function create({ provinces, regions, citymun }) {
+export default function create({ provinces, regions, citymuns }) {
     const form = useForm<PatientForm>({
         resolver: zodResolver(patientFormSchema),
         defaultValues: {
@@ -98,6 +104,11 @@ export default function create({ provinces, regions, citymun }) {
         });
     }
 
+    const province = provinces;
+    const permProvince = provinces;
+    const citymun = citymuns;
+    const permCityMun = citymuns;
+
     const member_of_IP = form.watch('member_of_IP');
     const IP_tribe = form.watch('IP_tribe');
     const selectedRegionId = form.watch('pat_address_reg');
@@ -120,12 +131,12 @@ export default function create({ provinces, regions, citymun }) {
     ];
 
     const filteredProvinces = useMemo(() => {
-        return provinces.filter((p) => String(p.region_id) === selectedRegionId);
-    }, [selectedRegionId, provinces]);
+        return province.filter((p) => String(p.region_id) === selectedRegionId);
+    }, [selectedRegionId, province]);
 
     const filteredPermProvinces = useMemo(() => {
-        return provinces.filter((p) => String(p.region_id) === selectedPermRegionId);
-    }, [selectedPermRegionId, provinces]);
+        return permProvince.filter((p) => String(p.region_id) === selectedPermRegionId);
+    }, [selectedPermRegionId, permProvince]);
 
     const filteredCityMun = useMemo(() => {
         if (!selectedRegionId || !selectedProvId) return [];
@@ -136,15 +147,15 @@ export default function create({ provinces, regions, citymun }) {
     const filteredPermCityMun = useMemo(() => {
         if (!selectedPermRegionId || !selectedPermProvId) return [];
 
-        return citymun.filter((c) => String(c.region_id) === selectedPermRegionId && String(c.province_id) === String(selectedPermProvId));
-    }, [selectedPermRegionId, selectedPermProvId, citymun]);
+        return permCityMun.filter((c) => String(c.region_id) === selectedPermRegionId && String(c.province_id) === String(selectedPermProvId));
+    }, [selectedPermRegionId, selectedPermProvId, permCityMun]);
 
     useEffect(() => {
-        if (selectedRegionId) {
+        if (selectedRegionId === null || selectedRegionId === '') {
             form.setValue('pat_address_prov', undefined);
             form.setValue('pat_address_city', undefined);
         }
-        if (selectedPermRegionId) {
+        if (selectedPermRegionId === null || selectedPermRegionId === '') {
             form.setValue('pat_perm_address_prov', undefined);
             form.setValue('pat_perm_address_city', undefined);
         }
@@ -428,39 +439,39 @@ export default function create({ provinces, regions, citymun }) {
                                                             form.setValue(
                                                                 'IP_tribe',
                                                                 Number(val) as
-                                                                    | 1
-                                                                    | 2
-                                                                    | 3
-                                                                    | 4
-                                                                    | 5
-                                                                    | 6
-                                                                    | 7
-                                                                    | 8
-                                                                    | 9
-                                                                    | 10
-                                                                    | 11
-                                                                    | 12
-                                                                    | 13
-                                                                    | 14
-                                                                    | 15
-                                                                    | 16
-                                                                    | 17
-                                                                    | 18
-                                                                    | 19
-                                                                    | 20
-                                                                    | 21
-                                                                    | 22
-                                                                    | 23
-                                                                    | 24
-                                                                    | 25
-                                                                    | 26
-                                                                    | 27
-                                                                    | 28
-                                                                    | 29
-                                                                    | 30
-                                                                    | 31
-                                                                    | 32
-                                                                    | 33,
+                                                                | 1
+                                                                | 2
+                                                                | 3
+                                                                | 4
+                                                                | 5
+                                                                | 6
+                                                                | 7
+                                                                | 8
+                                                                | 9
+                                                                | 10
+                                                                | 11
+                                                                | 12
+                                                                | 13
+                                                                | 14
+                                                                | 15
+                                                                | 16
+                                                                | 17
+                                                                | 18
+                                                                | 19
+                                                                | 20
+                                                                | 21
+                                                                | 22
+                                                                | 23
+                                                                | 24
+                                                                | 25
+                                                                | 26
+                                                                | 27
+                                                                | 28
+                                                                | 29
+                                                                | 30
+                                                                | 31
+                                                                | 32
+                                                                | 33,
                                                             );
                                                         }}
                                                         className="w-auto"
@@ -536,39 +547,39 @@ export default function create({ provinces, regions, citymun }) {
                                                             form.setValue(
                                                                 'IP_tribe',
                                                                 Number(val) as
-                                                                    | 1
-                                                                    | 2
-                                                                    | 3
-                                                                    | 4
-                                                                    | 5
-                                                                    | 6
-                                                                    | 7
-                                                                    | 8
-                                                                    | 9
-                                                                    | 10
-                                                                    | 11
-                                                                    | 12
-                                                                    | 13
-                                                                    | 14
-                                                                    | 15
-                                                                    | 16
-                                                                    | 17
-                                                                    | 18
-                                                                    | 19
-                                                                    | 20
-                                                                    | 21
-                                                                    | 22
-                                                                    | 23
-                                                                    | 24
-                                                                    | 25
-                                                                    | 26
-                                                                    | 27
-                                                                    | 28
-                                                                    | 29
-                                                                    | 30
-                                                                    | 31
-                                                                    | 32
-                                                                    | 33,
+                                                                | 1
+                                                                | 2
+                                                                | 3
+                                                                | 4
+                                                                | 5
+                                                                | 6
+                                                                | 7
+                                                                | 8
+                                                                | 9
+                                                                | 10
+                                                                | 11
+                                                                | 12
+                                                                | 13
+                                                                | 14
+                                                                | 15
+                                                                | 16
+                                                                | 17
+                                                                | 18
+                                                                | 19
+                                                                | 20
+                                                                | 21
+                                                                | 22
+                                                                | 23
+                                                                | 24
+                                                                | 25
+                                                                | 26
+                                                                | 27
+                                                                | 28
+                                                                | 29
+                                                                | 30
+                                                                | 31
+                                                                | 32
+                                                                | 33,
                                                             );
                                                         }}
                                                         className="w-auto"

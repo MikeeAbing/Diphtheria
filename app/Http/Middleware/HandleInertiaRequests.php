@@ -53,6 +53,10 @@ class HandleInertiaRequests extends Middleware
                 'sort'    => $request->query('sort'),
                 'filters' => $request->query('filters'),
             ],
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
+            ],
             /* 'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
