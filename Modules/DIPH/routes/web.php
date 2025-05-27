@@ -10,9 +10,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('diph', DIPHController::class)->names('diph');
     Route::resource('patient', PatientController::class)->names('patient');
     Route::resource('lab', LabController::class)->names('lab');
-   Route::resource('consultation', ConsultationController::class)->names('consultation');
-  // routes/web.php
+
+    Route::resource('consultation', ConsultationController::class)->names('consultation');
+    Route::get('/diph/{id}/print', [DIPHController::class, 'print'])->name('diph.print');
     Route::get('/api/jsonfile', [ConsultationController::class, 'jsonFile']);
-
-
-   });
+});

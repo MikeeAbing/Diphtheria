@@ -34,6 +34,10 @@ import TableNoSortHeader from '../../../../../../../resources/js/components/data
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
         title: 'Patient List',
         href: '/patient',
     },
@@ -103,7 +107,8 @@ export default function Patient() {
                                     Add Diphtheria Case
                                 </DropdownMenuItem>
                             </Link> */}
-                            <Link href={`/consultation?id=${row.original.patient_number}`}>
+
+                            <Link href='/consultation/'>
                                 <DropdownMenuItem>
                                     <PlusCircleIcon className="h-4 w-4" />
                                     View Consultation

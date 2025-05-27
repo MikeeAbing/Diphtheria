@@ -15,6 +15,10 @@ import { title } from 'process';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Dashboard',
+        href: '/dashboard'
+    },
+    {
         title: 'Patient List',
         href: '/patient'
     },
@@ -26,6 +30,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function create({ provinces, regions, citymuns }) {
+    const [age, setAge] = useState<{ years: number; months: number; days: number } | null>(null);
+
     const form = useForm<PatientForm>({
         resolver: zodResolver(patientFormSchema),
         defaultValues: {
@@ -56,8 +62,6 @@ export default function create({ provinces, regions, citymuns }) {
             phone_no: '',
         },
     });
-
-    const [age, setAge] = useState<{ years: number; months: number; days: number } | null>(null);
 
     function calculateAge(dobString) {
         const dob = new Date(dobString);
@@ -93,6 +97,10 @@ export default function create({ provinces, regions, citymuns }) {
         const payload = {
             ...values,
         };
+
+        payload.ageinyears = age?.years as number;
+        payload.ageinmonths = age?.months as number;
+        payload.ageindays = age?.days as number;
 
         router.post('/patient', payload, {
             onSuccess: () => {

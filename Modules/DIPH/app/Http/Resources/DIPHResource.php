@@ -17,6 +17,7 @@ class DIPHResource extends JsonResource
             'case_id' => $this->case_id,
             'admitted' => $this->admitted,
             'date_admitted' => $this->date_admitted,
+            'specimen_id'=>$this->specimen_id,
             'patient' => $this->whenLoaded('patient', function () {
                 return PatientDataResource::collection($this->patient);
             })

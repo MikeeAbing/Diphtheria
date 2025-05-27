@@ -58,8 +58,6 @@ class ConsultationController extends Controller
         return inertia('DIPH::Consultation/index', [
             'consultations' => $consultation->get()
         ]);
-       // return dd('sample');
-        
     }
 
     /**
@@ -67,10 +65,15 @@ class ConsultationController extends Controller
      */
     public function create()
     {
-        
-         
-        return inertia('DIPH::Consultation/create');
+        $search = $request->query('search');
 
+        if ($search) {
+            $patient_number = Patient::where('patient_number', 'like', "%{$search}%")->select('patient_number')->get();
+            return Inertia::render(
+                'DIPH::Consultation/create',
+                ['patient_number' => $patient_number]
+            );
+        }   
     }
     public function store(ConsultationFormRequest $request): RedirectResponse
     {

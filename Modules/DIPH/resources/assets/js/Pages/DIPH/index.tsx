@@ -28,11 +28,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { toast } from 'sonner';
 import useDebouncedSearch from '@/hooks/use-debounced-search';
 import useSorting from '@/hooks/use-sorting';
+import { Printer } from 'lucide-react';
 
 import { useEffect, useState } from 'react';
 import TableNoSortHeader from '../../../../../../../resources/js/components/data-table/data-table-no-sort-header';
 
 const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
     {
         title: 'Diphtheria Cases List',
         href: '/diph',
@@ -50,11 +55,14 @@ export default function Diph() {
 
     const { data: diph } = usePage().props.diph;
 
+    console.log(diph)
+
     type Diph = {
         id: string;
         case_id: number;
         admitted: string;
         date_admitted: string,
+        specimen_id: string,
         patient: {
             id: string;
             patient_number: string,
@@ -63,8 +71,6 @@ export default function Diph() {
     };
 
     const [data, setData] = useState<Diph[]>([...diph]);
-
-    console.log(data);
 
     // const { links, meta } = usePage().props;
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -98,15 +104,35 @@ export default function Diph() {
                                     Edit Diphtheria Case
                                 </DropdownMenuItem>
                             </Link>
-                            <DropdownMenuSeparator />
-                            <sub><u>Laboratory</u></sub>
-                            <Link href='/lab/create'>
+                            <Link href={`/diph/${row.original.id}/print`}>
                                 <DropdownMenuItem>
-                                    <PencilLine className="h-4 w-4" />
-                                    Add Laboratory Data
+                                    <Printer className="h-4 w-4" />
+                                    Print CIF
                                 </DropdownMenuItem>
                             </Link>
                             <DropdownMenuSeparator />
+                            {!row.original.specimen_id && (
+                                <>
+                                    <sub><u>Laboratory</u></sub>
+                                    <Link href={`/lab/create?id=${row.original.case_id}`}>
+                                        <DropdownMenuItem>
+                                            <PencilLine className="h-4 w-4" />
+                                            Add Laboratory Data
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <DropdownMenuSeparator /></>
+                            )}
+                            {row.original.specimen_id && (
+                                <>
+                                    <sub><u>Laboratory</u></sub>
+                                    <Link href={`/lab/${row.original.specimen_id}/edit`}>
+                                        <DropdownMenuItem>
+                                            <PencilLine className="h-4 w-4" />
+                                            Edit Laboratory Data
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <DropdownMenuSeparator /></>
+                            )}
                             {/* {row.original.diph?.[0]?.id && (
                                 <div><Link href={`/diph/${row.original.diph?.[0]?.id}/edit`}>
                                     <DropdownMenuItem>

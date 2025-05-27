@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const labFormSchema = z
     .object({
+        case_id: z.string({required_error: 'Case ID is missing', invalid_type_error: 'Must be of type string'}).max(50),
         date_specimen_collected: z
             .string()
             .refine((val) => val === '' || /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(val), {

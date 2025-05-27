@@ -17,13 +17,17 @@ class DIPHService
             request()->query('col')
         );
 
+         $query = DIPH::query()
+            ->leftJoin('specimen', 'case_report.case_id', '=', 'specimen.case_id')
+            ->select('case_report.*', 'specimen.id as specimen_id') // customize as needed
+            ->with([]); // if no Eloquent relationships
+
         // $result = DataTable::query(DIPH::query());
 
         // return DIPHResource::collection($result);
 
-        $result = DataTable::query(DIPH::query())
-        // ->with(['patient'])
-        ->searchable(['patient_number', 'case_id'])
+        $result = DataTable::query($query)
+        ->searchable(['case_report.patient_number', 'case_report.case_id', 'specimen.id'])
         ->applySort($sort)
         ->allowedSorts(['case_id', 'patient_number', 'admitted', 'date_admitted'])
         ->make();
