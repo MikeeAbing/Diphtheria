@@ -10,8 +10,6 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
-
-
 use ParagonIE\CipherSweet\BlindIndex;
 use ParagonIE\CipherSweet\EncryptedRow;
 use Spatie\Activitylog\LogOptions;
@@ -86,6 +84,7 @@ class Patient extends Model implements IsFilterable, CipherSweetEncrypted
      */
     public static function configureCipherSweet(EncryptedRow $encryptedRow): void
     {
+
         // $encryptedRow
         //     // ->addTextField('patient_number')
         //     // ->addBlindIndex('patient_number', new BlindIndex('patient_number_index'))
@@ -173,5 +172,9 @@ class Patient extends Model implements IsFilterable, CipherSweetEncrypted
 
     public function diph(){
         return $this->hasMany(DIPH::class, 'patient_number', 'patient_number');
+    }
+
+    public function consultation(){
+        return $this->hasMany(Consultation::class, 'patient_number', 'patient_number');
     }
 }

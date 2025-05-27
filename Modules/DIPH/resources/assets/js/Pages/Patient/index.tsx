@@ -34,6 +34,10 @@ import TableNoSortHeader from '../../../../../../../resources/js/components/data
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
         title: 'Patient List',
         href: '/patient',
     },

@@ -1362,7 +1362,7 @@ export default function create() {
                             </div>
                             <div className="flex justify-center">
                                 <Button className="bg-blue-500 text-white hover:bg-blue-600" type="submit">
-                                    Register User
+                                   Submit
                                 </Button>
                             </div>
                         </form>

@@ -39,6 +39,7 @@ class DIPHController extends Controller
     public function index(Request $request)
     {
         $diph = $this->diphService->index();
+        
         return inertia(
             'DIPH::DIPH/index',
             ['diph' => $diph]

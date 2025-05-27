@@ -48,6 +48,14 @@ export default function edit({ provinces, regions, citymuns }) {
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
+            title: 'Dashboard',
+            href: '/dashboard',
+        },
+        {
+            title: 'Patient List',
+            href: '/patient',
+        },
+        {
             title: 'Edit Patient Data',
             href: `/diph/patient/${patient_data.id}/edit`,
         },
@@ -94,7 +102,6 @@ export default function edit({ provinces, regions, citymuns }) {
         let months = today.getMonth() - dob.getMonth();
         let days = today.getDay() - dob.getDay();
 
-        console.log(years, months, days);
         if (days < 0) {
             months -= 1;
 
@@ -120,6 +127,10 @@ export default function edit({ provinces, regions, citymuns }) {
         const payload = {
             ...values,
         };
+
+        payload.ageinyears = age?.years as number;
+        payload.ageinmonths = age?.months as number;
+        payload.ageindays = age?.days as number;
 
         router.put(`/patient/${patient_data.id}`, payload, {
             onSuccess: () => {
@@ -467,7 +478,7 @@ export default function edit({ provinces, regions, citymuns }) {
                                                         <FormLabel>Indigenous People Tribe:</FormLabel>
                                                     </div>
                                                     <Select
-                                                        value={Number(form.watch('IP_tribe'))??''}
+                                                        value={Number(form.watch('IP_tribe')) ?? ''}
                                                         onValueChange={(val) => {
                                                             form.setValue(
                                                                 'IP_tribe',

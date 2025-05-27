@@ -12,6 +12,7 @@ class MunicipalitySeeder extends Seeder
      */
     public function run()
     {
+
         $cities = [
             ['old_id' => 124701, 'id' => 1204701, 'region_id' => 12, 'province_id' => 12047, '10digitPSGC' => '1204701000', 'city_name' => 'Alamada', 'geographic_level' => 'Mun', 'city_class' => null, 'uhc_class' => null, 'income_class' => null, 'population' => null],
             ['old_id' => 124702, 'id' => 1204702, 'region_id' => 12, 'province_id' => 12047, '10digitPSGC' => '1204702000', 'city_name' => 'Carmen', 'geographic_level' => 'Mun', 'city_class' => null, 'uhc_class' => null, 'income_class' => null, 'population' => null],
@@ -23,5 +24,6 @@ class MunicipalitySeeder extends Seeder
         foreach ($cities as $city) {
             Municipality::create($city);
         }
+        
     }
 }
