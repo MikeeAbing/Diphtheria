@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Modules\IAM\Models\User;
 use ParagonIE\CipherSweet\BlindIndex;
 use ParagonIE\CipherSweet\EncryptedRow;
 use Spatie\Activitylog\LogOptions;
@@ -191,6 +192,10 @@ class DIPH extends Model implements IsFilterable
 
     public function patient(){
         return $this->belongsTo(Patient::class, 'patient_number', 'patient_number');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function getCanAttribute()

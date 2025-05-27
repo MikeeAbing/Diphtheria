@@ -68,6 +68,7 @@ export default function Patient() {
 
     const [data, setData] = useState<Patient[]>([...patients]);
 
+    console.log(data)
     // const { links, meta } = usePage().props;
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -192,7 +193,7 @@ export default function Patient() {
                 />
             ),
             cell: ({ row }) => {
-                return <div className="capitalize">{row.original.diph?.user_id}</div>;
+                return <div className="capitalize">{row.original.diph?.[0].full_name}</div>;
             },
         },
     ];

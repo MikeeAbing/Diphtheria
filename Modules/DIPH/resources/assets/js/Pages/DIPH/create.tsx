@@ -23,7 +23,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function create() {
     const { patient_number } = usePage().props;
 
-    const pat_number = patient_number.map((p)=>p.patient_number);
+    const pat_number = patient_number.map((p) => p.patient_number);
 
 
     const form = useForm<DIPHForm>({
@@ -159,7 +159,6 @@ export default function create() {
                 <div className="flex w-full flex-row justify-start">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-8">
-                            {/* 1st Column */}
                             <h1>
                                 <b>FORM</b>
                             </h1>
@@ -248,7 +247,8 @@ export default function create() {
                                         )}
                                     />
                                 )}
-
+                            </div>
+                            <div className="flex flex-row items-start gap-x-32">
                                 <FormField
                                     control={form.control}
                                     name="outcome"
@@ -288,6 +288,8 @@ export default function create() {
                                         </FormItem>
                                     )}
                                 />
+                            </div>
+                            <div className="flex flex-row items-start gap-x-32">
                                 {Number(outcome) === 2 ? (
                                     <FormField
                                         control={form.control}
@@ -342,7 +344,6 @@ export default function create() {
                                 )}
                             </div>
                             <Separator />
-                            {/* 2nd Column */}
                             <div className="flex flex-row items-start gap-x-32">
                                 <FormField
                                     control={form.control}
@@ -357,6 +358,8 @@ export default function create() {
                                         </FormItem>
                                     )}
                                 />
+                            </div>
+                            <div className="flex flex-row items-start gap-x-32">
                                 <FormField
                                     control={form.control}
                                     name="caregiver_no"
@@ -372,7 +375,6 @@ export default function create() {
                                 />
                             </div>
                             <Separator />
-                            {/* 3rd Column */}
                             <div className="flex flex-row items-start gap-x-32">
                                 <FormField
                                     control={form.control}
@@ -396,6 +398,8 @@ export default function create() {
                                         </FormItem>
                                     )}
                                 />
+                            </div>
+                            <div className="flex flex-row items-start gap-x-32">
                                 {date_report !== '' ? (
                                     <div className="flex flex-row items-start gap-x-32">
                                         <FormField
@@ -405,7 +409,7 @@ export default function create() {
                                                 <FormItem>
                                                     <FormLabel>Name of Reporter:</FormLabel>
                                                     <FormControl>
-                                                        <Input {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input {...field} className="min-w-xs border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -418,7 +422,7 @@ export default function create() {
                                                 <FormItem>
                                                     <FormLabel>Reporter Contact Number:</FormLabel>
                                                     <FormControl>
-                                                        <Input {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input {...field} className="min-w-xs border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -434,7 +438,7 @@ export default function create() {
                                                 <FormItem>
                                                     <FormLabel>Name of Reporter:</FormLabel>
                                                     <FormControl>
-                                                        <Input disabled {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input disabled {...field} className="min-w-xs border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -447,7 +451,7 @@ export default function create() {
                                                 <FormItem>
                                                     <FormLabel>Reporter Contact Number:</FormLabel>
                                                     <FormControl>
-                                                        <Input disabled {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input disabled {...field} className="min-w-xs border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -457,7 +461,6 @@ export default function create() {
                                 )}
                             </div>
                             <Separator />
-                            {/* 4th Column */}
                             <div className="flex flex-row items-start gap-x-32">
                                 <FormField
                                     control={form.control}
@@ -481,6 +484,8 @@ export default function create() {
                                         </FormItem>
                                     )}
                                 />
+                            </div>
+                            <div className="flex flex-row items-start gap-x-32">
                                 {date_investigation !== '' ? (
                                     <div className="flex flex-row items-start gap-x-32">
                                         <FormField
@@ -490,7 +495,7 @@ export default function create() {
                                                 <FormItem>
                                                     <FormLabel>Name of Investigator:</FormLabel>
                                                     <FormControl>
-                                                        <Input {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input {...field} className="min-w-xs border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -503,7 +508,7 @@ export default function create() {
                                                 <FormItem>
                                                     <FormLabel>Investigator Contact Number:</FormLabel>
                                                     <FormControl>
-                                                        <Input {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input {...field} className="min-w-xs border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -519,7 +524,7 @@ export default function create() {
                                                 <FormItem>
                                                     <FormLabel>Name of Investigator:</FormLabel>
                                                     <FormControl>
-                                                        <Input disabled {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input disabled {...field} className="min-w-xs border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -532,7 +537,7 @@ export default function create() {
                                                 <FormItem>
                                                     <FormLabel>Investigator Contact Number:</FormLabel>
                                                     <FormControl>
-                                                        <Input disabled {...field} className="min-w-149 border-2 border-black" />
+                                                        <Input disabled {...field} className="min-w-xs border-2 border-black" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -584,6 +589,8 @@ export default function create() {
                                         </FormItem>
                                     )}
                                 />
+                            </div>
+                            <div className="flex flex-row items-start gap-x-32">
                                 <FormField
                                     control={form.control}
                                     name="known_exposure"
@@ -640,156 +647,164 @@ export default function create() {
                             <h4>
                                 <b>If given diphtheria-containing vaccine doses</b>
                             </h4>
-                            {/* {6th Column} */}
                             {diphtheria_dose === 'Y' ? (
-                                <div className="flex flex-row items-start gap-x-32">
-                                    <FormField
-                                        control={form.control}
-                                        name="total_dose"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <div className="flex w-full items-start gap-x-8">
-                                                    <div className="flex flex-col">
-                                                        <FormLabel className="mb-1">
-                                                            Number of total doses Diphtheria-containing vaccine{' '}
-                                                            <div className="text-red-500">
-                                                                <b>*</b>
-                                                            </div>
-                                                        </FormLabel>
-                                                        <FormDescription>
-                                                            Select from either <strong>None</strong>, <strong>1</strong>, <strong>2</strong>,{' '}
-                                                            <strong>3</strong> or <strong>Unknown</strong>.
-                                                        </FormDescription>
-                                                    </div>
+                                <>
 
-                                                    <RadioGroup
-                                                        value={form.watch('total_dose') ?? ''}
-                                                        onValueChange={(val) => form.setValue('total_dose', val as 'None' | 1 | 2 | 3 | 'Unknown')}
-                                                        className="flex flex-row space-x-4"
-                                                    >
-                                                        {['None', 1, 2, 3, 'Unknown'].map((option) => (
-                                                            <FormItem key={option} className="flex items-center space-x-2">
-                                                                <FormControl>
-                                                                    <RadioGroupItem value={option} id={option} />
-                                                                </FormControl>
-                                                                <FormLabel htmlFor={option}>{option}</FormLabel>
-                                                            </FormItem>
-                                                        ))}
-                                                    </RadioGroup>
-                                                </div>
-                                                <FormMessage /> {/* Shows validation errors if any */}
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="date_last_vaccination"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <div className="flex w-full items-start gap-x-8">
-                                                    <div className="flex flex-col">
-                                                        <FormLabel className="mb-1">
-                                                            Date of last vaccination{' '}
-                                                            <div className="text-red-500">
-                                                                <b>*</b>
-                                                            </div>
-                                                        </FormLabel>
+                                    <div className="flex flex-row items-start gap-x-32">
+                                        <FormField
+                                            control={form.control}
+                                            name="total_dose"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <div className="flex w-full items-start gap-x-8">
+                                                        <div className="flex flex-col">
+                                                            <FormLabel className="mb-1">
+                                                                Number of total doses Diphtheria-containing vaccine{' '}
+                                                                <div className="text-red-500">
+                                                                    <b>*</b>
+                                                                </div>
+                                                            </FormLabel>
+                                                            <FormDescription>
+                                                                Select from either <strong>None</strong>, <strong>1</strong>, <strong>2</strong>,{' '}
+                                                                <strong>3</strong> or <strong>Unknown</strong>.
+                                                            </FormDescription>
+                                                        </div>
+
+                                                        <RadioGroup
+                                                            value={form.watch('total_dose') ?? ''}
+                                                            onValueChange={(val) => form.setValue('total_dose', val as 'None' | 1 | 2 | 3 | 'Unknown')}
+                                                            className="flex flex-row space-x-4"
+                                                        >
+                                                            {['None', 1, 2, 3, 'Unknown'].map((option) => (
+                                                                <FormItem key={option} className="flex items-center space-x-2">
+                                                                    <FormControl>
+                                                                        <RadioGroupItem value={option} id={option} />
+                                                                    </FormControl>
+                                                                    <FormLabel htmlFor={option}>{option}</FormLabel>
+                                                                </FormItem>
+                                                            ))}
+                                                        </RadioGroup>
                                                     </div>
-                                                    <FormControl>
-                                                        <Input
-                                                            className="w-auto border-2 border-black"
-                                                            type="date"
-                                                            min="1925-01-01"
-                                                            value={field.value ?? ''}
-                                                            onChange={(e) => {
-                                                                const date = e.target.value;
-                                                                field.onChange(date);
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </div>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
+                                                    <FormMessage /> {/* Shows validation errors if any */}
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
+                                    <div>
+
+                                        <FormField
+                                            control={form.control}
+                                            name="date_last_vaccination"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <div className="flex w-full items-start gap-x-8">
+                                                        <div className="flex flex-col">
+                                                            <FormLabel className="mb-1">
+                                                                Date of last vaccination{' '}
+                                                                <div className="text-red-500">
+                                                                    <b>*</b>
+                                                                </div>
+                                                            </FormLabel>
+                                                        </div>
+                                                        <FormControl>
+                                                            <Input
+                                                                className="w-auto border-2 border-black"
+                                                                type="date"
+                                                                min="1925-01-01"
+                                                                value={field.value ?? ''}
+                                                                onChange={(e) => {
+                                                                    const date = e.target.value;
+                                                                    field.onChange(date);
+                                                                }}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </div>
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
+                                </>
                             ) : (
-                                <div className="flex flex-row items-start gap-x-32">
-                                    <FormField
-                                        control={form.control}
-                                        name="total_dose"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <div className="flex w-full items-start gap-x-8">
-                                                    <div className="flex flex-col">
-                                                        <FormLabel className="mb-1">
-                                                            Number of total doses Diphtheria-containing vaccine{' '}
-                                                            <div className="text-red-500">
-                                                                <b>*</b>
-                                                            </div>
-                                                        </FormLabel>
-                                                        <FormDescription>
-                                                            Select from either <strong>None</strong>, <strong>1</strong>, <strong>2</strong>,{' '}
-                                                            <strong>3</strong> or <strong>Unknown</strong>.
-                                                        </FormDescription>
-                                                    </div>
+                                <>
+                                    <div className="flex flex-row items-start gap-x-32">
+                                        <FormField
+                                            control={form.control}
+                                            name="total_dose"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <div className="flex w-full items-start gap-x-8">
+                                                        <div className="flex flex-col">
+                                                            <FormLabel className="mb-1">
+                                                                Number of total doses Diphtheria-containing vaccine{' '}
+                                                                <div className="text-red-500">
+                                                                    <b>*</b>
+                                                                </div>
+                                                            </FormLabel>
+                                                            <FormDescription>
+                                                                Select from either <strong>None</strong>, <strong>1</strong>, <strong>2</strong>,{' '}
+                                                                <strong>3</strong> or <strong>Unknown</strong>.
+                                                            </FormDescription>
+                                                        </div>
 
-                                                    <RadioGroup
-                                                        disabled
-                                                        value={form.watch('total_dose') ?? ''}
-                                                        onValueChange={(val) => form.setValue('total_dose', val as 'None' | 1 | 2 | 3 | 'Unknown')}
-                                                        className="flex flex-row space-x-4"
-                                                    >
-                                                        {['None', 1, 2, 3, 'Unknown'].map((option) => (
-                                                            <FormItem key={option} className="flex items-center space-x-2">
-                                                                <FormControl>
-                                                                    <RadioGroupItem value={option} id={option} />
-                                                                </FormControl>
-                                                                <FormLabel htmlFor={option}>{option}</FormLabel>
-                                                            </FormItem>
-                                                        ))}
-                                                    </RadioGroup>
-                                                </div>
-                                                <FormMessage /> {/* Shows validation errors if any */}
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="date_last_vaccination"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <div className="flex w-full items-start gap-x-8">
-                                                    <div className="flex flex-col">
-                                                        <FormLabel className="mb-1">
-                                                            Date of last vaccination{' '}
-                                                            <div className="text-red-500">
-                                                                <b>*</b>
-                                                            </div>
-                                                        </FormLabel>
-                                                    </div>
-                                                    <FormControl>
-                                                        <Input
+                                                        <RadioGroup
                                                             disabled
-                                                            className="w-auto border-2 border-black"
-                                                            type="date"
-                                                            min="1925-01-01"
-                                                            value={field.value ?? ''}
-                                                            onChange={(e) => {
-                                                                const date = e.target.value;
-                                                                field.onChange(date);
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </div>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
+                                                            value={form.watch('total_dose') ?? ''}
+                                                            onValueChange={(val) => form.setValue('total_dose', val as 'None' | 1 | 2 | 3 | 'Unknown')}
+                                                            className="flex flex-row space-x-4"
+                                                        >
+                                                            {['None', 1, 2, 3, 'Unknown'].map((option) => (
+                                                                <FormItem key={option} className="flex items-center space-x-2">
+                                                                    <FormControl>
+                                                                        <RadioGroupItem value={option} id={option} />
+                                                                    </FormControl>
+                                                                    <FormLabel htmlFor={option}>{option}</FormLabel>
+                                                                </FormItem>
+                                                            ))}
+                                                        </RadioGroup>
+                                                    </div>
+                                                    <FormMessage /> {/* Shows validation errors if any */}
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
+                                    <div className="flex flex-row items-start gap-x-32">
+                                        <FormField
+                                            control={form.control}
+                                            name="date_last_vaccination"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <div className="flex w-full items-start gap-x-8">
+                                                        <div className="flex flex-col">
+                                                            <FormLabel className="mb-1">
+                                                                Date of last vaccination{' '}
+                                                                <div className="text-red-500">
+                                                                    <b>*</b>
+                                                                </div>
+                                                            </FormLabel>
+                                                        </div>
+                                                        <FormControl>
+                                                            <Input
+                                                                disabled
+                                                                className="w-auto border-2 border-black"
+                                                                type="date"
+                                                                min="1925-01-01"
+                                                                value={field.value ?? ''}
+                                                                onChange={(e) => {
+                                                                    const date = e.target.value;
+                                                                    field.onChange(date);
+                                                                }}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </div>
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
+                                </>
                             )}
                             <Separator />
-                            {/* 7th Column */}
                             {diphtheria_dose === 'Y' ? (
                                 <FormField
                                     control={form.control}
@@ -889,7 +904,6 @@ export default function create() {
                                 />
                             )}
                             <Separator />
-                            {/* 8th Column */}
                             <div className="flex flex-row items-start gap-x-10">
                                 <FormField
                                     control={form.control}
@@ -904,6 +918,8 @@ export default function create() {
                                         </FormItem>
                                     )}
                                 />
+                            </div>
+                            <div className="flex flex-row items-start gap-x-10">
                                 <FormField
                                     control={form.control}
                                     name="name_school"
@@ -919,7 +935,6 @@ export default function create() {
                                 />
                             </div>
                             <Separator />
-                            {/* 9th Column */}
                             <div className="flex flex-row items-start gap-x-40">
                                 <FormField
                                     control={form.control}
@@ -955,8 +970,9 @@ export default function create() {
                                         </FormItem>
                                     )}
                                 />
-                                {/* Will only appear if travel_detail has a value */}
-                                {travel14days === 'Y' ? (
+                            </div>
+                            {travel14days === 'Y' ? (
+                                <div className="flex flex-row items-start gap-x-40">
                                     <FormField
                                         control={form.control}
                                         name="travel_detail"
@@ -983,7 +999,9 @@ export default function create() {
                                             </FormItem>
                                         )}
                                     />
-                                ) : (
+                                </div>
+                            ) : (
+                                <div className="flex flex-row items-start gap-x-40">
                                     <FormField
                                         control={form.control}
                                         name="travel_detail"
@@ -1011,12 +1029,11 @@ export default function create() {
                                             </FormItem>
                                         )}
                                     />
-                                )}
-                            </div>
+                                </div>
+                            )}
                             <h4 className="mt-10">
                                 <b>CLINICAL DETAILS:</b>
                             </h4>
-                            {/* 10th Column */}
                             <div className="flex flex-row items-start gap-x-12">
                                 <FormField
                                     control={form.control}
@@ -1049,12 +1066,39 @@ export default function create() {
                                         </FormItem>
                                     )}
                                 />
+                            </div>
+                            <div className="flex flex-row items-start gap-x-12">
                                 <FormLabel>Check Signs/Symptoms which apply:</FormLabel>
+                            </div>
+                            <div className="flex flex-row items-start gap-x-12">
                                 {[
                                     { id: 'fever', label: 'Fever' },
                                     { id: 'cough', label: 'Cough' },
                                     { id: 'sorethroat', label: 'Sore Throat' },
                                     { id: 'pseudomembrane', label: 'Pseudomembrane' },
+                                ].map((option) => (
+                                    <FormField
+                                        className="bg-neutral-500"
+                                        key={option.id}
+                                        control={form.control}
+                                        name={option.id as any}
+                                        render={({ field }) => (
+                                            <FormItem className="flex flex-row items-start space-y-0 space-x-3">
+                                                <FormControl>
+                                                    <Checkbox
+                                                        checked={field.value === 'Y'}
+                                                        onCheckedChange={(checked) => field.onChange(checked ? 'Y' : 'N')}
+                                                        className="rounded-sm border-2 border-black"
+                                                    />
+                                                </FormControl>
+                                                <FormLabel className="text-sm leading-none font-medium">{option.label}</FormLabel>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                ))}</div>
+                            <div className="flex flex-row items-start gap-x-12">
+                                {[
                                     { id: 'swallowing', label: 'Swallowing' },
                                     { id: 'breathing', label: 'Breathing' },
                                     { id: 'other_symptoms', label: 'Other Symptoms' },
@@ -1081,7 +1125,6 @@ export default function create() {
                                 ))}
                             </div>
                             <Separator />
-                            {/* 11th column */}
                             <div className="flex flex-grow flex-row items-start gap-x-22">
                                 {other_symptoms === 'Y' ? (
                                     <FormField
@@ -1221,6 +1264,8 @@ export default function create() {
                                         )}
                                     />
                                 )}
+                            </div>
+                            <div className="flex flex-grow flex-row items-start gap-x-22">
                                 <FormField
                                     control={form.control}
                                     name="diphtheriatoxin"
@@ -1311,14 +1356,8 @@ export default function create() {
                                     />
                                 )}
                             </div>
-                            {/* <h4 className="mt-10">
-                                <b>SPECIMEN COLLECTION for Corynebacterium diphtheriae</b>
-                            </h4> */}
-                            {/* 13th Column */}
-                            {/* 14th Column */}
-                            {/* 15th Column */}
                             <Separator />
-                            <div className="flex flex-grow flex-row items-start gap-x-22">
+                            <div className="flex flex-grow flex-row items-start gap-x-15">
                                 <FormField
                                     control={form.control}
                                     name="final_classi"
@@ -1362,7 +1401,7 @@ export default function create() {
                             </div>
                             <div className="flex justify-center">
                                 <Button className="bg-blue-500 text-white hover:bg-blue-600" type="submit">
-                                   Submit
+                                    Submit
                                 </Button>
                             </div>
                         </form>

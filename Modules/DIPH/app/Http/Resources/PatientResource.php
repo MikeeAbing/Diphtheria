@@ -13,10 +13,10 @@ class PatientResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->id,
-            'patient_number'=>$this->patient_number,
+            'id' => $this->id,
+            'patient_number' => $this->patient_number,
             'full_name' => $this->full_name,
-            'created_at'=>$this->created_at->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'diph'=>$this->whenLoaded('diph', function(){
                 return ProviderResource::collection($this->diph);
             })

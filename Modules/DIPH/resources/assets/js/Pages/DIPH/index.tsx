@@ -72,6 +72,8 @@ export default function Diph() {
 
     const [data, setData] = useState<Diph[]>([...diph]);
 
+    console.log(data);
+
     // const { links, meta } = usePage().props;
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
