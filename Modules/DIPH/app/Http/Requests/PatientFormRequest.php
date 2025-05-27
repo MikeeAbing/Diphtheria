@@ -4,6 +4,7 @@ namespace Modules\DIPH\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
+use Modules\DIPH\Models\Patient;
 
 class PatientFormRequest extends FormRequest
 {
@@ -53,7 +54,7 @@ class PatientFormRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-        'patient_number'=> $this->input('patient_number') ?? substr((string) Str::uuid(), 0, 30)
+            'patient_number' => Patient::max('patient_number') + 1 ?? 1
         ]);
     }
 }

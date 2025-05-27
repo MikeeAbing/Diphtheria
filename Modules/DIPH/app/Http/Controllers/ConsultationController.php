@@ -73,7 +73,6 @@ class ConsultationController extends Controller
         return inertia('DIPH::Consultation/index', [
             'consultations' => $consultation->get()
         ]);
-        
     }
 
     /**
@@ -81,17 +80,15 @@ class ConsultationController extends Controller
      */
     public function create(Request $request)
     {
-        // $search = $request->query('search');
+        $search = $request->query('search');
 
-        // if ($search) {
-        //     $patient_number = Patient::where('patient_number', 'like', "%{$search}%")->select('patient_number')->get();
-        //     return Inertia::render(
-        //         'DIPH::Consultation/create',
-        //         ['patient_number' => $patient_number]
-        //     );
-        // }   
-        return inertia('DIPH::Patient/create');
-
+        if ($search) {
+            $patient_number = Patient::where('patient_number', 'like', "%{$search}%")->select('patient_number')->get();
+            return Inertia::render(
+                'DIPH::Consultation/create',
+                ['patient_number' => $patient_number]
+            );
+        }   
     }
 
     public function jsonFile()

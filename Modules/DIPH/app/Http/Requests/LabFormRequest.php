@@ -49,8 +49,8 @@ class LabFormRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'case_id' => $this->input('case_id') ?? substr((string) Str::uuid(), 0, 50),
-            'API_labdata_ID' => Lab::max('API_labdata_ID') + 1 ?? 0,
+            'case_id' => Lab::max('case_id') + 1 ?? 001,
+            'API_labdata_ID' => Lab::max('API_labdata_ID') + 1 ?? 1,
         ]);
     }
 }

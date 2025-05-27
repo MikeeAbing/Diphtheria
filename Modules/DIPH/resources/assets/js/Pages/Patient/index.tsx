@@ -101,13 +101,13 @@ export default function Patient() {
                                 </DropdownMenuItem>
                             </Link>
                             <DropdownMenuSeparator />
-                            <Link href={`/diph/create?search=${row.original.patient_number}`}>
+                            {/* <Link href={`/diph/create?search=${row.original.patient_number}`}>
                                 <DropdownMenuItem>
                                     <PlusCircleIcon className="h-4 w-4" />
                                     Add Diphtheria Case
                                 </DropdownMenuItem>
-                            </Link>
-                            <Link href={`/consultation/?id=${row.original.patient_number}`}>
+                            </Link> */}
+                            <Link href='/consultation/'>
                                 <DropdownMenuItem>
                                     <PlusCircleIcon className="h-4 w-4" />
                                     View Consultation
