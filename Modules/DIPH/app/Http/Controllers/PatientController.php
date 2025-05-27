@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Modules\DIPH\Http\Requests\PatientFormRequest;
 use Modules\DIPH\Http\Resources\ProviderResource;
 use Modules\DIPH\Models\DIPH;
+use Modules\DIPH\Models\Lab;
 use Modules\DIPH\Models\Patient;
 use Modules\DIPH\Services\PatientService;
 use Modules\IAM\Http\Resources\UserResource;

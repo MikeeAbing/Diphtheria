@@ -14,37 +14,62 @@ import { Head, router, usePage } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
 import { LabForm, labFormSchema } from './data/schema';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Add Laboratory Data',
-        href: '/diph/lab/create',
-    },
-];
+interface Lab {
+    id: number,
+    case_id: string,
+    date_specimen_collected: string | '',
+    specimen_type: number | undefined
+    lab_sent_RITM: 'Y' | 'N' | undefined,
+    date_sent_RITM: string | '',
+    date_received_by_lab: string | '',
+    time_received_by_lab: string | '',
+    type_test: number | undefined
+    lab_result: number | undefined
+    typeoforganism: '',
+    interpretation: ''
+}
 
-export default function create({ case_id, specimenType, testType, labResult }) {
+export default function create({ specimenType, testType, labResult }) {
+    const { lab } = usePage().props;
 
+    const lab_data = lab as Lab;
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Dashboard',
+            href: `/dashboard/`,
+        },
+        {
+            title: 'Diphtheria Cases List',
+            href: `/diph/`,
+        },
+        {
+            title: 'Edit Laboratory Data',
+            href: `/diph/lab/${lab_data.id}/edit`,
+        },
+    ];
 
     const form = useForm<LabForm>({
         resolver: zodResolver(labFormSchema),
         defaultValues: {
-            case_id: case_id,
-            date_specimen_collected: undefined,
-            specimen_type: undefined,
-            lab_sent_RITM: undefined,
-            date_sent_RITM: undefined,
-            date_received_by_lab: undefined,
-            time_received_by_lab: undefined,
-            type_test: undefined,
-            lab_result: undefined,
-            typeoforganism: '',
-            interpretation: ''
+            case_id: lab_data.case_id,
+            date_specimen_collected: lab_data.date_specimen_collected || undefined,
+            specimen_type: lab_data.specimen_type || undefined,
+            lab_sent_RITM: lab_data.lab_sent_RITM || undefined,
+            date_sent_RITM: lab_data.date_sent_RITM || undefined,
+            date_received_by_lab: lab_data.date_received_by_lab || undefined,
+            time_received_by_lab: lab_data.time_received_by_lab || undefined,
+            type_test: lab_data.type_test || undefined,
+            lab_result: lab_data.lab_result || undefined,
+            typeoforganism: lab_data.typeoforganism || undefined,
+            interpretation: lab_data.interpretation || undefined
         },
     });
 
     function onSubmit(values: LabForm) {
         const payload = { ...values };
 
-        router.post('/lab', payload, {
+        router.put(`/lab/${lab_data.id}`, payload, {
             onSuccess: () => {
                 form.reset();
             },
@@ -54,7 +79,7 @@ export default function create({ case_id, specimenType, testType, labResult }) {
         });
     }
 
-    const lab_result = form.watch('lab_result');
+    const lab_result = Number(form.watch('lab_result'));
 
     const onError = (errors: any) => {
         console.log('Form validation errors:', errors);
@@ -293,7 +318,7 @@ export default function create({ case_id, specimenType, testType, labResult }) {
                             />
                             <div className="flex justify-center">
                                 <Button className="bg-blue-500 text-white hover:bg-blue-600" type="submit">
-                                    Save Laboratory Data
+                                    Update Laboratory Data
                                 </Button>
                             </div>
                         </form>
