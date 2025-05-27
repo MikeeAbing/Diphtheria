@@ -13,6 +13,8 @@ use Modules\DIPH\Models\DIPH;
 use Modules\IAM\Models\User;
 use Modules\DIPH\Http\Requests\DIPHFormRequest;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class DIPHController extends Controller
 {
     protected DIPHService $diphService;
@@ -117,6 +119,15 @@ class DIPHController extends Controller
                 ->toArray()
         );
         return redirect(route('patient.index'))->with('success', 'Case report updated.');
+    }
+
+    public function print($id)
+    {
+        $diph = DIPH::with('patient')->findOrFail($id);
+
+        return Inertia::render('DIPH::DIPH/printCIF', [
+            'diph' => $diph,
+        ]);
     }
 
     /**

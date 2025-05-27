@@ -40,7 +40,7 @@ return new class extends Migration
             $table->string('occupation', 150)->nullable();
             $table->string('phone_no', 50)->nullable();
             $table->timestamps();
-            $table->softDeletes(); // <-- Adds 'deleted_at' column for soft deletes
+            $table->softDeletes(); 
         });
     }
 
