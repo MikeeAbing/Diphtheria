@@ -1,11 +1,27 @@
 import React, { useRef } from 'react';
 import { usePage } from '@inertiajs/react';
 import html2pdf from 'html2pdf.js';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const PrintCIF = () => {
   const { props } = usePage();
   const diph = props.diph;
   const patient = diph?.patient;
+  const city = props.city;
+  const province = props.province;
+  const permcity = props.permcity;
+  const permprovince = props.permprovince;
+
+  const barangays = [
+    { label: 'Bao', value: 1204701001 },
+    { label: 'Barangiran', value: 1204701002 },
+    { label: 'Camansi', value: 1204701003 },
+    { label: 'Dado', value: 1204701004 },
+    { label: 'Guiling', value: 1204701005 },
+  ];
+  const barangay = barangays.find((bar) => { if(Number(patient.pat_address_brgy) === bar.value) return bar.label });
+
+  const permbarangay = barangays.find((bar) => { if(Number(patient.pat_perm_address_brgy) === bar.value) return bar.label });
 
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -66,10 +82,10 @@ const PrintCIF = () => {
             </div>
             <div className="col-span-2 pl-4">
               <p>Type:</p>
-                <p className="mt-1">
-                  ☐ RHU/CHO &nbsp;&nbsp; ☐ Gov’t Hospital &nbsp;&nbsp; ☐ Private Hospital &nbsp;&nbsp; ☐ Clinic &nbsp;&nbsp; <br />
-                  ☐ Gov’t Laboratory &nbsp;&nbsp; ☐ Private Laboratory &nbsp;&nbsp; ☐ Airport/Seaport
-                </p>
+              <p className="mt-1">
+                ☐ RHU/CHO &nbsp;&nbsp; ☐ Gov’t Hospital &nbsp;&nbsp; ☐ Private Hospital &nbsp;&nbsp; ☐ Clinic &nbsp;&nbsp; <br />
+                ☐ Gov’t Laboratory &nbsp;&nbsp; ☐ Private Laboratory &nbsp;&nbsp; ☐ Airport/Seaport
+              </p>
             </div>
           </div>
         </div>
@@ -85,11 +101,14 @@ const PrintCIF = () => {
           </div>
           <div className="grid grid-cols-6 text-[9pt] border-b border-black">
             <div className="col-span-2 pr-4 border-r border-black">
-              <p className="mb-2 mt-4">Current Address: {patient?.pat_address_prov}</p>
+              <p className="mb-2 mt-4">Current Address: <br/>
+              {patient.pat_address_street_name}, {barangay.label}, {city.city_name}, {province.province_name}</p>
               <p>Permanent Address:</p>
+              {patient.pat_perm_address_street_name}, {permbarangay.label}, {permcity.city_name}, {permprovince.province_name}
             </div>
             <div className="col-span-2 pl-1 border-r border-black">
-              <p>Sex: ☐ Male &nbsp;&nbsp; ☐ Female</p>
+              <p>Sex: {patient.sex === 'M' ? '☑' : '☐'} Male &nbsp;&nbsp; {patient.sex === 'F' ? '☑' : '☐'} Female</p>
+
               <p>Pregnant? ☐ Y &nbsp;&nbsp; ☐ N &nbsp;&nbsp; ☐ U</p>
               <p>If yes, weeks of pregnancy _______________________________</p>
               <p>Civil Status: ___________________</p>
@@ -101,11 +120,11 @@ const PrintCIF = () => {
             </div>
             <div className="col-span-1 text-center pr-4">
               <p className="mb-2 mt-2 ml-1">Age: {patient?.ageinyears} y.o.</p>
-              <p>☐ Days <br /> ☐ Months <br /> ☐ Years</p>
+              <p><p className='ml-2 border-solid border-3 w-6 h-6'>{patient?.ageindays}&nbsp;&nbsp;&nbsp;Days</p> <br /> <p className='ml-2 border-solid border-3 w-6 h-6'>{patient?.ageinmonths}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Months</p> <br /> <p className='ml-2 border-solid border-3 w-6 h-6'>{patient?.ageinyears}&nbsp;&nbsp;&nbsp;Years</p></p>
               <p></p>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-6 text-[9pt] border-b border-black">
             <div className="col-span-2 pr-2 border-r border-black">
               <p>Occupation: {patient?.occupation}</p>
@@ -114,12 +133,12 @@ const PrintCIF = () => {
             <div className="col-span-4 border-r border-black">
               <div className="grid grid-cols-4">
                 <div className="col-span-2 border-r border-black">
-                  Patient Admitted? ☐ Y &nbsp;&nbsp; ☐ N</div>
+                  Patient Admitted? {diph?.admitted === 'Y' ? '☑' : '☐'} Y &nbsp;&nbsp; {diph?.admitted === 'N' ? '☑' : '☐'} N</div>
                 <div className="col-span-1 border-r border-black">Date Admitted/ Seen/Consult</div>
                 <div className="grid grid-cols-3 text-center">
-                  <div className="col-span-1">MM</div>
-                  <div className="col-span-1">DD</div>
-                  <div className="col-span-1">YYYY</div>
+                  {diph?.date_admitted ? new Date(diph?.date_admitted).toLocaleDateString('en-US') : (<><div className="col-span-1">MM</div>
+                    <div className="col-span-1">DD</div>
+                    <div className="col-span-1">YYYY</div></>)}
                 </div>
               </div>
             </div>
@@ -137,10 +156,10 @@ const PrintCIF = () => {
           <div className="grid grid-cols-7 text-[9pt] border-b border-black">
             <div className="col-span-2 border-r border-black">
               <div className="grid grid-cols-5 text-center">
-                  <div className="col-span-2">Date of Report</div>
-                  <div className="col-span-1">MM</div>
+                <div className="col-span-2">Date of Report</div>
+                {diph?.date_report ? new Date(diph?.date_report).toLocaleDateString('en-US') : (<><div className="col-span-1">MM</div>
                   <div className="col-span-1">DD</div>
-                  <div className="col-span-1">YYYY</div>
+                  <div className="col-span-1">YYYY</div></>)}
               </div>
             </div>
             <div className="col-span-3 pr-2 border-r border-black">
@@ -154,10 +173,11 @@ const PrintCIF = () => {
           <div className="grid grid-cols-7 text-[9pt] border-b border-black">
             <div className="col-span-2 border-r border-black">
               <div className="grid grid-cols-5">
-                  <div className="col-span-2">Date of Investigation</div>
-                  <div className="col-span-1">MM</div>
+                <div className="col-span-2">Date of Investigation</div>
+
+                {diph?.date_investigation ? new Date(diph?.date_investigation).toLocaleDateString('en-US') : (<><div className="col-span-1">MM</div>
                   <div className="col-span-1">DD</div>
-                  <div className="col-span-1">YYYY</div>
+                  <div className="col-span-1">YYYY</div></>)}
               </div>
             </div>
             <div className="col-span-3 pr-2 border-r border-black">
@@ -168,55 +188,55 @@ const PrintCIF = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="border-r border-l border-black">
           <h3 className="font-bold bg-gray-100 p-1 border-b border-black">B. BACKGROUND INFORMATION</h3>
-          <div className="text-[9pt] border-b border-black">  
-            <p>Diphtheria-containing vaccine doses: ☐ Yes &nbsp;&nbsp; ☐ No</p>
-            <p>If Yes, Number of total doses: ☐ Zero &nbsp;&nbsp; ☐ 1 &nbsp;&nbsp; ☐ 2 &nbsp;&nbsp; ☐ 3 &nbsp;&nbsp; ☐ Unknown</p>
-            <p>Date of last vaaccination (MM/DD/YYYY) </p>
-            <p>Source of information ☐ Card &nbsp;&nbsp; ☐ Recall &nbsp;&nbsp; ☐ TCL</p>
-            <p>Known Exposure to &nbsp;&nbsp; ☐ Confirmed Case &nbsp;&nbsp; ☐ Probable Case &nbsp;&nbsp; ☐ Carrier &nbsp;&nbsp; ☐ International traveller</p>
-            <p>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; Other means of exposure: ________________________________</p>
-            <p>School name, if applicable:</p>
-            <p>Any travel within 14 days before onset of illness &nbsp;&nbsp; ☐ Yes &nbsp;&nbsp; ☐ No &nbsp;&nbsp; if yes where (in detail) _________________________________
-              _______________________________________________________________________________________________________
+          <div className="text-[9pt] border-b border-black">
+            <p>Diphtheria-containing vaccine doses: {diph?.diphtheria_dose === 'Y' ? '☑' : '☐'} Yes &nbsp;&nbsp; {diph?.diphtheria_dose === 'N' ? '☑' : '☐'} No</p>
+            <p>If Yes, Number of total doses: {diph?.total_dose === 0 ? '☑' : '☐'} Zero &nbsp;&nbsp; {diph?.total_dose === 1 ? '☑' : '☐'} 1 &nbsp;&nbsp; {diph?.total_dose === 2 ? '☑' : '☐'} 2 &nbsp;&nbsp; {diph?.total_dose === 3 ? '☑' : '☐'} 3 &nbsp;&nbsp; {diph?.total_dose === 4 ? '☑' : '☐'} Unknown</p>
+            <p>Date of last vaccination (MM/DD/YYYY) </p>
+            <p>Source of information {diph?.sourceinformation === '1' ? '☑' : '☐'} Card &nbsp;&nbsp; {diph?.sourceinformation === '2' ? '☑' : '☐'} Recall &nbsp;&nbsp; {diph?.sourceinformation === '3' ? '☑' : '☐'} TCL</p>
+            <p>Known Exposure to &nbsp;&nbsp; {diph?.known_exposure === '1' ? '☑' : '☐'} Confirmed Case &nbsp;&nbsp; {diph?.known_exposure === '2' ? '☑' : '☐'} Probable Case &nbsp;&nbsp; {diph?.known_exposure === '3' ? '☑' : '☐'} Carrier &nbsp;&nbsp; {diph?.known_exposure === '4' ? '☑' : '☐'} International traveller</p>
+            <p>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; Other means of exposure: {diph?.exposure_other !== null || diph?.exposure_other !== "" ? <u>{diph?.exposure_other}</u> : '________________________________'} </p>
+            <p>School name, if applicable: <u>{diph?.name_school}</u></p>
+            <p>Any travel within 14 days before onset of illness &nbsp;&nbsp; {diph?.travel14days === 'Y' ? '☑' : '☐'} Yes &nbsp;&nbsp; {diph?.travel14days === 'N' ? '☑' : '☐'} No &nbsp;&nbsp; if yes where (in detail) {diph?.travel14days === 'Y' ? <u>{diph?.travel_detail}</u> : '_________________________________'}
+              ____________________________________________________________________________________________________
               _______________________________________________________________________________________________________.</p>
           </div>
         </div>
 
         <div className="border-r border-l border-black">
           <h3 className="font-bold bg-gray-100 p-1 border-b border-black">C. CLINICAL DETAILS</h3>
-          <div className="text-[9pt] border-b border-black">  
-            <p>Date onset of fever and/or sore throat: (MM/DD/YYYY)</p>
+          <div className="text-[9pt] border-b border-black">
+            <p>Date onset of fever and/or sore throat: {diph?.date_onset !== null || diph?.date_onset !== "" ? new Date(diph?.date_onset).toLocaleDateString('en-US') : '(MM/DD/YYYY)'}</p>
             <p>Check Signs/Symptoms which apply: </p>
-              <div className="grid grid-cols-4">
-                <p className="col-span-1">☐ Fever</p>
-                <p className="col-span-1">☐ Sore Throat</p>   
-                <p className="col-span-1">☐ Difficulty of Swallowing</p>
-                <p className="col-span-1">☐ Difficulty of Breathing</p>
-              </div>
-              
-              <div className="grid grid-cols-4">
-                <p className="col-span-1">☐ Cough</p>
-                <p className="col-span-1">☐ Pseudomembrane</p>   
-                <p className="col-span-2">☐ Others, specify _______________________________</p>
-              </div>
+            <div className="grid grid-cols-4">
+              <p className="col-span-1">{diph?.fever === 'Y' ? '☑' : '☐'} Fever</p>
+              <p className="col-span-1">{diph?.sorethroat === 'Y' ? '☑' : '☐'} Sore Throat</p>
+              <p className="col-span-1">{diph?.swallowing === 'Y' ? '☑' : '☐'} Difficulty of Swallowing</p>
+              <p className="col-span-1">{diph?.breathing === 'Y' ? '☑' : '☐'} Difficulty of Breathing</p>
+            </div>
 
-              <div className="grid grid-cols-6">
-                <p className="col-span-2">Outcome at discharge</p>   
-                <p className="col-span-1">☐ Clinically well</p>
-                <p className="col-span-3">☐ Death (Date died)(mm/dd/yyyy) _______________</p>
-              </div>
+            <div className="grid grid-cols-4">
+              <p className="col-span-1">{diph?.cough === 'Y' ? '☑' : '☐'} Cough</p>
+              <p className="col-span-1">{diph?.pseudomembrane === 'Y' ? '☑' : '☐'} Pseudomembrane</p>
+              <p className="col-span-2">{diph?.other_symptoms === 'Y' ? '☑' : '☐'} Others, specify {diph?.other_symptoms_specify ? <u>{diph?.other_symptoms_specify}</u> : '_______________________________'}</p>
+            </div>
 
-              <div className="grid grid-cols-6">
-                <p className="col-span-2"></p>   
-                <p className="col-span-4">☐ Referred to ______________</p>
-              </div>
+            <div className="grid grid-cols-6">
+              <p className="col-span-2">Outcome at discharge</p>
+              <p className="col-span-1">☐ Clinically well</p>
+              <p className="col-span-3">{diph?.outcome === 2 ? '☑' + `Death (Date died)(mm/dd/yyyy) ${<u>{new Date(diph.datedied).toLocaleDateString('en-US')}</u>}` : '☐' + 'Death (Date died)(mm/dd/yyyy) _______________'} </p>
+            </div>
 
-              <div className="border-t border-black">
-                <p className="mt-4">☐ Others, specify _____________</p>
-              </div>
+            <div className="grid grid-cols-6">
+              <p className="col-span-2"></p>
+              <p className="col-span-4">☐ Referred to ______________</p>
+            </div>
+
+            <div className="border-t border-black">
+              <p className="mt-4">☐ Others, specify _____________</p>
+            </div>
           </div>
         </div>
 

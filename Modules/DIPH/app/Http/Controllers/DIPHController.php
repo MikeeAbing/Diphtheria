@@ -2,6 +2,8 @@
 
 namespace Modules\DIPH\Http\Controllers;
 
+use App\Models\Municipality;
+use App\Models\Province;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
 use Modules\Core\Http\Controllers\CoreController as Controller;
@@ -39,7 +41,6 @@ class DIPHController extends Controller
     public function index(Request $request)
     {
         $diph = $this->diphService->index();
-        
         return inertia(
             'DIPH::DIPH/index',
             ['diph' => $diph]
@@ -125,8 +126,16 @@ class DIPHController extends Controller
     {
         $diph = DIPH::with('patient')->findOrFail($id);
 
+        $city = Municipality::find($diph->patient->pat_address_city);
+        $province = Province::find($diph->patient->pat_address_prov);
+        $permcity = Municipality::find($diph->patient->pat_perm_address_city);
+        $permprovince = Province::find($diph->patient->pat_perm_address_prov);
         return Inertia::render('DIPH::DIPH/printCIF', [
             'diph' => $diph,
+            'city'=>$city,
+            'province'=>$province,
+            'permcity'=>$permcity,
+            'permprovince'=>$permprovince
         ]);
     }
 
