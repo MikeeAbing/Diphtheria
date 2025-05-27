@@ -10,8 +10,6 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
-
-
 use ParagonIE\CipherSweet\BlindIndex;
 use ParagonIE\CipherSweet\EncryptedRow;
 use Spatie\Activitylog\LogOptions;
@@ -86,15 +84,15 @@ class Patient extends Model implements IsFilterable, CipherSweetEncrypted
      */
     public static function configureCipherSweet(EncryptedRow $encryptedRow): void
     {
-        $encryptedRow
+      //  $encryptedRow
             // ->addTextField('patient_number')
             // ->addBlindIndex('patient_number', new BlindIndex('patient_number_index'))
-            ->addTextField('firstname')
-            ->addBlindIndex('firstname', new BlindIndex('firstname_index'))
-            ->addTextField('middlename')
-            ->addBlindIndex('middlename', new BlindIndex('middlename_index'))
-            ->addTextField('lastname')
-            ->addBlindIndex('lastname', new BlindIndex('lastname_index'))
+            // ->addTextField('firstname')
+            // ->addBlindIndex('firstname', new BlindIndex('firstname_index'))
+            // ->addTextField('middlename')
+            // ->addBlindIndex('middlename', new BlindIndex('middlename_index'))
+            // ->addTextField('lastname')
+            // ->addBlindIndex('lastname', new BlindIndex('lastname_index'))
             // ->addTextField('suffixname')
             // ->addBlindIndex('suffixname', new BlindIndex('suffixname_index'))
             // ->addTextField('sex')
@@ -113,30 +111,30 @@ class Patient extends Model implements IsFilterable, CipherSweetEncrypted
             // ->addBlindIndex('IP_tribe', new BlindIndex('IP_tribe_index'))
             // ->addOptionalTextField('IP_tribe_specify')
             // ->addBlindIndex('IP_tribe_specify', new BlindIndex('IP_tribe_specify_index'))
-            ->addOptionalTextField('pat_address_reg')
-            ->addBlindIndex('pat_address_reg', new BlindIndex('pat_address_reg_index'))
-            ->addOptionalTextField('pat_address_prov')
-            ->addBlindIndex('pat_address_prov', new BlindIndex('pat_address_prov_index'))
-            ->addOptionalTextField('pat_address_city')
-            ->addBlindIndex('pat_address_city', new BlindIndex('pat_address_city_index'))
-            ->addOptionalTextField('pat_address_brgy')
-            ->addBlindIndex('pat_address_brgy', new BlindIndex('pat_address_brgy_index'))
-            ->addOptionalTextField('pat_address_street_name')
-            ->addBlindIndex('pat_address_street_name', new BlindIndex('pat_address_street_name_index'))
-            ->addOptionalTextField('pat_perm_address_reg')
-            ->addBlindIndex('pat_perm_address_reg', new BlindIndex('pat_perm_address_reg_index'))
-            ->addOptionalTextField('pat_perm_address_prov')
-            ->addBlindIndex('pat_perm_address_prov', new BlindIndex('pat_perm_address_prov_index'))
-            ->addOptionalTextField('pat_perm_address_city')
-            ->addBlindIndex('pat_perm_address_city', new BlindIndex('pat_perm_address_city_index'))
-            ->addOptionalTextField('pat_perm_address_brgy')
-            ->addBlindIndex('pat_perm_address_brgy', new BlindIndex('pat_perm_address_brgy_index'))
-            ->addOptionalTextField('pat_perm_address_street_name')
-            ->addBlindIndex('pat_perm_address_street_name', new BlindIndex('pat_perm_address_street_name_index'))
-            ->addOptionalTextField('facilityname')
-            ->addBlindIndex('facilityname', new BlindIndex('facilityname_index'))
-            ->addOptionalTextField('occupation')
-            ->addBlindIndex('occupation', new BlindIndex('occupation_index'));
+            // ->addOptionalTextField('pat_address_reg')
+            // ->addBlindIndex('pat_address_reg', new BlindIndex('pat_address_reg_index'))
+            // ->addOptionalTextField('pat_address_prov')
+            // ->addBlindIndex('pat_address_prov', new BlindIndex('pat_address_prov_index'))
+            // ->addOptionalTextField('pat_address_city')
+            // ->addBlindIndex('pat_address_city', new BlindIndex('pat_address_city_index'))
+            // ->addOptionalTextField('pat_address_brgy')
+            // ->addBlindIndex('pat_address_brgy', new BlindIndex('pat_address_brgy_index'))
+            // ->addOptionalTextField('pat_address_street_name')
+            // ->addBlindIndex('pat_address_street_name', new BlindIndex('pat_address_street_name_index'))
+            // ->addOptionalTextField('pat_perm_address_reg')
+            // ->addBlindIndex('pat_perm_address_reg', new BlindIndex('pat_perm_address_reg_index'))
+            // ->addOptionalTextField('pat_perm_address_prov')
+            // ->addBlindIndex('pat_perm_address_prov', new BlindIndex('pat_perm_address_prov_index'))
+            // ->addOptionalTextField('pat_perm_address_city')
+            // ->addBlindIndex('pat_perm_address_city', new BlindIndex('pat_perm_address_city_index'))
+            // ->addOptionalTextField('pat_perm_address_brgy')
+            // ->addBlindIndex('pat_perm_address_brgy', new BlindIndex('pat_perm_address_brgy_index'))
+            // ->addOptionalTextField('pat_perm_address_street_name')
+            // ->addBlindIndex('pat_perm_address_street_name', new BlindIndex('pat_perm_address_street_name_index'))
+            // ->addOptionalTextField('facilityname')
+            // ->addBlindIndex('facilityname', new BlindIndex('facilityname_index'))
+            // ->addOptionalTextField('occupation')
+            // ->addBlindIndex('occupation', new BlindIndex('occupation_index'));
             // ->addOptionalTextField('phone_no')
             // ->addBlindIndex('phone_no', new BlindIndex('phone_no_index'));
     }
@@ -173,5 +171,9 @@ class Patient extends Model implements IsFilterable, CipherSweetEncrypted
 
     public function diph(){
         return $this->hasMany(DIPH::class, 'patient_number', 'patient_number');
+    }
+
+    public function consultation(){
+        return $this->hasMany(Consultation::class, 'patient_number', 'patient_number');
     }
 }
