@@ -28,6 +28,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { toast } from 'sonner';
 import useDebouncedSearch from '@/hooks/use-debounced-search';
 import useSorting from '@/hooks/use-sorting';
+import { Printer } from 'lucide-react';
 
 import { useEffect, useState } from 'react';
 import TableNoSortHeader from '../../../../../../../resources/js/components/data-table/data-table-no-sort-header';
@@ -96,6 +97,12 @@ export default function Diph() {
                                 <DropdownMenuItem>
                                     <PencilLine className="h-4 w-4" />
                                     Edit Diphtheria Case
+                                </DropdownMenuItem>
+                            </Link>
+                            <Link href={`/diph/${row.original.id}/print`}>
+                                <DropdownMenuItem>
+                                    <Printer className="h-4 w-4" />
+                                    Print CIF
                                 </DropdownMenuItem>
                             </Link>
                             <DropdownMenuSeparator />
