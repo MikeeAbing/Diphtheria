@@ -63,7 +63,7 @@ const { data: consultations = [] } = usePage().props.consultations || {};
            mode_of_transaction: string;
            type_of_consultation: string;
            chief_complaint: string;
-           firstname: string;
+           fullname: string;
        };
    
        

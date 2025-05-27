@@ -45,24 +45,9 @@ class ConsultationController extends Controller
         return Inertia::render('DIPH::Consultation/index', [
             'consultations' => $consultations
         ]);
+       // return dd('sample');
 
-    //     $consultations = DB::table('patient_consultation')
-    // ->join('patient_info', 'patient_consultation.patient_number', '=', 'patient_info.patient_number')
-    // ->select('patient_consultation.*', 'patient_info.firstname as firstname')
-    // ->get();
-    //   $consultations = $this->consultationService->index();
-    //    return inertia('DIPH::Consultation/index',['consultations' => $consultations]);
-    // $consultations = DB::table('patient_consultation')
-    //     ->join('patient_info', 'patient_consultation.patient_number', '=', 'patient_info.patient_number')
-    //     ->select(
-    //         'patient_consultation.*',
-    //         'patient_info.firstname as firstname'
-    //     )
-    //     ->get();
-
-    // return Inertia::render('DIPH::Consultation/index', [
-    //     'consultations' => $consultations
-    // ]);
+   
     }
 
 
@@ -78,7 +63,7 @@ class ConsultationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
         $search = $request->query('search');
 
@@ -90,7 +75,11 @@ class ConsultationController extends Controller
             );
         }   
     }
-
+    public function store(ConsultationFormRequest $request): RedirectResponse
+    {
+        $patient = Patient::create($request->validated());
+        return redirect(route('consultation.index'))->with('Success', 'Successfully saved patient');
+    }
     public function jsonFile()
     {
         return response()->json([
@@ -136,4 +125,13 @@ class ConsultationController extends Controller
     
     {
     }
+    public function consultation(Request $request)
+    {
+        $patient_number = $request->query('id');
+        return inertia(
+            'DIPH::Consultation/index',
+            ['patient_number' => $patient_number]
+        );
+    }
+
 }
