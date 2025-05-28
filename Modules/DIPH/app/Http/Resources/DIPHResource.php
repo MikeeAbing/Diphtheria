@@ -19,6 +19,7 @@ class DIPHResource extends JsonResource
             'date_admitted' => $this->date_admitted,
             'specimen_id'=>$this->specimen_id,
             'consultation_id'=>$this->consultation_id,
+            'pidsr_status'=>$this->pidsr_status,
             'patient' => new PatientDataResource($this->whenLoaded('patient')), // ✅ CORRECT
         ];
     }

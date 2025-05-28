@@ -86,6 +86,7 @@ class DIPHFormRequest extends FormRequest
             'ageinmonths' => ['nullable'],
             'ageindays' => ['nullable'],
             'morbiditymonth' => ['nullable'],
+            'pidsr_status' => ['nullable'],
         ];
     }
     protected function prepareForValidation(): void
@@ -117,6 +118,7 @@ class DIPHFormRequest extends FormRequest
             'ageinmonths' => $this->input('ageinmonths', null),
             'ageindays' => $this->input('ageindays', null),
             'morbiditymonth' => $this->input('morbiditymonth', null),
+            'pidsr_status' => $this->input('pidsr_status', "PENDING"),
         ]);
     }
 }
