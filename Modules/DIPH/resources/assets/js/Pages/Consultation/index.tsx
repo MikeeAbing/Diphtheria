@@ -41,6 +41,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Consultation({patient_number}) {
+    const patientnumber = sessionStorage.getItem('patient_number');
+    console.log(patientnumber)
 //const { data: consultations} = usePage().props.consultations;
 const { data: consultations = [] } = usePage().props.consultations || {};
 
@@ -278,6 +280,7 @@ const { data: consultations = [] } = usePage().props.consultations || {};
                                           setParams={setParams}
                                           setTimeDebounce={setTimeDebounce}
                                       /> */}
+                                      
                                       <Link href="/consultation/create">
                                           <Button className="h-8 px-2 lg:px-3">
                                               <PlusCircleIcon className="h-4 w-4" />

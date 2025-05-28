@@ -4,6 +4,7 @@ namespace Modules\DIPH\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
+use Modules\DIPH\Models\Consultation;
 
 class ConsultationFormRequest extends FormRequest
 {
@@ -22,7 +23,12 @@ class ConsultationFormRequest extends FormRequest
     {
         return [
             'patient_number' => ['required'],
-        
+            'consultation_id'  => ['required'],
+            'consultation_date'  => ['required'],
+            'consultation_time'  => ['required'],
+            'mode_of_transaction'  => ['required'],
+            'type_of_consultation'  => ['required'],
+            'chief_complaint'  => ['nullable'],
         
         ];
     }
@@ -30,7 +36,7 @@ class ConsultationFormRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-        'patient_number'=> $this->input('patient_number') ?? substr((string) Str::uuid(), 0, 30)
+        'consultation_id'=> Consultation::max('consultation_id')+1??1
         ]);
     }
 }
