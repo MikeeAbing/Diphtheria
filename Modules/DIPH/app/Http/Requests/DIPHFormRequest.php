@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Modules\DIPH\Models\DIPH;
+use Number;
 
 
 class DIPHFormRequest extends FormRequest
@@ -92,8 +93,8 @@ class DIPHFormRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'case_id' => DIPH::max('case_id') + 1 ?? 1,
-            'patient_number' => DIPH::max('case_id') + 1 ?? 1,
+            'case_id' => (int) DIPH::max('case_id') + 1 ?? 1,
+            'patient_number' => (int) DIPH::max('case_id') + 1 ?? 1,
             'user_id' => $this->input('user_id', Auth::user()->id),
             'timestamp' => $this->input('timestamp', null),
             'verification_level' => $this->input('verification_level', null),
