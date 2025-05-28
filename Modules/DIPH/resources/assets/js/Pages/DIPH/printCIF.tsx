@@ -42,12 +42,6 @@ const PrintCIF = () => {
 
   return (
     <div className="p-4">
-      <button
-        onClick={handleGeneratePDF}
-        className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Download PDF
-      </button>
 
       <div
         ref={contentRef}
@@ -156,7 +150,7 @@ const PrintCIF = () => {
           <div className="grid grid-cols-7 text-[9pt] border-b border-black">
             <div className="col-span-2 border-r border-black">
               <div className="grid grid-cols-5 text-center">
-                <div className="col-span-2">Date of Report</div>
+                <div className="col-span-2 mr-1">Date of Report</div>
                 {diph?.date_report ? new Date(diph?.date_report).toLocaleDateString('en-US') : (<><div className="col-span-1">MM</div>
                   <div className="col-span-1">DD</div>
                   <div className="col-span-1">YYYY</div></>)}
@@ -190,7 +184,7 @@ const PrintCIF = () => {
         </div>
 
         <div className="border-r border-l border-black">
-          <h3 className="font-bold bg-gray-100 p-1 border-b border-black">B. BACKGROUND INFORMATION</h3>
+          <h3 className="font-bold bg-gray-100 p-1 border-b border-black">II. BACKGROUND INFORMATION</h3>
           <div className="text-[9pt] border-b border-black">
             <p>Diphtheria-containing vaccine doses: {diph?.diphtheria_dose === 'Y' ? '☑' : '☐'} Yes &nbsp;&nbsp; {diph?.diphtheria_dose === 'N' ? '☑' : '☐'} No</p>
             <p>If Yes, Number of total doses: {diph?.total_dose === 0 ? '☑' : '☐'} Zero &nbsp;&nbsp; {diph?.total_dose === 1 ? '☑' : '☐'} 1 &nbsp;&nbsp; {diph?.total_dose === 2 ? '☑' : '☐'} 2 &nbsp;&nbsp; {diph?.total_dose === 3 ? '☑' : '☐'} 3 &nbsp;&nbsp; {diph?.total_dose === 4 ? '☑' : '☐'} Unknown</p>
@@ -200,13 +194,13 @@ const PrintCIF = () => {
             <p>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; Other means of exposure: {diph?.exposure_other !== null || diph?.exposure_other !== "" ? <u>{diph?.exposure_other}</u> : '________________________________'} </p>
             <p>School name, if applicable: <u>{diph?.name_school}</u></p>
             <p>Any travel within 14 days before onset of illness &nbsp;&nbsp; {diph?.travel14days === 'Y' ? '☑' : '☐'} Yes &nbsp;&nbsp; {diph?.travel14days === 'N' ? '☑' : '☐'} No &nbsp;&nbsp; if yes where (in detail) {diph?.travel14days === 'Y' ? <u>{diph?.travel_detail}</u> : '_________________________________'}
-              ____________________________________________________________________________________________________
+              _________________________________________________________________________
               _______________________________________________________________________________________________________.</p>
           </div>
         </div>
 
         <div className="border-r border-l border-black">
-          <h3 className="font-bold bg-gray-100 p-1 border-b border-black">C. CLINICAL DETAILS</h3>
+          <h3 className="font-bold bg-gray-100 p-1 border-b border-black">III. CLINICAL DETAILS</h3>
           <div className="text-[9pt] border-b border-black">
             <p>Date onset of fever and/or sore throat: {diph?.date_onset !== null || diph?.date_onset !== "" ? new Date(diph?.date_onset).toLocaleDateString('en-US') : '(MM/DD/YYYY)'}</p>
             <p>Check Signs/Symptoms which apply: </p>
@@ -240,59 +234,49 @@ const PrintCIF = () => {
           </div>
         </div>
 
-        {/* <div className="mt-6">
-          <h3 className="font-bold">II. BACKGROUND INFORMATION</h3>
-          <p><strong>Vaccinated:</strong> {diph?.vaccine_received}</p>
-          <p><strong>Number of doses:</strong> {diph?.vaccine_doses}</p>
-          <p><strong>Date of last vaccination:</strong> {diph?.last_vaccine_date}</p>
-          <p><strong>Source of info:</strong> {diph?.vaccine_source}</p>
-          <p><strong>Known exposure to:</strong> {diph?.exposure_type}</p>
-          <p><strong>Other means of exposure:</strong> {diph?.exposure_other}</p>
-          <p><strong>School name:</strong> {diph?.school_name}</p>
-          <p><strong>Recent travel (14 days):</strong> {diph?.recent_travel}</p>
-          <p><strong>Where:</strong> {diph?.travel_location}</p>
-        </div> */}
-
-        {/* <div className="mt-6">
-          <h3 className="font-bold">III. CLINICAL DETAILS</h3>
-          <p><strong>Date of onset:</strong> {diph?.onset_date}</p>
-          <p><strong>Signs/Symptoms:</strong> {diph?.symptoms?.join(', ')}</p>
-          <p><strong>Outcome at discharge:</strong> {diph?.outcome}</p>
-          <p><strong>If death, date:</strong> {diph?.date_died}</p>
-          <p><strong>Referred to:</strong> {diph?.referred_to}</p>
+        <div className="border-r border-l border-black">
+          <h3 className="font-bold bg-gray-100 p-1 border-b border-black">IV. TREATMENT INFORMATION</h3>
+          <div className="text-[9pt] border-b border-black">
+            <div className="grid grid-cols-6 border-b border-black">
+              <p className="col-span-4">Administered antibiotic therapy? {diph?.antibiotic === 'Y' ? '☑' : '☐'} Yes &nbsp;&nbsp; {diph?.antibiotic === 'N' ? '☑' : '☐'} No</p> 
+              <p className="col-span-2">if yes, Date {diph?.antibiotic_date ? new Date(diph?.antibiotic_date).toLocaleDateString('en-US') : '(MM/DD/YYYY)'}</p>
+            </div>
+            <div className="grid grid-cols-6 border-black">
+              <p className="col-span-4">Administered Diphtheria Anti toxin (DAT) therapy: {diph?.diphtheriatoxin === 'Y' ? '☑' : '☐'} Yes &nbsp;&nbsp; {diph?.diphtheriatoxin === 'N' ? '☑' : '☐'} No</p> 
+              <p className="col-span-2">if yes, Date {diph?.diphtheriatoxin_date ? new Date(diph?.diphtheriatoxin_date).toLocaleDateString('en-US') : '(MM/DD/YYYY)'}</p>
+            </div>
+           </div>
         </div>
 
-        <div className="mt-6">
-          <h3 className="font-bold">IV. TREATMENT INFORMATION</h3>
-          <p><strong>Antibiotic therapy:</strong> {diph?.antibiotic_therapy}</p>
-          <p><strong>Date given:</strong> {diph?.antibiotic_date}</p>
-          <p><strong>DAT given:</strong> {diph?.dat_administered}</p>
-          <p><strong>Date given:</strong> {diph?.dat_date}</p>
+        <div className="border-r border-l border-black">
+          <h3 className="font-bold bg-gray-100 p-1 border-b border-black">V. SPECIMEN COLLECTION</h3>
+          <div className="text-[9pt] border-b border-black">
+            <div className="grid grid-cols-6 p-2 border-b border-black">
+              <p className="col-span-3">Date of collection: {diph?.date_onset !== null || diph?.date_onset !== "" ? new Date(diph?.date_onset).toLocaleDateString('en-US') : '(MM/DD/YYYY)'} </p> 
+              <p className="col-span-3">Date of sample send: {diph?.date_onset !== null || diph?.date_onset !== "" ? new Date(diph?.date_onset).toLocaleDateString('en-US') : '(MM/DD/YYYY)'}</p>
+            </div>
+            <p>Date of results: {diph?.date_onset !== null || diph?.date_onset !== "" ? new Date(diph?.date_onset).toLocaleDateString('en-US') : '(MM/DD/YYYY)'}</p>
+            <p>Check what applies: </p>
+            <p>{diph?.known_exposure === '1' ? '☑' : '☐'} Positive &nbsp;&nbsp; {diph?.known_exposure === '2' ? '☑' : '☐'} Negative &nbsp;&nbsp; {diph?.known_exposure === '3' ? '☑' : '☐'} Undetermined &nbsp;&nbsp; {diph?.known_exposure === '4' ? '☑' : '☐'} Not processed</p>
+
+            <p className="mt-2">If positive </p>
+            <p className="mb-2">{diph?.cough === 'Y' ? '☑' : '☐'} Toxigenic &nbsp;&nbsp; {diph?.pseudomembrane === 'Y' ? '☑' : '☐'} Non-toxigenic</p>
+
+          </div>
         </div>
 
-        <div className="mt-6">
-          <h3 className="font-bold">V. SPECIMEN COLLECTION</h3>
-          <p><strong>Date of collection:</strong> {diph?.specimen_collection_date}</p>
-          <p><strong>Date sent:</strong> {diph?.specimen_sent_date}</p>
-          <p><strong>Date of results:</strong> {diph?.result_date}</p>
-          <p><strong>Result:</strong> {diph?.lab_result}</p>
-          <p><strong>If positive:</strong> {diph?.toxigenic_status}</p>
+        <div className="grid grid-cols-6 border-r border-l border-black">
+          <h3 className="col-span-2 font-bold p-2 border-b border-black">VI. FINAL CLASSIFICATION</h3>
+          <p className="col-span-4 p-2 border-b border-black">{diph?.known_exposure === '1' ? '☑' : '☐'} Positive &nbsp;&nbsp; {diph?.known_exposure === '2' ? '☑' : '☐'} Negative &nbsp;&nbsp; {diph?.known_exposure === '3' ? '☑' : '☐'} Undetermined &nbsp;&nbsp; {diph?.known_exposure === '4' ? '☑' : '☐'} Not processed</p>
         </div>
 
-        <div className="mt-6">
-          <h3 className="font-bold">VI. FINAL CLASSIFICATION</h3>
-          <p><strong>Classification:</strong> {diph?.final_classification}</p>
+        <div className="border-r border-l border-black">
+          <h3 className="font-bold bg-gray-100 p-1 border-b border-black">To include linelist for close contacts</h3>
         </div>
 
-        <div className="mt-6">
-          <h3 className="font-bold">VII. INVESTIGATION DETAILS</h3>
-          <p><strong>Date of Investigation:</strong> {diph?.investigation_date}</p>
-          <p><strong>Name of investigator:</strong> {diph?.investigator_name}</p>
-          <p><strong>Contact No.:</strong> {diph?.investigator_contact}</p>
-        </div> */}
-
-        <div className="mt-6 text-sm italic text-gray-700">
-          <p>Deliberately providing false or misleading information may constitute non-cooperation under RA No. 11332.</p>
+        <div className="mt-4 text-sm italic text-gray-700">
+          <p>Deliberately providing false or misleading, personal information on the part of the patient, or the next of kin in case of patient’s incapacity, may
+            constitute non-cooperation punishable under the Republic Act No. 11332.</p>
         </div>
       </div>
     </div>
