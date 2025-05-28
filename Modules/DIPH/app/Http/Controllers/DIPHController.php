@@ -131,10 +131,27 @@ class DIPHController extends Controller
     }
     public function jsonFile(Request $request)
     {
-        $case_id = $request->query('id');
-        return response()->json([
-            'data' => DIPH::where('case_id',  $case_id)->get()
+        $validated = $request->validate([
+            'case_id' => 'required|string',
+            'pidsr_status' => 'required|string',
         ]);
+    
+        $caseId = $validated['case_id'];
+        $data = DIPH::where('case_id', $caseId)->first();
+
+        if (!$data) {
+            return response()->json(['error' => 'Case not found'], 404);
+        }
+
+        $data->pidsr_status = $validated['pidsr_status'];
+        $data->save();
+    
+        return response()->json($data);
+        // $diph = DIPH::where('case_id', $request->)
+        // $case_status = $diph->update()
+        // return response()->json([
+        //     'data' => DIPH::where('case_id',  $case_id)->get()
+        // ]);
     }
     /**
      * Remove the specified resource from storage.

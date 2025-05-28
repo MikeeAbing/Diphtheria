@@ -146,6 +146,7 @@ export const diphFormSchema = z
                 message: 'Invalid date format. Please use YYYY-MM-DD or leave it empty.',
             })
             .optional(),
+            pidsr_status: z.string().max(10).optional(),
         fever: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),
         cough: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),
         sorethroat: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),

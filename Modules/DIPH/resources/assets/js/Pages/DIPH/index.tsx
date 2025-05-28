@@ -82,12 +82,16 @@ export default function Diph() {
         if (caseID) {
             setLoading(true);
             setJsonData(null); // Clear previous data
-            axios.get(`/api/jsonfile?id=${caseID}`)
+            axios.post(`/api/jsonfile`, { 'case_id': caseID, 'pidsr_status': 'SENT' }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
                 .then(res => setJsonData(res.data))
                 .catch(err => console.error('Error fetching JSON:', err))
                 .finally(() => setLoading(false));
         }
-        console.log(caseID);
     }, [flash?.success, open, caseID]);
 
     // const fetchData = async () => {
@@ -151,36 +155,35 @@ export default function Diph() {
                                     Edit Diphtheria Case
                                 </DropdownMenuItem>
                             </Link>
-                          
 
-                          
+
+
                             <Dialog>
                                 <DialogTrigger asChild>
                                     <Button
-                                    variant="ghost"
-                                    className="w-full justify-start px-2 py-1.5 text-sm font-normal hover:bg-accent hover:text-accent-foreground flex items-center gap-2"
-                                    onClick={() => setcaseID(row.original.case_id)}
-                                    >
-                                    <Eye className="h-4 w-4" />
-                                    View Raw JSON
+                                        variant="ghost"
+                                        className="w-full justify-start px-2 py-1.5 text-sm font-normal hover:bg-accent hover:text-accent-foreground flex items-center gap-2"
+                                        onClick={setcaseID(row.original.case_id)}> <Eye className="h-4 w-4" />
+                                        View Raw JSON
                                     </Button>
                                 </DialogTrigger>
 
                                 <DialogContent className="max-w-7xl text-sm">
                                     <DialogHeader>
-                                    <DialogTitle>JSON Format</DialogTitle>
+                                        <DialogTitle>JSON Format</DialogTitle>
                                     </DialogHeader>
 
                                     <div className="overflow-auto max-h-[70vh]">
-                                    {loading ? (
-                                        <p>Loading...</p>
-                                    ) : jsonData ? (
-                                        <pre className="text-xs whitespace-pre-wrap break-words">{JSON.stringify(jsonData, null, 2)}</pre>
-                                    ) : (
-                                        <p>No data available.</p>
-                                    )}
+                                        {loading ? (
+                                            <p>Loading...</p>
+                                        ) : jsonData ? (
+                                            <pre className="text-xs whitespace-pre-wrap break-words">{JSON.stringify(jsonData, null, 2)}</pre>
+                                        ) : (
+                                            <p>No data available.</p>
+                                        )}
                                     </div>
                                 </DialogContent>
+
                             </Dialog>
 
 
@@ -266,20 +269,6 @@ export default function Diph() {
             cell: ({ row }) => <div className="capitalize">{row.getValue('admitted')}</div>,
         },
         {
-            accessorKey: 'date_admitted',
-            header: ({ column }) => (
-                <TableSortHeader
-                    title="Date Admitted"
-                    onClick={() => {
-                        setTimeDebounce(50);
-                        sort('encoded_by');
-                    }}
-                    sort={params.col === 'encoded_by' ? params.sort : null}
-                />
-            ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue('date_admitted')}</div>,
-        },
-        {
             accessorKey: 'patient',
             header: ({ column }) => (
                 <TableSortHeader
@@ -294,6 +283,20 @@ export default function Diph() {
             cell: ({ row }) => {
                 return <div className="capitalize">{row.original.patient?.full_name}</div>;
             },
+        },
+        {
+            accessorKey: 'pidsr_status',
+            header: ({ column }) => (
+                <TableSortHeader
+                    title="Status"
+                    onClick={() => {
+                        setTimeDebounce(50);
+                        sort('pidsr_status');
+                    }}
+                    sort={params.col === 'pidsr_status' ? params.sort : null}
+                />
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue('pidsr_status')}</div>,
         },
     ];
 

@@ -93,6 +93,7 @@ class DIPH extends Model implements IsFilterable
         'ageinmonths',
         'ageindays',
         'morbiditymonth',
+        'pidsr_status',
     ];
 
     protected $with = [];
