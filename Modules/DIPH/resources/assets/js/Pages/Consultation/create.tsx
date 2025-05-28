@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Head, router, usePage } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
 import { ConsultationForm, consultationFormSchema } from './data/schema';
+import {React} from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,19 +24,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function create() {
     const { patient_number } = usePage().props;
 
-    const pat_number = patient_number.map((p)=>p.patient_number);
+    const pat_number = sessionStorage.getItem('patient_number');
 
-
-    const form = useForm<ConsultationForm({
+    const form = useForm<ConsultationForm>({
         resolver: zodResolver(consultationFormSchema),
         defaultValues: {
             // case_id: '',
-            patient_number: pat_number[0] as string,
-           
+            patient_number: pat_number as string,
+            consultation_date:'',
+            consultation_time:'',
+            mode_of_transaction:'',
+            type_of_consultation:'',
+            chief_complaint:'',
         },
     });
 
-    function onSubmit(values: consultationForm) {
+    function onSubmit(values: ConsultationForm) {
         const payload = { ...values };
 
        
@@ -50,15 +54,13 @@ export default function create() {
         });
     }
 
-    // const admitted = form.watch('admitted');
-    // const date_report = form.watch('date_report');
-    // const date_investigation = form.watch('date_investigation');
-    // const diphtheria_dose = form.watch('diphtheria_dose');
-    // const travel14days = form.watch('travel14days');
-    // const other_symptoms = form.watch('other_symptoms');
-    // const outcome = form.watch('outcome');
-    // const antibiotic = form.watch('antibiotic');
-    // const diphtheriatoxin = form.watch('diphtheriatoxin');
+    const consultation_date = form.watch('consultation_date');
+    const consultation_time = form.watch('consultation_time');
+    const mode_of_transaction = form.watch('mode_of_transaction');
+    const type_of_consultation = form.watch('type_of_consultation');
+    const chief_complaint = form.watch('chief_complaint');
+
+
 
     const onError = (errors: any) => {
         console.log('Form validation errors:', errors);
@@ -73,196 +75,21 @@ export default function create() {
                         <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-8">
                             {/* 1st Column */}
                             <h1>
-                                <b>FORM</b>
+                                <b>Consultation Details</b>
                             </h1>
-                            <div className="flex flex-row items-start gap-x-16">
-                                <FormField
-                                    control={form.control}
-                                    name="admitted"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <div className="flex w-full items-start gap-x-8">
-                                                <div className="flex flex-col">
-                                                    <FormLabel className="mb-1">Patient Number:</FormLabel>
-                                                </div>
-                                                <RadioGroup
-                                                    value={form.watch('admitted') ?? ''}
-                                                    onValueChange={(val) => form.setValue('admitted', val as 'Y' | 'N')}
-                                                    className="flex flex-row space-x-4"
-                                                >
-                                                    {['Y', 'N'].map((option) => (
-                                                        <FormItem key={option} className="flex items-center space-x-2">
-                                                            <FormControl>
-                                                                <RadioGroupItem value={option} id={option} />
-                                                            </FormControl>
-                                                            <FormLabel htmlFor={option}>{option === 'Y' ? 'Yes' : 'No'}</FormLabel>
-                                                        </FormItem>
-                                                    ))}
-                                                </RadioGroup>
-                                            </div>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                {admitted === 'Y' ? (
-                                    <FormField
-                                        control={form.control}
-                                        name="date_admitted"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <div className="flex w-full items-start gap-x-8">
-                                                    <div className="flex flex-col">
-                                                        <FormLabel className="mb-1">Date Admitted:</FormLabel>
-                                                    </div>
-                                                    <FormControl>
-                                                        <Input
-                                                            className="w-full border-2 border-black"
-                                                            type="date"
-                                                            min="1925-01-01"
-                                                            value={field.value ?? ''}
-                                                            onChange={(e) => {
-                                                                const date = e.target.value;
-                                                                field.onChange(date);
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </div>
-                                            </FormItem>
-                                        )}
-                                    />
-                                ) : (
-                                    <FormField
-                                        control={form.control}
-                                        name="date_admitted"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <div className="flex w-full items-start gap-x-8">
-                                                    <div className="flex flex-col">
-                                                        <FormLabel className="mb-1">Date Admitted:</FormLabel>
-                                                    </div>
-                                                    <FormControl>
-                                                        <Input
-                                                            disabled
-                                                            className="w-full border-2 border-black"
-                                                            type="date"
-                                                            min="1925-01-01"
-                                                            value={field.value ?? ''}
-                                                            onChange={(e) => {
-                                                                const date = e.target.value;
-                                                                field.onChange(date);
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </div>
-                                            </FormItem>
-                                        )}
-                                    />
-                                )}
-
-                                <FormField
-                                    control={form.control}
-                                    name="outcome"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <div className="flex w-full items-start gap-x-8">
-                                                <div className="flex flex-col">
-                                                    <FormLabel className="mb-1">Outcome of the Patient:</FormLabel>
-                                                    <FormDescription>
-                                                        Select from either <strong>Alive</strong>, <strong>Dead</strong>, or{' '}
-                                                        <strong>Home Against Medical Advice</strong>
-                                                    </FormDescription>
-                                                </div>
-
-                                                <RadioGroup
-                                                    value={form.watch('outcome') ?? ''}
-                                                    onValueChange={(val) => form.setValue('outcome', Number(val) as 1 | 2 | 3)}
-                                                    className="flex flex-row space-x-4"
-                                                >
-                                                    {(
-                                                        [
-                                                            { label: 'Alive', value: 1 },
-                                                            { label: 'Died', value: 2 },
-                                                            { label: 'Home Against Medical Advice', value: 3 },
-                                                        ] as const
-                                                    ).map((option) => (
-                                                        <FormItem key={option.value} className="flex items-center space-x-2">
-                                                            <FormControl>
-                                                                <RadioGroupItem value={option.value} id={option.value} />
-                                                            </FormControl>
-                                                            <FormLabel htmlFor={option.value}>{option.label}</FormLabel>
-                                                        </FormItem>
-                                                    ))}
-                                                </RadioGroup>
-                                            </div>
-                                            <FormMessage /> {/* Shows validation errors if any */}
-                                        </FormItem>
-                                    )}
-                                />
-                                {Number(outcome) === 2 ? (
-                                    <FormField
-                                        control={form.control}
-                                        name="datedied"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <div className="flex w-full items-start gap-x-8">
-                                                    <div className="flex flex-col">
-                                                        <FormLabel className="mb-1">Date Died of Illness:</FormLabel>
-                                                    </div>
-                                                    <FormControl>
-                                                        <Input
-                                                            className="w-38 min-w-[38px] flex-shrink-0 border-2 border-black"
-                                                            type="date"
-                                                            min="1925-01-01"
-                                                            value={field.value ?? ''}
-                                                            onChange={(e) => {
-                                                                const date = e.target.value;
-                                                                field.onChange(date);
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </div>
-                                            </FormItem>
-                                        )}
-                                    />
-                                ) : (
-                                    <FormField
-                                        control={form.control}
-                                        name="datedied"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <div className="flex w-full items-start gap-x-8">
-                                                    <div className="flex flex-col">
-                                                        <FormLabel className="mb-1">Date Died of Illness:</FormLabel>
-                                                    </div>
-                                                    <FormControl>
-                                                        <Input
-                                                            disabled
-                                                            className="w-38 min-w-[38px] flex-shrink-0 border-2 border-black"
-                                                            type="date"
-                                                            min="1925-01-01"
-                                                            value={''}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </div>
-                                            </FormItem>
-                                        )}
-                                    />
-                                )}
-                            </div>
-                            <Separator />
-                            
-                            {/* 4th Column */}
+                  
                             <div className="flex flex-row items-start gap-x-32">
                                 <FormField
                                     control={form.control}
-                                    name="date_investigation"
+                                    name="consultation_date"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Date of Investigation:</FormLabel>
+                                            <FormLabel className="mb-1">
+                                                        Consultation Date{' '}
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                    </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     className="w-38 min-w-[38px] flex-shrink-0 border-2 border-black"
@@ -279,72 +106,158 @@ export default function create() {
                                         </FormItem>
                                     )}
                                 />
-                                {date_investigation !== '' ? (
-                                    <div className="flex flex-row items-start gap-x-32">
-                                        <FormField
-                                            control={form.control}
-                                            name="investigator"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Name of Investigator:</FormLabel>
-                                                    <FormControl>
-                                                        <Input {...field} className="min-w-149 border-2 border-black" />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={form.control}
-                                            name="investigator_no"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Investigator Contact Number:</FormLabel>
-                                                    <FormControl>
-                                                        <Input {...field} className="min-w-149 border-2 border-black" />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className="flex flex-row items-start gap-x-32">
-                                        <FormField
-                                            control={form.control}
-                                            name="investigator"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Name of Investigator:</FormLabel>
-                                                    <FormControl>
-                                                        <Input disabled {...field} className="min-w-149 border-2 border-black" />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={form.control}
-                                            name="investigator_no"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Investigator Contact Number:</FormLabel>
-                                                    <FormControl>
-                                                        <Input disabled {...field} className="min-w-149 border-2 border-black" />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </div>
-                                )}
                             </div>
-                            <Separator />
-                            <h1 className="mt-10">
-                                <b>BACKGROUND INFORMATION</b>
-                            </h1>
-                           
-                          
+                            <div className="flex flex-row items-start gap-x-32">
+                                <FormField
+                                    control={form.control}
+                                    name="consultation_time"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                           
+                                            <FormLabel className="mb-1">
+                                                       Consultation Time{' '}
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                    </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    className="w-38 min-w-[38px] flex-shrink-0 border-2 border-black"
+                                                    type="time"
+                                           
+                                                    value={field.value ?? ''}
+                                                    onChange={(e) => {
+                                                        const time = e.target.value;
+                                                        field.onChange(time);
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div className="flex flex-row items-start gap-x-32">
+                                <FormField
+                                    control={form.control}
+                                    name="mode_of_transaction"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <div className="flex w-full items-start gap-x-8">
+                                                <div className="flex flex-col">
+                                                    <FormLabel className="mb-1">
+                                                        Mode Of Transaction{' '}
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                    </FormLabel>
+                                                    <FormDescription>
+                                                        Select from either <strong>Confirmed Case</strong>, <strong>Probable Case</strong>,{' '}
+                                                        <strong>Carrier</strong>, <strong>International Traveler</strong> or <strong>Unknown</strong>.
+                                                    </FormDescription>
+                                                </div>
+                                                <Select
+                                                    value={form.watch('mode_of_transaction')}
+                                                    onValueChange={(val) => {
+                                                        form.setValue('mode_of_transaction',(val));
+                                                    }}
+                                                >
+                                                    <SelectTrigger className="w-[180px]">
+                                                        <SelectValue placeholder="Please Select" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {(
+                                                            [
+                                                                'Admitted',
+                                                                'Referral',
+                                                                'Visited',
+                                                                'Walk-in' ,
+                                                            ] as const
+                                                        ).map((option) => (
+                                                            <FormItem key={option} className="flex items-center space-x-2">
+                                                                <FormControl>
+                                                                    <SelectItem value={option} id={option}>
+                                                                        {option}
+                                                                    </SelectItem>
+                                                                </FormControl>
+                                                            </FormItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            <FormMessage /> {/* Shows validation errors if any */}
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div className="flex flex-row items-start gap-x-32">
+                                <FormField
+                                    control={form.control}
+                                    name="type_of_consultation"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <div className="flex w-full items-start gap-x-8">
+                                                <div className="flex flex-col">
+                                                    <FormLabel className="mb-1">
+                                                        Type of Consultation{' '}
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                    </FormLabel>
+                                                    {/* <FormDescription>
+                                                        Select from either <strong>Confirmed Case</strong>, <strong>Probable Case</strong>,{' '}
+                                                        <strong>Carrier</strong>, <strong>International Traveler</strong> or <strong>Unknown</strong>.
+                                                    </FormDescription> */}
+                                                </div>
+                                                <Select
+                                                    value={form.watch('type_of_consultation')}
+                                                    onValueChange={(val) => {
+                                                        form.setValue('type_of_consultation', (val) );
+                                                    }}
+                                                >
+                                                    <SelectTrigger className="w-[180px]">
+                                                        <SelectValue placeholder="Please Select" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {(
+                                                            [
+                                                                'Adult Imumunization',
+                                                                'Animal Bite',
+                                                                'Diptheria', 
+                                                                'General', 
+                                                            ] as const
+                                                        ).map((option) => (
+                                                            <FormItem key={option} className="flex items-center space-x-2">
+                                                                <FormControl>
+                                                                    <SelectItem value={option} id={option}>
+                                                                        {option}
+                                                                    </SelectItem>
+                                                                </FormControl>
+                                                            </FormItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            <FormMessage /> {/* Shows validation errors if any */}
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div className="flex flex-row items-start gap-x-10">
+                                <FormField
+                                    control={form.control}
+                                    name="chief_complaint"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Chief Complaint</FormLabel>
+                                            <FormControl>
+                                                <Textarea {...field} placeholder="Write here..." className="min-w-149 border-2 border-black" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                             <div className="flex justify-center">
                                 <Button className="bg-blue-500 text-white hover:bg-blue-600" type="submit">
                                   Submit

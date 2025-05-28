@@ -13,5 +13,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('consultation', ConsultationController::class)->names('consultation');
     Route::get('/diph/{id}/print', [DIPHController::class, 'print'])->name('diph.print');
-    Route::get('/api/jsonfile', [ConsultationController::class, 'jsonFile']);
+    Route::get('/api/jsonfile', [DIPHController::class, 'jsonFile']);
 });

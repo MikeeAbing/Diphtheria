@@ -74,16 +74,27 @@ class ConsultationController extends Controller
         //         ['patient_number' => $patient_number]
         //     );
         // }   
+
+        return Inertia::render(
+                    'DIPH::Consultation/create');
     }
     public function store(ConsultationFormRequest $request): RedirectResponse
     {
-        $patient = Patient::create($request->validated());
-        return redirect(route('consultation.index'))->with('Success', 'Successfully saved patient');
+        $consultation = Consultation::create($request->validated());
+        return redirect(route('consultation.index'))->with('Success', 'Successfully saved consultation');
     }
-    public function jsonFile()
+    // public function jsonFile()
+    // {
+    //     return response()->json([
+    //         'data' => Consultation::all()
+    //     ]);
+    // }
+
+    public function jsonFile(Request $request)
     {
+        $case_id = $request->query('id');
         return response()->json([
-            'data' => Consultation::all()
+            'data' => Consultation::where('case_id',  $case_id)->get()
         ]);
     }
     
@@ -133,5 +144,4 @@ class ConsultationController extends Controller
             ['patient_number' => $patient_number]
         );
     }
-
 }

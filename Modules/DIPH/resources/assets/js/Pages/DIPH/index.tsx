@@ -1,7 +1,18 @@
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
+import axios from 'axios';
 import { Head, Link, usePage } from '@inertiajs/react';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 
+import { Label } from "@/components/ui/label";
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -29,7 +40,7 @@ import { toast } from 'sonner';
 import useDebouncedSearch from '@/hooks/use-debounced-search';
 import useSorting from '@/hooks/use-sorting';
 import { Printer } from 'lucide-react';
-
+import { Eye } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import TableNoSortHeader from '../../../../../../../resources/js/components/data-table/data-table-no-sort-header';
 
@@ -43,19 +54,54 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/diph',
     },
 ];
+type Consultation = {
+    patient_number: string;
+    case_id: string;
+    consultation_id: string;
+    consultation_date: string;
+    consultation_time: string;
+    mode_of_transaction: string;
+    type_of_consultation: string;
+    chief_complaint: string;
+    fullname: string;
+};
 
 export default function Diph() {
+    const [jsonData, setJsonData] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [caseID, setcaseID] = useState('');
+
     const { flash } = usePage().props;
 
     useEffect(() => {
         if (flash?.success) {
             toast(flash?.success);
         }
-    }, [flash?.success]);
+
+        if (caseID) {
+            setLoading(true);
+            setJsonData(null); // Clear previous data
+            axios.get(`/api/jsonfile?id=${caseID}`)
+                .then(res => setJsonData(res.data))
+                .catch(err => console.error('Error fetching JSON:', err))
+                .finally(() => setLoading(false));
+        }
+        console.log(caseID);
+    }, [flash?.success, open, caseID]);
+
+    // const fetchData = async () => {
+    //     try {
+    //         const res = await axios.get('/api/jsonfile'); // adjust URL if needed
+    //         setJsonData(res.data.data);
+    //         setOpen(true);
+    //     } catch (err) {
+    //         console.error('Error fetching consultations:', err);
+    //     }
+    // };
+
 
     const { data: diph } = usePage().props.diph;
-
-    console.log(diph)
 
     type Diph = {
         id: string;
@@ -63,6 +109,7 @@ export default function Diph() {
         admitted: string;
         date_admitted: string,
         specimen_id: string,
+        consultation_id: string,
         patient: {
             id: string;
             patient_number: string,
@@ -71,8 +118,6 @@ export default function Diph() {
     };
 
     const [data, setData] = useState<Diph[]>([...diph]);
-
-    console.log(data);
 
     // const { links, meta } = usePage().props;
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -106,6 +151,41 @@ export default function Diph() {
                                     Edit Diphtheria Case
                                 </DropdownMenuItem>
                             </Link>
+                          
+
+                          
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button
+                                    variant="ghost"
+                                    className="w-full justify-start px-2 py-1.5 text-sm font-normal hover:bg-accent hover:text-accent-foreground flex items-center gap-2"
+                                    onClick={() => setcaseID(row.original.case_id)}
+                                    >
+                                    <Eye className="h-4 w-4" />
+                                    View Raw JSON
+                                    </Button>
+                                </DialogTrigger>
+
+                                <DialogContent className="max-w-7xl text-sm">
+                                    <DialogHeader>
+                                    <DialogTitle>JSON Format</DialogTitle>
+                                    </DialogHeader>
+
+                                    <div className="overflow-auto max-h-[70vh]">
+                                    {loading ? (
+                                        <p>Loading...</p>
+                                    ) : jsonData ? (
+                                        <pre className="text-xs whitespace-pre-wrap break-words">{JSON.stringify(jsonData, null, 2)}</pre>
+                                    ) : (
+                                        <p>No data available.</p>
+                                    )}
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
+
+
+
+
                             <Link href={`/diph/${row.original.id}/print`}>
                                 <DropdownMenuItem>
                                     <Printer className="h-4 w-4" />

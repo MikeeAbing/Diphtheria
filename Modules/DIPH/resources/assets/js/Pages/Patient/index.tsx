@@ -109,7 +109,7 @@ export default function Patient() {
                                 </DropdownMenuItem>
                             </Link> */}
 
-                            <Link href='/consultation/'>
+                            <Link href='/consultation/' onClick={()=>sessionStorage.setItem('patient_number', row.original.patient_number)}>
                                 <DropdownMenuItem>
                                     <PlusCircleIcon className="h-4 w-4" />
                                     View Consultation

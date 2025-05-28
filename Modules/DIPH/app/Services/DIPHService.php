@@ -19,7 +19,8 @@ class DIPHService
 
          $query = DIPH::query()
             ->leftJoin('specimen', 'case_report.case_id', '=', 'specimen.case_id')
-            ->select('case_report.*', 'specimen.id as specimen_id'); // customize as needed
+            ->leftjoin('patient_consultation', 'case_report.patient_number', 'patient_consultation.patient_number')
+            ->select('case_report.*', 'specimen.id as specimen_id', 'patient_consultation.consultation_id as consultation_id'); // customize as needed
 
         // $result = DataTable::query(DIPH::query());
 

@@ -129,7 +129,13 @@ class DIPHController extends Controller
             'diph' => $diph,
         ]);
     }
-
+    public function jsonFile(Request $request)
+    {
+        $case_id = $request->query('id');
+        return response()->json([
+            'data' => DIPH::where('case_id',  $case_id)->get()
+        ]);
+    }
     /**
      * Remove the specified resource from storage.
      */
