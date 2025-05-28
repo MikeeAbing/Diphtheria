@@ -93,8 +93,8 @@ class DIPHFormRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'case_id' => (int) DIPH::max('case_id') + 1 ?? 1,
-            'patient_number' => (int) DIPH::max('case_id') + 1 ?? 1,
+            'case_id' => (int) DIPH::max('case_id') + (int) 1 ?? (int) 1,
+            'patient_number' => $this->input('patient_number'),
             'user_id' => $this->input('user_id', Auth::user()->id),
             'timestamp' => $this->input('timestamp', null),
             'verification_level' => $this->input('verification_level', null),

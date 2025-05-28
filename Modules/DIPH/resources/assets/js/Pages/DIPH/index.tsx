@@ -158,7 +158,7 @@ export default function Diph() {
 
 
 
-                            <Dialog>
+                            <Dialog >
                                 <DialogTrigger asChild>
                                     <Button
                                         variant="ghost"

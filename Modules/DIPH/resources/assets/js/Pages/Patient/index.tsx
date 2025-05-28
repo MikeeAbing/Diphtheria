@@ -194,7 +194,7 @@ export default function Patient() {
                 />
             ),
             cell: ({ row }) => {
-                return <div className="capitalize">{row.original.diph?.[0].full_name}</div>;
+                return <div className="capitalize">{row.original.diph?.full_name}</div>;
             },
         },
     ];
