@@ -103,14 +103,15 @@ export default function Diph() {
 
     type Diph = {
         id: string;
-        case_id: number;
+        case_id: string;
         admitted: string;
         date_admitted: string;
         specimen_id: string;
         consultation_id: string;
         patient: {
             id: string;
-            patient_number: string;
+            // patient_number: string,
+            // firstname:string,
             full_name: string;
         } | null;
     };
@@ -150,6 +151,7 @@ export default function Diph() {
                                 </DropdownMenuItem>
                             </Link>
                             <DropdownMenuSeparator />
+
 
                             <DropdownMenuItem
                                 variant="ghost"
