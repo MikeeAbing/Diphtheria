@@ -4,6 +4,7 @@ namespace Modules\DIPH\Http\Controllers;
 
 use App\Models\Municipality;
 use App\Models\Province;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
 use Modules\Core\Http\Controllers\CoreController as Controller;
@@ -193,7 +194,7 @@ class DIPHController extends Controller
             "edcscode" => $edcscode,
             "diseasedata" => [
                 [
-                    "hfhudcode" => $diphData->hfhudcode,
+                    "hfhudcode" => "DOH000000000004799",
                     "patient_number" => $diphData->patient_number,
                     "firstname" => $diphData->patient->firstname,
                     "middlename" => $diphData->patient->middlename,
@@ -212,7 +213,7 @@ class DIPHController extends Controller
                     "sex" => $diphData->patient->sex,
                     "dateofbirth" => $diphData->patient->dateofbirth,
                     "member_of_IP" => $diphData->patient->member_of_IP,
-                    "IP_tribe" => $diphData->patient->IP_tribe,
+                    "IP_tribe" => (int)$diphData->patient->IP_tribe,
                     "admitted" => $diphData->admitted,
                     "date_admitted" => $diphData->date_admitted,
                     "date_onset" => $diphData->date_onset,
@@ -252,15 +253,15 @@ class DIPHController extends Controller
                     "date_died" => $diphData->date_died,
                     "verification_level" => $diphData->verification_level,
                     "user_id" => $diphData->user_id,
-                    "case_code" => $diphData->case_code,
-                    "timestamp" => $diphData->timestamp,
+                    "case_code" => "DIPH",
+                    "timestamp" => Carbon::parse($diphData->created_at)->format('Y-m-d H:i:s'),
                     "last_modified_by" => $diphData->last_modified_by,
-                    "last_modified_date_patient" => $diphData->last_modified_date_patient,
-                    "last_modified_date_disease" => $diphData->last_modified_date_disease,
-                    "last_modified_date_laboratory" => $diphData->last_modified_date_laboratory,
+                    "last_modified_date_patient" => Carbon::parse($diphData->patient->updated_at)->format('Y-m-d H:i:s'),
+                    "last_modified_date_disease" => Carbon::parse($diphData->updated_at)->format('Y-m-d H:i:s'),
+                    "last_modified_date_laboratory" => Carbon::parse($diphData->last_modified_date_laboratory)->format('Y-m-d H:i:s'),
                     "datafrom" => "iClinicSys",
                     "lab_data" => $diphData->lab->lab_data,
-                    "API_ID" => $diphData->lab->API_ID,
+                    "API_ID" => $diphData->lab->case_id,
                     "API_labdata_ID" => $diphData->lab->API_labdata_ID,
                     "specimen_type" => $diphData->lab->specimen_type,
                     "date_specimen_collected" => $diphData->lab->date_specimen_collected,
