@@ -2,6 +2,7 @@
 
 namespace Modules\DIPH\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -96,7 +97,7 @@ class DIPHFormRequest extends FormRequest
             'case_id' => (int) DIPH::max('case_id') + (int) 1 ?? (int) 1,
             'patient_number' => $this->input('patient_number'),
             'user_id' => $this->input('user_id', Auth::user()->id),
-            'timestamp' => $this->input('timestamp', null),
+            'timestamp' => $this->input('timestamp', Carbon::now()->format('Y-m-d H:i:s')),
             'verification_level' => $this->input('verification_level', null),
             'case_code' => $this->input('case_code', null),
             'last_modified_by' => $this->input('last_modified_by', Auth::user()->first_name . ' ' . Auth::user()->last_name),

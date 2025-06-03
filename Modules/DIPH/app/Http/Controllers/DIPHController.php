@@ -16,6 +16,7 @@ use Modules\IAM\Models\User;
 use Modules\DIPH\Http\Requests\DIPHFormRequest;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class DIPHController extends Controller
 {
@@ -259,7 +260,7 @@ class DIPHController extends Controller
                     "last_modified_date_disease" => $diphData->last_modified_date_disease,
                     "last_modified_date_laboratory" => $diphData->last_modified_date_laboratory,
                     "datafrom" => "iClinicSys",
-                    "lab_data" => $diphData->lab->lab_data,
+                    "lab_data" => $diphData->lab ? 'Y' : 'N',
                     "API_ID" => $diphData->lab->API_ID,
                     "API_labdata_ID" => $diphData->lab->API_labdata_ID,
                     "specimen_type" => $diphData->lab->specimen_type,
@@ -279,7 +280,6 @@ class DIPHController extends Controller
                 ]
             ]
         ];
-
         return response()->json($formattedData);
     }
     public function destroy($id)
