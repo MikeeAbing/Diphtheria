@@ -16,6 +16,18 @@ import {React} from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
+        title: 'Patient List',
+        href: '/patient',
+    },
+    {
+        title: 'Consultation List',
+        href: '/consultation',
+    },
+    {
         title: 'Add Patient Consultation',
         href: '/consultation',
     },
@@ -42,7 +54,7 @@ export default function create() {
     function onSubmit(values: ConsultationForm) {
         const payload = { ...values };
 
-       
+
 
         router.post('/consultation', payload, {
             onSuccess: () => {
@@ -77,7 +89,7 @@ export default function create() {
                             <h1>
                                 <b>Consultation Details</b>
                             </h1>
-                  
+
                             <div className="flex flex-row items-start gap-x-32">
                                 <FormField
                                     control={form.control}
@@ -113,7 +125,7 @@ export default function create() {
                                     name="consultation_time"
                                     render={({ field }) => (
                                         <FormItem>
-                                           
+
                                             <FormLabel className="mb-1">
                                                        Consultation Time{' '}
                                                         <div className="text-red-500">
@@ -124,7 +136,7 @@ export default function create() {
                                                 <Input
                                                     className="w-38 min-w-[38px] flex-shrink-0 border-2 border-black"
                                                     type="time"
-                                           
+
                                                     value={field.value ?? ''}
                                                     onChange={(e) => {
                                                         const time = e.target.value;
@@ -152,8 +164,8 @@ export default function create() {
                                                         </div>
                                                     </FormLabel>
                                                     <FormDescription>
-                                                        Select from either <strong>Confirmed Case</strong>, <strong>Probable Case</strong>,{' '}
-                                                        <strong>Carrier</strong>, <strong>International Traveler</strong> or <strong>Unknown</strong>.
+                                                        Select from either <strong>Admitted</strong>, <strong>Referral</strong>,{' '}
+                                                        <strong>Visited</strong>, or <strong>Walk-in</strong>.
                                                     </FormDescription>
                                                 </div>
                                                 <Select
@@ -223,8 +235,8 @@ export default function create() {
                                                             [
                                                                 'Adult Imumunization',
                                                                 'Animal Bite',
-                                                                'Diptheria', 
-                                                                'General', 
+                                                                'Diptheria',
+                                                                'General',
                                                             ] as const
                                                         ).map((option) => (
                                                             <FormItem key={option} className="flex items-center space-x-2">

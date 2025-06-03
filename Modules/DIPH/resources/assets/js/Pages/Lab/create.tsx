@@ -16,6 +16,14 @@ import { LabForm, labFormSchema } from './data/schema';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
+        title: 'Diphtheria Cases List',
+        href: '/diph',
+    },
+    {
         title: 'Add Laboratory Data',
         href: '/diph/lab/create',
     },

@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from "@/components/ui/label";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
@@ -15,32 +15,32 @@ import { useForm } from 'react-hook-form';
 import { PatientForm, patientFormSchema } from './data/schema';
 
 interface Patient {
-    id: number,
-    firstname: string | '',
-    middlename: string | '',
-    lastname: string | '',
-    suffixname: string | '',
-    sex: 'M' | 'F' | undefined,
-    dateofbirth: string | undefined,
-    ageinyears: number,
-    ageinmonths: number,
-    ageindays: number,
-    member_of_IP: undefined,
-    IP_tribe: number | undefined,
-    IP_tribe_specify: string | '',
-    pat_address_reg: string | '',
-    pat_address_prov: string | '',
-    pat_address_city: string | '',
-    pat_address_brgy: string | '',
-    pat_address_street_name: string | '',
-    pat_perm_address_reg: string | '',
-    pat_perm_address_prov: string | '',
-    pat_perm_address_city: string | '',
-    pat_perm_address_brgy: string | '',
-    pat_perm_address_street_name: string | '',
-    facilityname: string | '',
-    occupation: string | '',
-    phone_no: string | '',
+    id: number;
+    firstname: string | '';
+    middlename: string | '';
+    lastname: string | '';
+    suffixname: string | '';
+    sex: 'M' | 'F' | undefined;
+    dateofbirth: string | undefined;
+    ageinyears: number;
+    ageinmonths: number;
+    ageindays: number;
+    member_of_IP: undefined;
+    IP_tribe: number | undefined;
+    IP_tribe_specify: string | '';
+    pat_address_reg: string | '';
+    pat_address_prov: string | '';
+    pat_address_city: string | '';
+    pat_address_brgy: string | '';
+    pat_address_street_name: string | '';
+    pat_perm_address_reg: string | '';
+    pat_perm_address_prov: string | '';
+    pat_perm_address_city: string | '';
+    pat_perm_address_brgy: string | '';
+    pat_perm_address_street_name: string | '';
+    facilityname: string | '';
+    occupation: string | '';
+    phone_no: string | '';
 }
 
 export default function edit({ provinces, regions, citymuns }) {
@@ -76,7 +76,7 @@ export default function edit({ provinces, regions, citymuns }) {
             ageinmonths: patient_data.ageinmonths || undefined,
             ageindays: patient_data.ageindays || undefined,
             member_of_IP: patient_data.member_of_IP || undefined,
-            IP_tribe: patient_data.IP_tribe || undefined,
+            IP_tribe: Number.isNaN(patient_data.IP_tribe) ? undefined : patient_data.IP_tribe,
             IP_tribe_specify: patient_data.IP_tribe_specify || undefined,
             pat_address_reg: patient_data.pat_address_reg || undefined,
             pat_address_prov: patient_data.pat_address_prov || undefined,
@@ -132,9 +132,9 @@ export default function edit({ provinces, regions, citymuns }) {
             ...values,
         };
 
-        payload.ageinyears = age?.years as number;
-        payload.ageinmonths = age?.months as number;
-        payload.ageindays = age?.days as number;
+        payload.ageinyears = payload.ageinyears ?? age?.years as number;
+        payload.ageinmonths = payload.ageinmonths ??age?.months as number;
+        payload.ageindays = payload.ageindays ?? age?.days as number;
 
         router.put(`/patient/${patient_data.id}`, payload, {
             onSuccess: () => {
@@ -210,8 +210,7 @@ export default function edit({ provinces, regions, citymuns }) {
             form.setValue('pat_perm_address_city', form.watch('pat_address_city'));
             form.setValue('pat_perm_address_brgy', form.watch('pat_address_brgy'));
             form.setValue('pat_perm_address_street_name', form.watch('pat_address_street_name'));
-        }
-        else {
+        } else {
             form.setValue('pat_perm_address_reg', patient_data.pat_perm_address_reg ?? '');
             form.setValue('pat_perm_address_prov', patient_data.pat_perm_address_prov ?? '');
             form.setValue('pat_perm_address_city', patient_data.pat_perm_address_city ?? '');
@@ -261,12 +260,7 @@ export default function edit({ provinces, regions, citymuns }) {
                                                 <FormLabel>Middle Name:</FormLabel>
                                             </div>
                                             <FormControl className="flex items-center">
-                                                <Input
-                                                    className="w-auto border-2 border-black"
-                                                    type="text"
-                                                    placeholder="Middle Name"
-                                                    {...field}
-                                                />
+                                                <Input className="w-auto border-2 border-black" type="text" placeholder="Middle Name" {...field} />
                                             </FormControl>
                                         </div>
                                         <FormMessage />
@@ -302,12 +296,7 @@ export default function edit({ provinces, regions, citymuns }) {
                                                 <FormLabel>Suffix Name:</FormLabel>
                                             </div>
                                             <FormControl>
-                                                <Input
-                                                    className="w-auto border-2 border-black"
-                                                    type="text"
-                                                    placeholder="Suffix Name"
-                                                    {...field}
-                                                />
+                                                <Input className="w-auto border-2 border-black" type="text" placeholder="Suffix Name" {...field} />
                                             </FormControl>
                                         </div>
                                         <FormMessage />
@@ -497,44 +486,44 @@ export default function edit({ provinces, regions, citymuns }) {
                                                     <FormLabel>Indigenous People Tribe:</FormLabel>
                                                 </div>
                                                 <Select
-                                                    value={Number(form.watch('IP_tribe')) ?? ''}
+                                                    value={Number(form.watch('IP_tribe'))}
                                                     onValueChange={(val) => {
                                                         form.setValue(
                                                             'IP_tribe',
                                                             Number(val) as
-                                                            | 1
-                                                            | 2
-                                                            | 3
-                                                            | 4
-                                                            | 5
-                                                            | 6
-                                                            | 7
-                                                            | 8
-                                                            | 9
-                                                            | 10
-                                                            | 11
-                                                            | 12
-                                                            | 13
-                                                            | 14
-                                                            | 15
-                                                            | 16
-                                                            | 17
-                                                            | 18
-                                                            | 19
-                                                            | 20
-                                                            | 21
-                                                            | 22
-                                                            | 23
-                                                            | 24
-                                                            | 25
-                                                            | 26
-                                                            | 27
-                                                            | 28
-                                                            | 29
-                                                            | 30
-                                                            | 31
-                                                            | 32
-                                                            | 33,
+                                                                | 1
+                                                                | 2
+                                                                | 3
+                                                                | 4
+                                                                | 5
+                                                                | 6
+                                                                | 7
+                                                                | 8
+                                                                | 9
+                                                                | 10
+                                                                | 11
+                                                                | 12
+                                                                | 13
+                                                                | 14
+                                                                | 15
+                                                                | 16
+                                                                | 17
+                                                                | 18
+                                                                | 19
+                                                                | 20
+                                                                | 21
+                                                                | 22
+                                                                | 23
+                                                                | 24
+                                                                | 25
+                                                                | 26
+                                                                | 27
+                                                                | 28
+                                                                | 29
+                                                                | 30
+                                                                | 31
+                                                                | 32
+                                                                | 33,
                                                         );
                                                     }}
                                                     className="w-auto"
@@ -610,39 +599,39 @@ export default function edit({ provinces, regions, citymuns }) {
                                                         form.setValue(
                                                             'IP_tribe',
                                                             parseInt(val) as
-                                                            | 1
-                                                            | 2
-                                                            | 3
-                                                            | 4
-                                                            | 5
-                                                            | 6
-                                                            | 7
-                                                            | 8
-                                                            | 9
-                                                            | 10
-                                                            | 11
-                                                            | 12
-                                                            | 13
-                                                            | 14
-                                                            | 15
-                                                            | 16
-                                                            | 17
-                                                            | 18
-                                                            | 19
-                                                            | 20
-                                                            | 21
-                                                            | 22
-                                                            | 23
-                                                            | 24
-                                                            | 25
-                                                            | 26
-                                                            | 27
-                                                            | 28
-                                                            | 29
-                                                            | 30
-                                                            | 31
-                                                            | 32
-                                                            | 33,
+                                                                | 1
+                                                                | 2
+                                                                | 3
+                                                                | 4
+                                                                | 5
+                                                                | 6
+                                                                | 7
+                                                                | 8
+                                                                | 9
+                                                                | 10
+                                                                | 11
+                                                                | 12
+                                                                | 13
+                                                                | 14
+                                                                | 15
+                                                                | 16
+                                                                | 17
+                                                                | 18
+                                                                | 19
+                                                                | 20
+                                                                | 21
+                                                                | 22
+                                                                | 23
+                                                                | 24
+                                                                | 25
+                                                                | 26
+                                                                | 27
+                                                                | 28
+                                                                | 29
+                                                                | 30
+                                                                | 31
+                                                                | 32
+                                                                | 33,
                                                         );
                                                     }}
                                                     className="w-auto"
@@ -779,7 +768,7 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel className="max-w-3xs break-word">
+                                                <FormLabel className="break-word max-w-3xs">
                                                     Facility Name of the Disease Reporting Unit based National Health Facility Registry:
                                                 </FormLabel>
                                             </div>
@@ -816,12 +805,7 @@ export default function edit({ provinces, regions, citymuns }) {
                                                 <FormLabel>Phone Number:</FormLabel>
                                             </div>{' '}
                                             <FormControl>
-                                                <Input
-                                                    className="w-auto border-2 border-black"
-                                                    type="text"
-                                                    placeholder="Phone Number"
-                                                    {...field}
-                                                />
+                                                <Input className="w-auto border-2 border-black" type="text" placeholder="Phone Number" {...field} />
                                             </FormControl>
                                         </div>
                                         <FormMessage />
@@ -1008,12 +992,15 @@ export default function edit({ provinces, regions, citymuns }) {
                         <div className="flex items-center space-x-2">
                             <Checkbox
                                 id="addresscheck"
-                                checked={sameAddress} onCheckedChange={(checked) => {
+                                checked={sameAddress}
+                                onCheckedChange={(checked) => {
                                     setSameAddress(!!checked);
                                 }}
                                 className="rounded-sm border-2 border-black"
                             />
-                            <Label htmlFor="addresscheck" className="text-sm leading-none font-medium">Check same as current address</Label>
+                            <Label htmlFor="addresscheck" className="text-sm leading-none font-medium">
+                                Check same as current address
+                            </Label>
                         </div>
                         <div className="flex flex-row items-start gap-x-8">
                             <FormField

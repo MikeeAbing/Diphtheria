@@ -47,7 +47,7 @@ class ConsultationController extends Controller
         ]);
        // return dd('sample');
 
-   
+
     }
 
 
@@ -73,7 +73,7 @@ class ConsultationController extends Controller
         //         'DIPH::Consultation/create',
         //         ['patient_number' => $patient_number]
         //     );
-        // }   
+        // }
 
         return Inertia::render(
                     'DIPH::Consultation/create');
@@ -97,11 +97,11 @@ class ConsultationController extends Controller
             'data' => Consultation::where('case_id',  $case_id)->get()
         ]);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      */
-  
+
 
     /**
      * Show the specified resource.
@@ -116,7 +116,7 @@ class ConsultationController extends Controller
      */
     public function edit()
     {
-       
+
     }
 
     /**
@@ -127,13 +127,13 @@ class ConsultationController extends Controller
      * @param  Consultation  $consultation
      * @return Redirect
      */
-  
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-    
+
     {
     }
     public function consultation(Request $request)

@@ -165,7 +165,7 @@ class DIPHController extends Controller
             'case_id' => 'required|string',
             'pidsr_status' => 'required|string',
         ]);
-    
+
         $caseId = $validated['case_id'];
         $data = DIPH::where('case_id', $caseId)->first();
 
@@ -175,6 +175,7 @@ class DIPHController extends Controller
 
         $data->pidsr_status = $validated['pidsr_status'];
         $data->save();
+
         $username = env('WEBSERVICE_PIDSR_USERNAME');
         $password = env('WEBSERVICE_PIDSR_PASSWORD');
         $edcscode = env('WEBSERVICE_PIDSR_TOKEN');
@@ -276,7 +277,7 @@ class DIPHController extends Controller
     ];
 
     return response()->json($formattedData);
-}
+     }
     public function destroy($id)
     {
     }
