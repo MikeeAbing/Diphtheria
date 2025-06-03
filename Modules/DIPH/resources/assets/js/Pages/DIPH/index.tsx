@@ -109,14 +109,15 @@ export default function Diph() {
 
     type Diph = {
         id: string;
-        case_id: number;
+        case_id: string;
         admitted: string;
         date_admitted: string,
         specimen_id: string,
         consultation_id: string,
         patient: {
             id: string;
-            patient_number: string,
+            // patient_number: string,
+            // firstname:string,
             full_name: string;
         } | null;
     };
@@ -163,7 +164,7 @@ export default function Diph() {
                                     <Button
                                         variant="ghost"
                                         className="w-full justify-start px-2 py-1.5 text-sm font-normal hover:bg-accent hover:text-accent-foreground flex items-center gap-2"
-                                        onClick={setcaseID(row.original.case_id)}> <Eye className="h-4 w-4" />
+                                        onClick={() => setcaseID(row.original.case_id)}> <Eye className="h-4 w-4" />
                                         View Raw JSON
                                     </Button>
                                 </DialogTrigger>
