@@ -41,11 +41,14 @@ class DIPHController extends Controller
     public function index(Request $request)
     {
         $diph = $this->diphService->index();
-        return inertia('DIPH::DIPH/index',['diph' => $diph]
-);
+        return inertia(
+            'DIPH::DIPH/index',
+            ['diph' => $diph]
+        );
     }
 
-    public function getDiphList(Request $request){
+    public function getDiphList(Request $request)
+    {
         $patient_number = $request->query('id');
 
         $diph = DIPH::where('patient_number', 'EQUALS', $patient_number);
@@ -130,10 +133,10 @@ class DIPHController extends Controller
         $permprovince = Province::find($diph->patient->pat_perm_address_prov);
         return Inertia::render('DIPH::DIPH/printCIF', [
             'diph' => $diph,
-            'city'=>$city,
-            'province'=>$province,
-            'permcity'=>$permcity,
-            'permprovince'=>$permprovince
+            'city' => $city,
+            'province' => $province,
+            'permcity' => $permcity,
+            'permprovince' => $permprovince
         ]);
     }
     // public function jsonFile(Request $request)
@@ -142,7 +145,7 @@ class DIPHController extends Controller
     //         'case_id' => 'required|string',
     //         'pidsr_status' => 'required|string',
     //     ]);
-    
+
     //     $caseId = $validated['case_id'];
     //     $data = DIPH::where('case_id', $caseId)->first();
 
@@ -152,14 +155,14 @@ class DIPHController extends Controller
 
     //     $data->pidsr_status = $validated['pidsr_status'];
     //     $data->save();
-    
+
     //     return response()->json($data);
-       
+
     // }
     /**
      * Remove the specified resource from storage.
      */
-        public function jsonFile(Request $request)
+    public function jsonFile(Request $request)
     {
         $validated = $request->validate([
             'case_id' => 'required|string',
@@ -180,104 +183,105 @@ class DIPHController extends Controller
         $password = env('WEBSERVICE_PIDSR_PASSWORD');
         $edcscode = env('WEBSERVICE_PIDSR_TOKEN');
         // return response()->json($data);
-       
 
-       
-     $formattedData = [
-        "username" => $username,
-        "password" => $password,
-        "edcscode" => $edcscode,
-        "diseasedata" => [
-            [
-                "hfhudcode" => $data->hfhudcode,
-                "patient_number" => $data->patient_number,
-                "firstname" => $data->firstname,
-                "middlename" => $data->middlename,
-                "lastname" => $data->lastname,
-                "suffixname" => $data->suffixname,
-                "pat_address_reg" => $data->pat_address_reg,
-                "pat_address_prov" => $data->pat_address_prov,
-                "pat_address_city" => $data->pat_address_city,
-                "pat_address_brgy" => $data->pat_address_brgy,
-                "pat_address_street_name" => $data->pat_address_street_name,
-                "pat_perm_address_reg" => $data->pat_perm_address_reg,
-                "pat_perm_address_prov" => $data->pat_perm_address_prov,
-                "pat_perm_address_city" => $data->pat_perm_address_city,
-                "pat_perm_address_brgy" => $data->pat_perm_address_brgy,
-                "pat_perm_address_street_name" => $data->pat_perm_address_street_name,
-                "sex" => $data->sex,
-                "dateofbirth" => $data->dateofbirth,
-                "member_of_IP" => $data->member_of_IP,
-                "IP_tribe" => $data->IP_tribe,
-                "admitted" => $data->admitted,
-                "date_admitted" => $data->date_admitted,
-                "date_onset" => $data->date_onset,
-                "occupation" => $data->occupation,
-                "phone_no" => $data->phone_no,
-                "caregiver" => $data->caregiver,
-                "caregiver_no" => $data->caregiver_no,
-                "date_report" => $data->date_report,
-                "reporter" => $data->reporter,
-                "reporter_no" => $data->reporter_no,
-                "date_investigation" => $data->date_investigation,
-                "investigator" => $data->investigator,
-                "investigator_no" => $data->investigator_no,
-                "diphtheria_dose" => $data->diphtheria_dose,
-                "total_dose" => $data->total_dose,
-                "date_last_vaccination" => $data->date_last_vaccination,
-                "sourceinformation" => $data->sourceinformation,
-                "known_exposure" => $data->known_exposure,
-                "exposure_other" => $data->exposure_other,
-                "name_school" => $data->name_school,
-                "travel14days" => $data->travel14days,
-                "travel_detail" => $data->travel_detail,
-                "fever" => $data->fever,
-                "cough" => $data->cough,
-                "sorethroat" => $data->sorethroat,
-                "pseudomembrane" => $data->pseudomembrane,
-                "swallowing" => $data->swallowing,
-                "breathing" => $data->breathing,
-                "other_symptoms" => $data->other_symptoms,
-                "other_symptoms_specify" => $data->other_symptoms_specify,
-                "antibiotic" => $data->antibiotic,
-                "antibiotic_date" => $data->antibiotic_date,
-                "diphtheriatoxin" => $data->diphtheriatoxin,
-                "diphtheriatoxin_date" => $data->diphtheriatoxin_date,
-                "final_classi" => $data->final_classi,
-                "outcome" => $data->outcome,
-                "date_died" => $data->date_died,
-                "verification_level" => $data->verification_level,
-                "user_id" => $data->user_id,
-                "case_code" => $data->case_code,
-                "timestamp" => $data->timestamp,
-                "last_modified_by" => $data->last_modified_by,
-                "last_modified_date_patient" => $data->last_modified_date_patient,
-                "last_modified_date_disease" => $data->last_modified_date_disease,
-                "last_modified_date_laboratory" => $data->last_modified_date_laboratory,
-                "datafrom" => $data->datafrom,
-                "lab_data" => $data->lab_data,
-                "API_ID" => $data->API_ID,
-                "API_labdata_ID" => $data->API_labdata_ID,
-                "specimen_type" => $data->specimen_type,
-                "date_specimen_collected" => $data->date_specimen_collected,
-                "lab_sent_RITM" => $data->lab_sent_RITM,
-                "date_sent_RITM" => $data->date_sent_RITM,
-                "date_received_by_lab" => $data->date_received_by_lab,
-                "time_received_by_lab" => $data->time_received_by_lab,
-                "lab_received_by" => $data->lab_received_by,
-                "type_test" => $data->type_test,
-                "date_testing" => $data->date_testing,
-                "lab_result" => $data->lab_result,
-                "typeoforganism" => $data->typeoforganism,
-                "date_result" => $data->date_result,
-                "interpretation" => $data->interpretation,
-                "remarks" => $data->remarks,
+        $diphData = DIPH::where('case_id', $caseId)->with(['patient', 'lab'])->first();
+
+
+        $formattedData = [
+            "username" => $username,
+            "password" => $password,
+            "edcscode" => $edcscode,
+            "diseasedata" => [
+                [
+                    "hfhudcode" => $diphData->hfhudcode,
+                    "patient_number" => $diphData->patient_number,
+                    "firstname" => $diphData->patient->firstname,
+                    "middlename" => $diphData->patient->middlename,
+                    "lastname" => $diphData->patient->lastname,
+                    "suffixname" => $diphData->patient->suffixname,
+                    "pat_address_reg" => $diphData->patient->pat_address_reg,
+                    "pat_address_prov" => $diphData->patient->pat_address_prov,
+                    "pat_address_city" => $diphData->patient->pat_address_city,
+                    "pat_address_brgy" => $diphData->patient->pat_address_brgy,
+                    "pat_address_street_name" => $diphData->patient->pat_address_street_name,
+                    "pat_perm_address_reg" => $diphData->patient->pat_perm_address_reg,
+                    "pat_perm_address_prov" => $diphData->patient->pat_perm_address_prov,
+                    "pat_perm_address_city" => $diphData->patient->pat_perm_address_city,
+                    "pat_perm_address_brgy" => $diphData->patient->pat_perm_address_brgy,
+                    "pat_perm_address_street_name" => $diphData->patient->pat_perm_address_street_name,
+                    "sex" => $diphData->patient->sex,
+                    "dateofbirth" => $diphData->patient->dateofbirth,
+                    "member_of_IP" => $diphData->patient->member_of_IP,
+                    "IP_tribe" => $diphData->patient->IP_tribe,
+                    "admitted" => $diphData->admitted,
+                    "date_admitted" => $diphData->date_admitted,
+                    "date_onset" => $diphData->date_onset,
+                    "occupation" => $diphData->patient->occupation,
+                    "phone_no" => $diphData->patient->phone_no,
+                    "caregiver" => $diphData->caregiver,
+                    "caregiver_no" => $diphData->caregiver_no,
+                    "date_report" => $diphData->date_report,
+                    "reporter" => $diphData->reporter,
+                    "reporter_no" => $diphData->reporter_no,
+                    "date_investigation" => $diphData->date_investigation,
+                    "investigator" => $diphData->investigator,
+                    "investigator_no" => $diphData->investigator_no,
+                    "diphtheria_dose" => $diphData->diphtheria_dose,
+                    "total_dose" => $diphData->total_dose,
+                    "date_last_vaccination" => $diphData->date_last_vaccination,
+                    "sourceinformation" => $diphData->sourceinformation,
+                    "known_exposure" => $diphData->known_exposure,
+                    "exposure_other" => $diphData->exposure_other,
+                    "name_school" => $diphData->name_school,
+                    "travel14days" => $diphData->travel14days,
+                    "travel_detail" => $diphData->travel_detail,
+                    "fever" => $diphData->fever,
+                    "cough" => $diphData->cough,
+                    "sorethroat" => $diphData->sorethroat,
+                    "pseudomembrane" => $diphData->pseudomembrane,
+                    "swallowing" => $diphData->swallowing,
+                    "breathing" => $diphData->breathing,
+                    "other_symptoms" => $diphData->other_symptoms,
+                    "other_symptoms_specify" => $diphData->other_symptoms_specify,
+                    "antibiotic" => $diphData->antibiotic,
+                    "antibiotic_date" => $diphData->antibiotic_date,
+                    "diphtheriatoxin" => $diphData->diphtheriatoxin,
+                    "diphtheriatoxin_date" => $diphData->diphtheriatoxin_date,
+                    "final_classi" => $diphData->final_classi,
+                    "outcome" => $diphData->outcome,
+                    "date_died" => $diphData->date_died,
+                    "verification_level" => $diphData->verification_level,
+                    "user_id" => $diphData->user_id,
+                    "case_code" => $diphData->case_code,
+                    "timestamp" => $diphData->timestamp,
+                    "last_modified_by" => $diphData->last_modified_by,
+                    "last_modified_date_patient" => $diphData->last_modified_date_patient,
+                    "last_modified_date_disease" => $diphData->last_modified_date_disease,
+                    "last_modified_date_laboratory" => $diphData->last_modified_date_laboratory,
+                    "datafrom" => "iClinicSys",
+                    "lab_data" => $diphData->lab->lab_data,
+                    "API_ID" => $diphData->lab->API_ID,
+                    "API_labdata_ID" => $diphData->lab->API_labdata_ID,
+                    "specimen_type" => $diphData->lab->specimen_type,
+                    "date_specimen_collected" => $diphData->lab->date_specimen_collected,
+                    "lab_sent_RITM" => $diphData->lab->lab_sent_RITM,
+                    "date_sent_RITM" => $diphData->lab->date_sent_RITM,
+                    "date_received_by_lab" => $diphData->lab->date_received_by_lab,
+                    "time_received_by_lab" => $diphData->lab->time_received_by_lab,
+                    "lab_received_by" => $diphData->lab->lab_received_by,
+                    "type_test" => $diphData->lab->type_test,
+                    "date_testing" => $diphData->lab->date_testing,
+                    "lab_result" => $diphData->lab->lab_result,
+                    "typeoforganism" => $diphData->lab->typeoforganism,
+                    "date_result" => $diphData->lab->date_result,
+                    "interpretation" => $diphData->lab->interpretation,
+                    "remarks" => $diphData->lab->remarks,
+                ]
             ]
-        ]
-    ];
+        ];
 
-    return response()->json($formattedData);
-     }
+        return response()->json($formattedData);
+    }
     public function destroy($id)
     {
     }
