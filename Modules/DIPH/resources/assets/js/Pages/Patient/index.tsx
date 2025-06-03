@@ -114,7 +114,7 @@ export default function Patient() {
                                     <PlusCircleIcon className="h-4 w-4" />
                                     View Consultation
                                 </DropdownMenuItem>
-                            </Link> 
+                            </Link>
                             <DropdownMenuSeparator />
 
                             {/* {row.original.diph?.[0]?.id && (
@@ -185,7 +185,7 @@ export default function Patient() {
             accessorKey: 'diph',
             header: ({ column }) => (
                 <TableSortHeader
-                    title="Encoded By"
+                    title="Diphtheria Case Encoded By"
                     onClick={() => {
                         setTimeDebounce(50);
                         sort('diph');
@@ -194,7 +194,9 @@ export default function Patient() {
                 />
             ),
             cell: ({ row }) => {
-                return <div className="capitalize">{row.original.diph?.full_name}</div>;
+                const rowValue = row.getValue('diph') as {full_name: string}[];
+                const fullName = rowValue?.[0]?.full_name || '—';
+                return <div className="capitalize">{fullName}</div>;
             },
         },
     ];

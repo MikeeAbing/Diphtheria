@@ -35,6 +35,14 @@ import { consultationSchema } from './data/schema';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
+        title: 'Patient List',
+        href: '/patient',
+    },
+    {
         title: 'Consultation List',
         href: 'consultation',
     },
@@ -48,16 +56,16 @@ const { data: consultations = [] } = usePage().props.consultations || {};
 
 
        const {flash} = usePage().props;
-   
+
        useEffect(() => {
            if (flash?.success) {
                toast(flash?.success);
            }
        }, [flash?.success]);
-   
-       
+
+
        type Consultation = {
-        
+
            patient_number: string;
            consultation_id: string;
            consultation_date: string;
@@ -67,21 +75,21 @@ const { data: consultations = [] } = usePage().props.consultations || {};
            chief_complaint: string;
            fullname: string;
        };
-   
-       
-   
+
+
+
        // const { links, meta } = usePage().props;
        const [sorting, setSorting] = React.useState<SortingState>([]);
        const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
        const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
        const [rowSelection, setRowSelection] = React.useState({});
-   
+
        const { filters, consultation, users } = usePage().props;
        const { params, setParams, setTimeDebounce } = useDebouncedSearch('/consultation', filters);
        const { sort } = useSorting(filters, setParams);
-   
+
        const [search, setSearch] = useState('');
-   
+
        const columns: ColumnDef<Consultation>[] = [
            {
                id: 'actions',
@@ -108,9 +116,9 @@ const { data: consultations = [] } = usePage().props.consultations || {};
                                        <PlusCircleIcon className="h-4 w-4" />
                                        Add Diptheria Case
                                    </DropdownMenuItem>
-                               </Link> 
+                               </Link>
                                <DropdownMenuSeparator />
-   
+
                                {/* {row.original.diph?.[0]?.id && (
                                    <div><Link href={`/diph/${row.original.diph?.[0]?.id}/edit`}>
                                        <DropdownMenuItem>
@@ -246,9 +254,9 @@ const { data: consultations = [] } = usePage().props.consultations || {};
             cell: ({ row }) => <div className="capitalize">{row.getValue('chief_complaint')}</div>,
         },
 
-      
+
        ];
-   
+
        const table = useReactTable({
            data: consultations,
            columns,
@@ -267,7 +275,7 @@ const { data: consultations = [] } = usePage().props.consultations || {};
                rowSelection,
            },
        });
-   
+
        return (
            <AppLayout breadcrumbs={breadcrumbs}>
                <Head title="Consultation" />
@@ -280,18 +288,18 @@ const { data: consultations = [] } = usePage().props.consultations || {};
                                           setParams={setParams}
                                           setTimeDebounce={setTimeDebounce}
                                       /> */}
-                                      
+
                                       <Link href="/consultation/create">
                                           <Button className="h-8 px-2 lg:px-3">
                                               <PlusCircleIcon className="h-4 w-4" />
                                               Add Consultation
                                           </Button>
                                       </Link>
-                                     
-                  
-                                    
+
+
+
                                       <DataTableViewOptions table={table} />
-                                   
+
                                   </div>
                    <div className="rounded-md border">
                        <Table>
@@ -336,6 +344,6 @@ const { data: consultations = [] } = usePage().props.consultations || {};
                </div>
            </AppLayout>
        );
-   
-   
+
+
 }

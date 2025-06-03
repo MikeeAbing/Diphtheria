@@ -43,17 +43,17 @@ export const patientFormSchema = z
             message: 'Date must be in YYYY-MM-DD format',
         }),
         ageinyears: z
-            .number()
+            .number({required_error: "The age in years field is required"})
             .int()
             .min(-2147483648, { message: 'Value must be >= -2,147,483,648' })
             .max(2147483647, { message: 'Value must be <= 2,147,483,647' }),
         ageinmonths: z
-            .number()
+            .number({required_error: "The age in months field is required"})
             .int()
             .min(-2147483648, { message: 'Value must be >= -2,147,483,648' })
             .max(2147483647, { message: 'Value must be <= 2,147,483,647' }),
         ageindays: z
-            .number()
+            .number({required_error: "The age in days field is required"})
             .int()
             .min(-2147483648, { message: 'Value must be >= -2,147,483,648' })
             .max(2147483647, { message: 'Value must be <= 2,147,483,647' }),

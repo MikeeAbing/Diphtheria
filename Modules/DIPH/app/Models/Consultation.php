@@ -23,9 +23,9 @@ use Spatie\Permission\Traits\HasRoles;
 class Consultation extends Model implements IsFilterable
 {
 
-  
+
     use Filterable;
-   
+
 
     protected $table = 'patient_consultation';
     /**
@@ -39,8 +39,8 @@ class Consultation extends Model implements IsFilterable
         'mode_of_transaction',
         'type_of_consultation',
         'chief_complaint',
-    
-     
+
+
     ];
 
     /**
@@ -48,13 +48,13 @@ class Consultation extends Model implements IsFilterable
      *
      * @var array
      */
- 
+
 
     public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
             Filter::field('patient_number', [FilterType::EQUAL]),
-           
+
         );
     }
 
@@ -62,7 +62,7 @@ class Consultation extends Model implements IsFilterable
      * The attributes that are mass assignable.
      *  @var array
      */
-  
+
 
     /**
      * Access the full name of the user
@@ -70,9 +70,9 @@ class Consultation extends Model implements IsFilterable
      * @return string
      */
     protected $with = [];
-  
+
     public function patient(){
         return $this->belongsTo(Patient::class, 'patient_number', 'patient_number');
     }
-   
+
 }

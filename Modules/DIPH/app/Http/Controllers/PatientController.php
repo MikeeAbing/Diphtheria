@@ -41,7 +41,7 @@ class PatientController extends Controller
     public function index()
     {
         $patients = $this->patientService->index();
-       
+
         return inertia(
             'DIPH::Patient/index',
             ['patients' => $patients]

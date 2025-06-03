@@ -144,7 +144,7 @@ class DIPHController extends Controller
             'case_id' => 'required|string',
             'pidsr_status' => 'required|string',
         ]);
-    
+
         $caseId = $validated['case_id'];
         $data = DIPH::where('case_id', $caseId)->first();
 
@@ -154,7 +154,7 @@ class DIPHController extends Controller
 
         $data->pidsr_status = $validated['pidsr_status'];
         $data->save();
-    
+
         return response()->json($data);
         // $diph = DIPH::where('case_id', $request->)
         // $case_status = $diph->update()
