@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('specimen', function (Blueprint $table) {
             $table->id();
             $table->string('case_id', 50);
+             $table->string('lab_data', 1)->nullable();
             $table->string('API_ID', 255)->nullable();
             $table->string('epi_id', 50)->nullable();
             $table->date('date_specimen_collected')->nullable();
