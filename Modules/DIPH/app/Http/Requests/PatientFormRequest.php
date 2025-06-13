@@ -3,8 +3,10 @@
 namespace Modules\DIPH\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Modules\DIPH\Models\Patient;
+use Number;
 
 class PatientFormRequest extends FormRequest
 {
@@ -23,6 +25,7 @@ class PatientFormRequest extends FormRequest
     {
         return [
             'patient_number' => ['required'],
+            'case_id' => ['required'],
             'firstname' => ['required'],
             'middlename' => ['required'],
             'lastname' => ['required'],
@@ -53,8 +56,17 @@ class PatientFormRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+            $userRegion = (string)$this->input('pat_address_reg');
+            $encoderRegion = '12';
+            $overallRegion = $userRegion.''.$encoderRegion;
+
+            $regionCode = strlen((string) $overallRegion) > 1
+            ? (string) $overallRegion . '00'
+            : (string) $overallRegion;
+
         $this->merge([
-            'patient_number' => Patient::max('patient_number') + 1 ?? 1
+            'patient_number' => Patient::max('patient_number') + 1 ?? 1,
+            'case_id'=>Date::now()->format('Y').'-'.$regionCode.$this->input('firstname')[0].$this->input('lastname')[0].$this->input('ageinyears').$this->input('sex')
         ]);
     }
 }

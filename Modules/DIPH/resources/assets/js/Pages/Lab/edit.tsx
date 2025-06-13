@@ -27,6 +27,7 @@ interface Lab {
     lab_result: number | undefined
     typeoforganism: '',
     interpretation: ''
+    epi_id: string,
 }
 
 export default function create({ specimenType, testType, labResult }) {
@@ -45,7 +46,7 @@ export default function create({ specimenType, testType, labResult }) {
         },
         {
             title: 'Edit Laboratory Data',
-            href: `/diph/lab/${lab_data.id}/edit`,
+            href: `/lab/${lab_data.id}/edit`,
         },
     ];
 
@@ -62,9 +63,12 @@ export default function create({ specimenType, testType, labResult }) {
             type_test: lab_data.type_test || undefined,
             lab_result: lab_data.lab_result || undefined,
             typeoforganism: lab_data.typeoforganism || undefined,
-            interpretation: lab_data.interpretation || undefined
+            interpretation: lab_data.interpretation || undefined,
+            epi_id: lab_data.epi_id
         },
     });
+
+    console.log(lab_data)
 
     function onSubmit(values: LabForm) {
         const payload = { ...values };

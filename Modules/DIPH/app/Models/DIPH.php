@@ -32,6 +32,7 @@ class DIPH extends Model implements IsFilterable
     protected $fillable = [
 
         'case_id',
+        'epi_id',
         'patient_number',
         'disease_age',
         'admitted',

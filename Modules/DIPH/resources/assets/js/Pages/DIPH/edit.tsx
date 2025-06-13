@@ -69,7 +69,7 @@ export default function edit() {
         },
         {
             title: 'Edit Diphtheria Case',
-            href: `/diph/diph/${case_report.id}/edit`,
+            href: `/diph/${case_report.id}/edit`,
         },
     ];
 

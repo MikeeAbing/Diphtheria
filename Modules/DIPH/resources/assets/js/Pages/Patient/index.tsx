@@ -56,6 +56,7 @@ export default function Patient() {
 
     type Patient = {
         id: string;
+        case_id: string;
         patient_number: string;
         full_name: string;
         created_at: string;
@@ -68,7 +69,6 @@ export default function Patient() {
 
     const [data, setData] = useState<Patient[]>([...patients]);
 
-    console.log(data)
     // const { links, meta } = usePage().props;
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -109,7 +109,7 @@ export default function Patient() {
                                 </DropdownMenuItem>
                             </Link> */}
 
-                            <Link href='/consultation/' onClick={()=>sessionStorage.setItem('patient_number', row.original.patient_number)}>
+                            <Link href='/consultation/' onClick={()=>{sessionStorage.setItem('case_id', row.original.case_id); sessionStorage.setItem('patient_number', row.original.patient_number)}}>
                                 <DropdownMenuItem>
                                     <PlusCircleIcon className="h-4 w-4" />
                                     View Consultation

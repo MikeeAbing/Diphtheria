@@ -59,6 +59,7 @@ export default function Diph() {
     const [jsonData, setJsonData] = useState(null);
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
 
     const { flash } = usePage().props;
 
@@ -66,7 +67,14 @@ export default function Diph() {
         if (flash?.success) {
             toast(flash?.success);
         }
-    }, [flash?.success]);
+
+        // if (open) {
+        //     window.location.reload();
+        // }
+        if (message) {
+            toast(message);
+        }
+    }, [flash?.success, open, message]);
 
     // const fetchData = async () => {
     //     try {
@@ -77,6 +85,31 @@ export default function Diph() {
     //         console.error('Error fetching consultations:', err);
     //     }
     // };
+
+    // async function fetchData(caseID) {
+    //     if (caseID) {
+    //         setLoading(true);
+    //         setJsonData(null); // Clear previous data
+    //         await axios
+    //             .post(
+    //                 `/api/jsonfile`,
+    //                 { case_id: caseID, pidsr_status: 'SENT' },
+    //                 {
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                         Accept: 'application/json',
+    //                     },
+    //                 },
+    //             )
+    //             .then(async (res) => {
+    //                 setJsonData(res.data);
+    //             })
+    //             .catch((err) => console.error('Error fetching JSON:', err))
+    //             .finally(() => {
+    //                 setLoading(false);
+    //             });
+    //     }
+    // }
 
     async function fetchData(caseID) {
         if (caseID) {
@@ -151,7 +184,6 @@ export default function Diph() {
                                 </DropdownMenuItem>
                             </Link>
                             <DropdownMenuSeparator />
-
 
                             <DropdownMenuItem
                                 variant="ghost"
@@ -315,7 +347,7 @@ export default function Diph() {
 
                             <div className="max-h-[70vh] overflow-auto">
                                 {loading ? (
-                                    <LoadingSpinner/>
+                                    <LoadingSpinner />
                                 ) : jsonData ? (
                                     <pre className="text-xs break-words whitespace-pre-wrap">{JSON.stringify(jsonData, null, 2)}</pre>
                                 ) : (

@@ -34,9 +34,9 @@ function calculateAgeComponents(dob: Date) {
 
 export const patientFormSchema = z
     .object({
-        firstname: z.string().max(50),
-        middlename: z.string().max(50),
-        lastname: z.string().max(50),
+        firstname: z.string().min(1, 'First Name is required').max(50, ),
+        middlename: z.string().min(1, 'Middle Name is required').max(50),
+        lastname: z.string().min(1, 'Last Name is required').max(50),
         suffixname: z.string().max(5).optional(),
         sex: z.enum(['M', 'F']),
         dateofbirth: z.string().regex(dateRegex, {
@@ -63,16 +63,16 @@ export const patientFormSchema = z
         }),
         IP_tribe: z.coerce.number({ message: 'Must be an integer' }).max(33).optional(),
         IP_tribe_specify: z.string({ invalid_type_error: 'Must be of type string' }).max(255).optional(),
-        pat_address_reg: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(10).optional(),
-        pat_address_prov: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(10).optional(),
-        pat_address_city: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
-        pat_address_brgy: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
-        pat_address_street_name: z.string({ invalid_type_error: 'Must be of type string' }).max(255).optional(),
-        pat_perm_address_reg: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
-        pat_perm_address_prov: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
-        pat_perm_address_city: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
-        pat_perm_address_brgy: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255).optional(),
-        pat_perm_address_street_name: z.string({ invalid_type_error: 'Must be of type string' }).max(255).optional(),
+        pat_address_reg: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(10),
+        pat_address_prov: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(10),
+        pat_address_city: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255),
+        pat_address_brgy: z.string({ invalid_type_error: 'Must be of type string' }).min(0).max(255),
+        pat_address_street_name: z.string({ invalid_type_error: 'Must be of type string' }).max(255),
+        pat_perm_address_reg: z.string({ invalid_type_error: 'Must be of type string' }).min(1, 'Required').max(255),
+        pat_perm_address_prov: z.string({ invalid_type_error: 'Must be of type string' }).min(1, 'Required').max(255),
+        pat_perm_address_city: z.string({ invalid_type_error: 'Must be of type string' }).min(1, 'Required').max(255),
+        pat_perm_address_brgy: z.string({ invalid_type_error: 'Must be of type string' }).min(1, 'Required').max(255),
+        pat_perm_address_street_name: z.string({ invalid_type_error: 'Must be of type string' }).min(1, 'Required').max(255),
         facilityname: z.string().max(150),
         occupation: z.string({ invalid_type_error: 'Must be of type string' }).max(150).optional(),
         phone_no: z
@@ -116,7 +116,7 @@ export const patientFormSchema = z
                 message: 'Must provide Indigenous Person Tribe',
             });
         }
-        if ((values.member_of_IP === 'Y' && values.IP_tribe === 33) && !values.IP_tribe_specify) {
+        if (values.IP_tribe === 33 && !values.IP_tribe_specify) {
             ctx.addIssue({
                 path: ['IP_tribe_specify'],
                 code: z.ZodIssueCode.custom,

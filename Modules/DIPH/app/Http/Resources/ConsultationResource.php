@@ -21,6 +21,7 @@ class ConsultationResource extends JsonResource
             'type_of_consultation'=>$this->type_of_consultation,
             'chief_complaint'=>$this->chief_complaint,
             'fullname'=>$this->fullname,
+            'case_report_id'=>$this->case_report_id,
             'patient' => $this->whenLoaded('patient', function () {
                 return PatientDataResource::collection($this->patient);
             })

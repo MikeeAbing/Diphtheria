@@ -6,49 +6,63 @@ import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
 import { ConsultationForm, consultationFormSchema } from './data/schema';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-    {
-        title: 'Patient List',
-        href: '/patient',
-    },
-    {
-        title: 'Consultation List',
-        href: '/consultation',
-    },
-    {
-        title: 'Add Patient Consultation',
-        href: '/consultation',
-    },
-];
+interface Consultation {
+    id: number,
+    patient_number: string;
+    consultation_id: string;
+    consultation_date: string | undefined;
+    consultation_time: string | undefined;
+    mode_of_transaction: 'Admitted' | 'Referral' | 'Visited' | 'Walk-in';
+    type_of_consultation: 'Adult Immunization' | 'Animal Bite' | 'Diphtheria' | 'General';
+    chief_complaint: string;
+}
 
 export default function create() {
+    const { consultation } = usePage().props;
+
+    const consult = consultation as Consultation;
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Dashboard',
+            href: '/dashboard',
+        },
+        {
+            title: 'Patient List',
+            href: '/patient',
+        },
+        {
+            title: 'Consultation List',
+            href: '/consultation',
+        },
+        {
+            title: 'Edit Patient Consultation',
+            href: `/consultation/${consult.id}/edit`,
+        },
+    ];
+
     const pat_number = sessionStorage.getItem('patient_number');
 
     const form = useForm<ConsultationForm>({
         resolver: zodResolver(consultationFormSchema),
         defaultValues: {
-            // case_id: '',
-            patient_number: pat_number as string,
-            consultation_date: '',
-            consultation_time: '',
-            mode_of_transaction: undefined,
-            type_of_consultation: undefined,
-            chief_complaint: '',
+            patient_number: consult.patient_number,
+            consultation_date: consult.consultation_date,
+            consultation_time: consult.consultation_time?.slice(0,5),
+            mode_of_transaction: consult.mode_of_transaction,
+            type_of_consultation: consult.type_of_consultation,
+            chief_complaint: consult.chief_complaint,
         },
     });
 
     function onSubmit(values: ConsultationForm) {
         const payload = { ...values };
 
-        router.post('/consultation', payload, {
+        router.put(`/consultation/${consult.id}`, payload, {
             onSuccess: () => {
                 form.reset();
             },

@@ -10,7 +10,7 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Head, router, usePage } from '@inertiajs/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PatientForm, patientFormSchema } from './data/schema';
 
@@ -59,7 +59,7 @@ export default function edit({ provinces, regions, citymuns }) {
         },
         {
             title: 'Edit Patient Data',
-            href: `/diph/patient/${patient_data.id}/edit`,
+            href: `/patient/${patient_data.id}/edit`,
         },
     ];
 
@@ -72,9 +72,9 @@ export default function edit({ provinces, regions, citymuns }) {
             suffixname: patient_data.suffixname || undefined,
             sex: patient_data.sex || undefined,
             dateofbirth: patient_data.dateofbirth || undefined,
-            ageinyears: patient_data.ageinyears || undefined,
-            ageinmonths: patient_data.ageinmonths || undefined,
-            ageindays: patient_data.ageindays || undefined,
+            ageinyears: patient_data.ageinyears,
+            ageinmonths: patient_data.ageinmonths,
+            ageindays: patient_data.ageindays,
             member_of_IP: patient_data.member_of_IP || undefined,
             IP_tribe: Number.isNaN(patient_data.IP_tribe) ? undefined : patient_data.IP_tribe,
             IP_tribe_specify: patient_data.IP_tribe_specify || undefined,
@@ -119,6 +119,7 @@ export default function edit({ provinces, regions, citymuns }) {
     }
 
     const [sameAddress, setSameAddress] = useState(false);
+    const previousSameAddress = useRef<boolean>(sameAddress);
 
     const handleCalculate = (dobString: string) => {
         if (dobString) {
@@ -132,9 +133,9 @@ export default function edit({ provinces, regions, citymuns }) {
             ...values,
         };
 
-        payload.ageinyears = payload.ageinyears ?? age?.years as number;
-        payload.ageinmonths = payload.ageinmonths ??age?.months as number;
-        payload.ageindays = payload.ageindays ?? age?.days as number;
+        payload.ageinyears = age?.years as number;
+        payload.ageinmonths = age?.months as number;
+        payload.ageindays = age?.days as number;
 
         router.put(`/patient/${patient_data.id}`, payload, {
             onSuccess: () => {
@@ -197,12 +198,12 @@ export default function edit({ provinces, regions, citymuns }) {
 
     useEffect(() => {
         if (selectedRegionId === null || selectedRegionId === '') {
-            form.setValue('pat_address_prov', undefined);
-            form.setValue('pat_address_city', undefined);
+            form.setValue('pat_address_prov', '');
+            form.setValue('pat_address_city', '');
         }
         if (selectedPermRegionId === null || selectedPermRegionId === '') {
-            form.setValue('pat_perm_address_prov', undefined);
-            form.setValue('pat_perm_address_city', undefined);
+            form.setValue('pat_perm_address_prov', '');
+            form.setValue('pat_perm_address_city', '');
         }
         if (sameAddress) {
             form.setValue('pat_perm_address_reg', form.watch('pat_address_reg'));
@@ -210,12 +211,16 @@ export default function edit({ provinces, regions, citymuns }) {
             form.setValue('pat_perm_address_city', form.watch('pat_address_city'));
             form.setValue('pat_perm_address_brgy', form.watch('pat_address_brgy'));
             form.setValue('pat_perm_address_street_name', form.watch('pat_address_street_name'));
-        } else {
+        } else if (previousSameAddress.current) {
             form.setValue('pat_perm_address_reg', patient_data.pat_perm_address_reg ?? '');
             form.setValue('pat_perm_address_prov', patient_data.pat_perm_address_prov ?? '');
             form.setValue('pat_perm_address_city', patient_data.pat_perm_address_city ?? '');
             form.setValue('pat_perm_address_brgy', patient_data.pat_perm_address_brgy ?? '');
             form.setValue('pat_perm_address_street_name', patient_data.pat_perm_address_street_name ?? '');
+        }
+
+        if (form.watch('dateofbirth')) {
+            handleCalculate(form.watch('dateofbirth'));
         }
     }, [selectedRegionId, selectedPermRegionId, sameAddress]);
     const onError = (errors: any) => {
@@ -240,7 +245,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>First Name:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    First Name:
+                                                </FormLabel>
                                             </div>
                                             <FormControl className="flex items-center">
                                                 <Input className="w-auto border-2 border-black" type="text" placeholder="First Name" {...field} />
@@ -257,7 +267,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Middle Name:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Middle Name:
+                                                </FormLabel>
                                             </div>
                                             <FormControl className="flex items-center">
                                                 <Input className="w-auto border-2 border-black" type="text" placeholder="Middle Name" {...field} />
@@ -274,7 +289,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Last Name:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Last Name:
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Input className="w-auto border-2 border-black" type="text" placeholder="Last Name" {...field} />
@@ -310,7 +330,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Sex:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Sex:
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('sex')}
@@ -351,7 +376,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Date of Birth:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Date of Birth:
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Input
@@ -381,7 +411,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Age Year:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Age Year:
+                                                    </FormLabel>
                                                 </div>
                                                 <FormControl>
                                                     <p className="justify-text h-8 w-10 rounded-sm border-2 border-black text-center">
@@ -400,7 +435,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Month:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Month:
+                                                    </FormLabel>
                                                 </div>
                                                 <FormControl>
                                                     <p className="justify-text h-8 w-10 rounded-sm border-2 border-black text-center">
@@ -419,7 +459,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Day:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Day:
+                                                    </FormLabel>
                                                 </div>
                                                 <FormControl>
                                                     <p className="justify-text h-8 w-10 rounded-sm border-2 border-black text-center">
@@ -441,7 +486,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Member of Indigenous People :</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Member of Indigenous People :
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('member_of_IP')}
@@ -483,7 +533,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Indigenous People Tribe:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Indigenous People Tribe:
+                                                    </FormLabel>
                                                 </div>
                                                 <Select
                                                     value={Number(form.watch('IP_tribe'))}
@@ -590,7 +645,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Indigenous People Tribe:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Indigenous People Tribe:
+                                                    </FormLabel>
                                                 </div>
                                                 <Select
                                                     disabled
@@ -829,7 +889,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Region):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Region):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -862,7 +927,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Province):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Province):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -896,7 +966,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (City/Municipality):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (City/Municipality):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -930,7 +1005,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Barangay):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Barangay):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('pat_address_brgy')}
@@ -968,7 +1048,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Street Name / House Number / Purok / Sitio):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Street Name / House Number / Purok / Sitio):
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Textarea
@@ -1010,7 +1095,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Region):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Region):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -1043,7 +1133,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Province):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Province):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -1077,7 +1172,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (City/Municipality):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (City/Municipality):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -1111,7 +1211,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Barangay):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Barangay):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('pat_perm_address_brgy')}
@@ -1149,7 +1254,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Street Name / House Number / Purok / Sitio):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Street Name / House Number / Purok / Sitio):
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Textarea

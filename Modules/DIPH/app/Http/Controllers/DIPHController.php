@@ -17,20 +17,23 @@ use Modules\IAM\Models\User;
 use Modules\DIPH\Http\Requests\DIPHFormRequest;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Modules\DIPH\Services\ConsultationService;
 
 class DIPHController extends Controller
 {
     protected DIPHService $diphService;
+    protected ConsultationService $consultationService;
     // /**
     //  * Create the controller instance.
     //  *
     //  * @return void
     //  */
-    public function __construct(DIPHService $diphService)
+    public function __construct(DIPHService $diphService, ConsultationService $consultationService)
     {
         // $this->authorizeResource(User::class, 'user');
         $this->diphService = $diphService;
+        $this->consultationService = $consultationService;
     }
 
     /**
@@ -67,13 +70,14 @@ class DIPHController extends Controller
     {
         $search = $request->query('search');
 
-        if ($search) {
-            $patient_number = Patient::where('patient_number', 'like', "%{$search}%")->select('patient_number')->get();
-            return Inertia::render(
-                'DIPH::DIPH/create',
-                ['patient_number' => $patient_number]
-            );
+        $patient = $this->diphService->create($search);
+
+        $patient_number = 0;
+        foreach ($patient as $item) {
+            $patient_number = $item['patient_number'];
         }
+        $disease_code = $this->consultationService->consultationType($patient_number);
+        return inertia('DIPH::DIPH/create', ['patient' => $patient, 'disease_code' => $disease_code]);
     }
 
     /**
@@ -186,8 +190,7 @@ class DIPHController extends Controller
         $edcscode = env('WEBSERVICE_PIDSR_TOKEN');
         // return response()->json($data);
 
-        $diphData = DIPH::where('case_id', $caseId)->with(['patient', 'lab'])->first();
-
+        $diphData = DIPH::where('case_id', $caseId)->with(['lab', 'patient'])->first();
 
         $formattedData = [
             "username" => $username,
@@ -214,7 +217,7 @@ class DIPHController extends Controller
                     "sex" => $diphData->patient->sex,
                     "dateofbirth" => $diphData->patient->dateofbirth,
                     "member_of_IP" => $diphData->patient->member_of_IP,
-                    "IP_tribe" => (int)$diphData->patient->IP_tribe,
+                    "IP_tribe" => (int) $diphData->patient->IP_tribe,
                     "admitted" => $diphData->admitted,
                     "date_admitted" => $diphData->date_admitted,
                     "date_onset" => $diphData->date_onset,
@@ -262,7 +265,8 @@ class DIPHController extends Controller
                     "last_modified_date_laboratory" => Carbon::parse($diphData->last_modified_date_laboratory)->format('Y-m-d H:i:s'),
                     "datafrom" => "iClinicSys",
                     "lab_data" => $diphData->lab ? 'Y' : 'N',
-                    "API_ID" => $diphData->lab->API_ID,
+                    // "API_ID" => Carbon::now()->year.'-'.'DIP'.'-'.'iCLINICSYS'.'-'.$disease_count.'-'.$facilitycode,
+                    "API_ID"=>$diphData->lab->API_ID,
                     "API_labdata_ID" => $diphData->lab->API_labdata_ID,
                     "specimen_type" => $diphData->lab->specimen_type,
                     "date_specimen_collected" => $diphData->lab->date_specimen_collected,
@@ -278,11 +282,139 @@ class DIPHController extends Controller
                     "date_result" => $diphData->lab->date_result,
                     "interpretation" => $diphData->lab->interpretation,
                     "remarks" => $diphData->lab->remarks,
+                    // "hfhudcode" => "DOH000000000004799",
+                    // "patient_number" => '',
+                    // "firstname" => '',
+                    // "middlename" => '',
+                    // "lastname" => '',
+                    // "suffixname" => '',
+                    // "pat_address_reg" => '',
+                    // "pat_address_prov" => '',
+                    // "pat_address_city" => '',
+                    // "pat_address_brgy" => '',
+                    // "pat_address_street_name" => '',
+                    // "pat_perm_address_reg" => '',
+                    // "pat_perm_address_prov" => '',
+                    // "pat_perm_address_city" => '',
+                    // "pat_perm_address_brgy" => '',
+                    // "pat_perm_address_street_name" => '',
+                    // "sex" => '',
+                    // "dateofbirth" => '',
+                    // "member_of_IP" => '',
+                    // "IP_tribe" => '',
+                    // "admitted" => '',
+                    // "date_admitted" => '',
+                    // "date_onset" => '',
+                    // "occupation" => '',
+                    // "phone_no" => '',
+                    // "caregiver" => '',
+                    // "caregiver_no" => '',
+                    // "date_report" => '',
+                    // "reporter" => '',
+                    // "reporter_no" => '',
+                    // "date_investigation" => '',
+                    // "investigator" => '',
+                    // "investigator_no" => '',
+                    // "diphtheria_dose" => '',
+                    // "total_dose" => '',
+                    // "date_last_vaccination" => '',
+                    // "sourceinformation" => '',
+                    // "known_exposure" => '',
+                    // "exposure_other" => '',
+                    // "name_school" => '',
+                    // "travel14days" => '',
+                    // "travel_detail" => '',
+                    // "fever" => '',
+                    // "cough" => '',
+                    // "sorethroat" => '',
+                    // "pseudomembrane" => '',
+                    // "swallowing" => '',
+                    // "breathing" => '',
+                    // "other_symptoms" => '',
+                    // "other_symptoms_specify" => '',
+                    // "antibiotic" => '',
+                    // "antibiotic_date" => '',
+                    // "diphtheriatoxin" => '',
+                    // "diphtheriatoxin_date" => '',
+                    // "final_classi" => '',
+                    // "outcome" => '',
+                    // "date_died" => '',
+                    // "verification_level" => '',
+                    // "user_id" => '',
+                    // "case_code" => "DIPH",
+                    // "timestamp" => '',
+                    // "last_modified_by" => $diphData->last_modified_by,
+                    // "last_modified_date_patient" => '',
+                    // "last_modified_date_disease" => '',
+                    // "last_modified_date_laboratory" => '',
+                    // "datafrom" => "iClinicSys",
+                    // "lab_data" => '',
+                    // // "API_ID" => Carbon::now()->year.'-'.'DIP'.'-'.'iCLINICSYS'.'-'.$disease_count.'-'.$facilitycode,
+                    // "API_ID" => '',
+                    // "API_labdata_ID" => '',
+                    // "specimen_type" => '',
+                    // "date_specimen_collected" => '',
+                    // "lab_sent_RITM" => '',
+                    // "date_sent_RITM" => '',
+                    // "date_received_by_lab" => '',
+                    // "time_received_by_lab" => '',
+                    // "lab_received_by" => '',
+                    // "type_test" => '',
+                    // "date_testing" => '',
+                    // "lab_result" => '',
+                    // "typeoforganism" => '',
+                    // "date_result" => '',
+                    // "interpretation" => '',
+                    // "remarks" => '',
                 ]
             ]
         ];
         return response()->json($formattedData);
     }
+
+    public function proxyToPidsr(Request $request)
+    {
+        $client = new \GuzzleHttp\Client();
+
+        $payload = [
+            'username' => $request->input('username'),
+            'password' => $request->input('password'),
+            'edcscode' => $request->input('edcscode'),
+            'diseasedata' => $request->input('diseasedata'), // This must be an array or object, not string
+        ];
+
+        try {
+            $response = $client->post('https://uhmistrn.doh.gov.ph/pidsr_hss/v1/disease', [
+                'json' => $payload,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Content-Length',
+                    'Host',
+                    'User-Agent' => 'PostmanRuntime/7.39.1',
+                    'Accept' => '*/*',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                    'Connection' => 'keep-alive'
+                ],
+            ]);
+
+            // return response()->json(json_decode($response->getBody(), true));
+            return response()->json($request->all());
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            if ($e->hasResponse()) {
+                return response()->json([
+                    'error' => 'Server responded with error',
+                    'message' => (string) $e->getResponse()->getBody()
+                ], 500);
+            }
+
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+        // catch (\Exception $e) {
+        //     return response()->json(['error' => 'Failed to fetch data.'], 500);
+        // }
+        // return response()->json($request->only(['username', 'password', 'edcscode', 'diseasedata']));
+    }
+
     public function destroy($id)
     {
     }

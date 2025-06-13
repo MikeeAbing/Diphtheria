@@ -14,7 +14,7 @@ import { z } from 'zod';
 const datetimeRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
 export const diphFormSchema = z
     .object({
-        // case_id: z.string().max(50).optional(),
+        case_id: z.string().max(50).optional(),
         patient_number: z.string({ required_error: 'Patient Number is missing' }).max(30),
         // disease_age: z.number().int().max(100),
         admitted: z.enum(['Y', 'N'], { required_error: 'Choose either Yes or No', invalid_type_error: 'Must either be Yes or No' }).optional(),
@@ -138,11 +138,9 @@ export const diphFormSchema = z
                 invalid_type_error: 'Travel Details must be of type string',
             })
             .max(150),
-        date_onset: z
-            .string()
-            .refine((val) => val === '' || /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(val), {
-                message: 'Invalid date format. Please use YYYY-MM-DD or leave it empty.',
-            }),
+        date_onset: z.string().refine((val) => val === '' || /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(val), {
+            message: 'Invalid date format. Please use YYYY-MM-DD or leave it empty.',
+        }),
         pidsr_status: z.string().max(10).optional(),
         fever: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),
         cough: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),
@@ -192,6 +190,7 @@ export const diphFormSchema = z
                 message: 'Must be one of 1, 2, 3, 4, or 5',
             })
             .optional(),
+        epi_id: z.string({ required_error: 'EPI ID is required. Network error...' }),
         // z.preprocess(
         //     (val) => Number(val),
         //     z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)])).optional(),
@@ -320,7 +319,7 @@ export const diphFormSchema = z
                 message: 'Date of antibiotic therapy is required',
             });
         }
-        if (values.date_report === undefined && values.date_report === "") {
+        if (values.date_report === undefined && values.date_report === '') {
             ctx.addIssue({
                 path: ['reporter'],
                 code: z.ZodIssueCode.custom,
@@ -332,7 +331,7 @@ export const diphFormSchema = z
                 message: 'Contact number of reporter must be provided',
             });
         }
-        if (values.date_investigation === undefined && values.date_investigation === "") {
+        if (values.date_investigation === undefined && values.date_investigation === '') {
             ctx.addIssue({
                 path: ['investigator'],
                 code: z.ZodIssueCode.custom,

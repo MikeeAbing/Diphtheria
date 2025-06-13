@@ -29,8 +29,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function create({ case_id, specimenType, testType, labResult }) {
-
+export default function create({ case_id, epi_id, specimenType, testType, labResult }) {
 
     const form = useForm<LabForm>({
         resolver: zodResolver(labFormSchema),
@@ -45,7 +44,8 @@ export default function create({ case_id, specimenType, testType, labResult }) {
             type_test: undefined,
             lab_result: undefined,
             typeoforganism: '',
-            interpretation: ''
+            interpretation: '',
+            epi_id: epi_id[0]
         },
     });
 

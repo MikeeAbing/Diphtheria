@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,7 +13,7 @@ return new class extends Migration
         Schema::create('specimen', function (Blueprint $table) {
             $table->id();
             $table->string('case_id', 50);
-             $table->string('lab_data', 1)->nullable();
+            $table->string('lab_data', 1)->nullable();
             $table->string('API_ID', 255)->nullable();
             $table->string('epi_id', 50)->nullable();
             $table->date('date_specimen_collected')->nullable();
@@ -34,7 +33,7 @@ return new class extends Migration
             $table->string('updatedby_RITM', 1)->nullable();
             $table->string('last_modified_by_RITM', 50)->nullable();
             $table->dateTime('last_modified_date_RITM')->nullable();
-            $table->integer('API_labdata_ID');
+            $table->string('API_labdata_ID', 255);
 
             $table->timestamps();    // created_at, updated_at
             $table->softDeletes();   // deleted_at

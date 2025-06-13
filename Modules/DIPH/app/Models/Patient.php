@@ -31,6 +31,7 @@ class Patient extends Model implements IsFilterable, CipherSweetEncrypted
      */
     protected $fillable = [
         'patient_number',
+        'case_id',
         'firstname',
         'middlename',
         'lastname',

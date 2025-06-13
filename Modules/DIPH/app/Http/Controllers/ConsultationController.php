@@ -45,7 +45,7 @@ class ConsultationController extends Controller
         return Inertia::render('DIPH::Consultation/index', [
             'consultations' => $consultations
         ]);
-       // return dd('sample');
+        // return dd('sample');
 
 
     }
@@ -76,7 +76,8 @@ class ConsultationController extends Controller
         // }
 
         return Inertia::render(
-                    'DIPH::Consultation/create');
+            'DIPH::Consultation/create'
+        );
     }
     public function store(ConsultationFormRequest $request): RedirectResponse
     {
@@ -94,7 +95,7 @@ class ConsultationController extends Controller
     {
         $case_id = $request->query('id');
         return response()->json([
-            'data' => Consultation::where('case_id',  $case_id)->get()
+            'data' => Consultation::where('case_id', $case_id)->get()
         ]);
     }
 
@@ -114,9 +115,12 @@ class ConsultationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit()
+    public function edit($id)
     {
-
+        $consultation = Consultation::where('consultation_id', '=', $id)->first();
+        return Inertia::render('DIPH::Consultation/edit', [
+            'consultation' => $consultation
+        ]);
     }
 
     /**
@@ -127,13 +131,22 @@ class ConsultationController extends Controller
      * @param  Consultation  $consultation
      * @return Redirect
      */
+    public function update(ConsultationFormRequest $request, Consultation  $consultation)
+    {
+        $consultation->update(
+            collect($request->validated())
+                ->except('consultation_id')
+                ->toArray()
+        );
+        return redirect(route('consultation.index'))->with('success', 'Consultation info updated.');
 
+        // return dd('sample');
+    }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-
     {
     }
     public function consultation(Request $request)

@@ -9,6 +9,7 @@ use App\Models\Region;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Modules\DIPH\Http\Requests\PatientFormRequest;
 use Modules\DIPH\Http\Resources\ProviderResource;
@@ -111,12 +112,13 @@ class PatientController extends Controller
      */
     public function update(PatientFormRequest $request, Patient $patient): RedirectResponse
     {
-        // $patient->update($request->validated());
         $patient->update(
             collect($request->validated())
-                ->except('patient_number')
+                ->except('patient_number', 'case_id')
                 ->toArray()
         );
+
+        $diph = DIPH::where('patient_number', '=', $patient['patient_number'])->update(['last_modified_date_patient'=> Carbon::now()->format('Y-m-d H:i:s')]);
 
         return redirect(route('patient.index'))->with('success', 'Patient data updated.');
     }
