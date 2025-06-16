@@ -111,17 +111,14 @@ export default function Consultation() {
                                 </DropdownMenuItem>
                             </Link>
                             <DropdownMenuSeparator />
-                            {!row.original.case_report_id && (
-                                <>
-                                    <Link href={`/diph/create?search=${sessionStorage.getItem('case_id')}`}>
-                                        <DropdownMenuItem>
-                                            <PlusCircleIcon className="h-4 w-4" />
-                                            Add Diptheria Case
-                                        </DropdownMenuItem>
-                                    </Link>
-                                    <DropdownMenuSeparator />
-                                </>
-                            )}
+
+                            <Link href={`/diph/create?search=${sessionStorage.getItem('case_id')}`}>
+                                <DropdownMenuItem>
+                                    <PlusCircleIcon className="h-4 w-4" />
+                                    Add Diptheria Case
+                                </DropdownMenuItem>
+                            </Link>
+                            <DropdownMenuSeparator />
                             {/* {row.original.diph?.[0]?.id && (
                                    <div><Link href={`/diph/${row.original.diph?.[0]?.id}/edit`}>
                                        <DropdownMenuItem>
