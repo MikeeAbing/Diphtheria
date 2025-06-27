@@ -138,6 +138,7 @@ class DIPHController extends Controller
             'permprovince'=>$permprovince
         ]);
     }
+    
     public function jsonFile(Request $request)
     {
         $validated = $request->validate([

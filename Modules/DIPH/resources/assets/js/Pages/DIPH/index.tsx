@@ -156,8 +156,6 @@ export default function Diph() {
                                 </DropdownMenuItem>
                             </Link>
 
-
-
                             <Dialog >
                                 <DialogTrigger asChild>
                                     <Button
@@ -191,10 +189,12 @@ export default function Diph() {
 
                             <Link href={`/diph/${row.original.id}/print`}>
                                 <DropdownMenuItem>
-                                    <Printer className="h-4 w-4" />
-                                    Print CIF
+                                     <button onClick={() => window.print()} className="btn btn-primary">
+                                        Print CIF
+                                     </button>
                                 </DropdownMenuItem>
                             </Link>
+                           
                             <DropdownMenuSeparator />
                             {!row.original.specimen_id && (
                                 <>

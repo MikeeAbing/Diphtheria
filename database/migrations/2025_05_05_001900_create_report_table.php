@@ -75,7 +75,7 @@ return new class extends Migration
             $table->integer('ageinmonths')->nullable();
             $table->integer('ageindays')->nullable();
             $table->integer('morbiditymonth')->nullable();
-            $table->string('pidsr_status', 10)->nullable();
+            $table->string('', 10)->nullable();
             $table->timestamps();    // created_at, updated_at
             $table->softDeletes();   // deleted_at
         });
