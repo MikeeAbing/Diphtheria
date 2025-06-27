@@ -2,6 +2,7 @@
 
 namespace Modules\DIPH\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -27,6 +28,7 @@ class DIPHFormRequest extends FormRequest
     {
         return [
             'case_id' => ['required'],
+            'epi_id' => ['required'],
             'patient_number' => ['nullable'],
             'admitted' => ['nullable'],
             'date_admitted' => ['nullable'],
@@ -92,16 +94,16 @@ class DIPHFormRequest extends FormRequest
     }
     protected function prepareForValidation(): void
     {
+
         $this->merge([
-            'case_id' => (int) DIPH::max('case_id') + (int) 1 ?? (int) 1,
             'patient_number' => $this->input('patient_number'),
             'user_id' => $this->input('user_id', Auth::user()->id),
-            'timestamp' => $this->input('timestamp', null),
+            'timestamp' => $this->input('timestamp', Carbon::now()->format('Y-m-d H:i:s')),
             'verification_level' => $this->input('verification_level', null),
             'case_code' => $this->input('case_code', null),
             'last_modified_by' => $this->input('last_modified_by', Auth::user()->first_name . ' ' . Auth::user()->last_name),
             'last_modified_date_patient' => $this->input('last_modified_date_patient', null),
-            'last_modified_date_disease' => $this->input('last_modified_date_disease', null),
+            'last_modified_date_disease' => $this->input('last_modified_date_disease', Carbon::now()->format('Y-m-d H:i:s')),
             'last_modified_date_lab' => $this->input('last_modified_date_lab', null),
             'hfhudcode' => $this->input('hfhudcode', null),
             'datevalidated_resu' => $this->input('datevalidated_resu', null),

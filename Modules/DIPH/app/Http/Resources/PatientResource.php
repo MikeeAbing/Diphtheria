@@ -14,6 +14,7 @@ class PatientResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'case_id'=>$this->case_id,
             'patient_number' => $this->patient_number,
             'full_name' => $this->full_name,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),

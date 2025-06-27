@@ -16,13 +16,20 @@ import { LabForm, labFormSchema } from './data/schema';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
+        title: 'Diphtheria Cases List',
+        href: '/diph',
+    },
+    {
         title: 'Add Laboratory Data',
         href: '/diph/lab/create',
     },
 ];
 
-export default function create({ case_id, specimenType, testType, labResult }) {
-
+export default function create({ case_id, epi_id, specimenType, testType, labResult }) {
 
     const form = useForm<LabForm>({
         resolver: zodResolver(labFormSchema),
@@ -37,7 +44,8 @@ export default function create({ case_id, specimenType, testType, labResult }) {
             type_test: undefined,
             lab_result: undefined,
             typeoforganism: '',
-            interpretation: ''
+            interpretation: '',
+            epi_id: epi_id[0]
         },
     });
 

@@ -29,7 +29,7 @@ class ConsultationFormRequest extends FormRequest
             'mode_of_transaction'  => ['required'],
             'type_of_consultation'  => ['required'],
             'chief_complaint'  => ['nullable'],
-        
+
         ];
     }
 

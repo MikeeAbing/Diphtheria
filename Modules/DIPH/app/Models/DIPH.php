@@ -32,6 +32,7 @@ class DIPH extends Model implements IsFilterable
     protected $fillable = [
 
         'case_id',
+        'epi_id',
         'patient_number',
         'disease_age',
         'admitted',
@@ -193,6 +194,10 @@ class DIPH extends Model implements IsFilterable
 
     public function patient(){
         return $this->belongsTo(Patient::class, 'patient_number', 'patient_number');
+    }
+
+    public function lab(){
+        return $this->hasOne(Lab::class, 'case_id', 'case_id');
     }
 
     public function user(){

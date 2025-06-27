@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from "@/components/ui/label";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
@@ -10,37 +10,37 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Head, router, usePage } from '@inertiajs/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PatientForm, patientFormSchema } from './data/schema';
 
 interface Patient {
-    id: number,
-    firstname: string | '',
-    middlename: string | '',
-    lastname: string | '',
-    suffixname: string | '',
-    sex: 'M' | 'F' | undefined,
-    dateofbirth: string | undefined,
-    ageinyears: number,
-    ageinmonths: number,
-    ageindays: number,
-    member_of_IP: undefined,
-    IP_tribe: number | undefined,
-    IP_tribe_specify: string | '',
-    pat_address_reg: string | '',
-    pat_address_prov: string | '',
-    pat_address_city: string | '',
-    pat_address_brgy: string | '',
-    pat_address_street_name: string | '',
-    pat_perm_address_reg: string | '',
-    pat_perm_address_prov: string | '',
-    pat_perm_address_city: string | '',
-    pat_perm_address_brgy: string | '',
-    pat_perm_address_street_name: string | '',
-    facilityname: string | '',
-    occupation: string | '',
-    phone_no: string | '',
+    id: number;
+    firstname: string | '';
+    middlename: string | '';
+    lastname: string | '';
+    suffixname: string | '';
+    sex: 'M' | 'F' | undefined;
+    dateofbirth: string | undefined;
+    ageinyears: number;
+    ageinmonths: number;
+    ageindays: number;
+    member_of_IP: undefined;
+    IP_tribe: number | undefined;
+    IP_tribe_specify: string | '';
+    pat_address_reg: string | '';
+    pat_address_prov: string | '';
+    pat_address_city: string | '';
+    pat_address_brgy: string | '';
+    pat_address_street_name: string | '';
+    pat_perm_address_reg: string | '';
+    pat_perm_address_prov: string | '';
+    pat_perm_address_city: string | '';
+    pat_perm_address_brgy: string | '';
+    pat_perm_address_street_name: string | '';
+    facilityname: string | '';
+    occupation: string | '';
+    phone_no: string | '';
 }
 
 export default function edit({ provinces, regions, citymuns }) {
@@ -59,7 +59,7 @@ export default function edit({ provinces, regions, citymuns }) {
         },
         {
             title: 'Edit Patient Data',
-            href: `/diph/patient/${patient_data.id}/edit`,
+            href: `/patient/${patient_data.id}/edit`,
         },
     ];
 
@@ -72,11 +72,11 @@ export default function edit({ provinces, regions, citymuns }) {
             suffixname: patient_data.suffixname || undefined,
             sex: patient_data.sex || undefined,
             dateofbirth: patient_data.dateofbirth || undefined,
-            ageinyears: patient_data.ageinyears || undefined,
-            ageinmonths: patient_data.ageinmonths || undefined,
-            ageindays: patient_data.ageindays || undefined,
+            ageinyears: patient_data.ageinyears,
+            ageinmonths: patient_data.ageinmonths,
+            ageindays: patient_data.ageindays,
             member_of_IP: patient_data.member_of_IP || undefined,
-            IP_tribe: patient_data.IP_tribe || undefined,
+            IP_tribe: Number.isNaN(patient_data.IP_tribe) ? undefined : patient_data.IP_tribe,
             IP_tribe_specify: patient_data.IP_tribe_specify || undefined,
             pat_address_reg: patient_data.pat_address_reg || undefined,
             pat_address_prov: patient_data.pat_address_prov || undefined,
@@ -119,6 +119,7 @@ export default function edit({ provinces, regions, citymuns }) {
     }
 
     const [sameAddress, setSameAddress] = useState(false);
+    const previousSameAddress = useRef<boolean>(sameAddress);
 
     const handleCalculate = (dobString: string) => {
         if (dobString) {
@@ -197,12 +198,12 @@ export default function edit({ provinces, regions, citymuns }) {
 
     useEffect(() => {
         if (selectedRegionId === null || selectedRegionId === '') {
-            form.setValue('pat_address_prov', undefined);
-            form.setValue('pat_address_city', undefined);
+            form.setValue('pat_address_prov', '');
+            form.setValue('pat_address_city', '');
         }
         if (selectedPermRegionId === null || selectedPermRegionId === '') {
-            form.setValue('pat_perm_address_prov', undefined);
-            form.setValue('pat_perm_address_city', undefined);
+            form.setValue('pat_perm_address_prov', '');
+            form.setValue('pat_perm_address_city', '');
         }
         if (sameAddress) {
             form.setValue('pat_perm_address_reg', form.watch('pat_address_reg'));
@@ -210,13 +211,16 @@ export default function edit({ provinces, regions, citymuns }) {
             form.setValue('pat_perm_address_city', form.watch('pat_address_city'));
             form.setValue('pat_perm_address_brgy', form.watch('pat_address_brgy'));
             form.setValue('pat_perm_address_street_name', form.watch('pat_address_street_name'));
-        }
-        else {
+        } else if (previousSameAddress.current) {
             form.setValue('pat_perm_address_reg', patient_data.pat_perm_address_reg ?? '');
             form.setValue('pat_perm_address_prov', patient_data.pat_perm_address_prov ?? '');
             form.setValue('pat_perm_address_city', patient_data.pat_perm_address_city ?? '');
             form.setValue('pat_perm_address_brgy', patient_data.pat_perm_address_brgy ?? '');
             form.setValue('pat_perm_address_street_name', patient_data.pat_perm_address_street_name ?? '');
+        }
+
+        if (form.watch('dateofbirth')) {
+            handleCalculate(form.watch('dateofbirth'));
         }
     }, [selectedRegionId, selectedPermRegionId, sameAddress]);
     const onError = (errors: any) => {
@@ -241,7 +245,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>First Name:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    First Name:
+                                                </FormLabel>
                                             </div>
                                             <FormControl className="flex items-center">
                                                 <Input className="w-auto border-2 border-black" type="text" placeholder="First Name" {...field} />
@@ -258,15 +267,15 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Middle Name:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Middle Name:
+                                                </FormLabel>
                                             </div>
                                             <FormControl className="flex items-center">
-                                                <Input
-                                                    className="w-auto border-2 border-black"
-                                                    type="text"
-                                                    placeholder="Middle Name"
-                                                    {...field}
-                                                />
+                                                <Input className="w-auto border-2 border-black" type="text" placeholder="Middle Name" {...field} />
                                             </FormControl>
                                         </div>
                                         <FormMessage />
@@ -280,7 +289,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Last Name:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Last Name:
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Input className="w-auto border-2 border-black" type="text" placeholder="Last Name" {...field} />
@@ -302,12 +316,7 @@ export default function edit({ provinces, regions, citymuns }) {
                                                 <FormLabel>Suffix Name:</FormLabel>
                                             </div>
                                             <FormControl>
-                                                <Input
-                                                    className="w-auto border-2 border-black"
-                                                    type="text"
-                                                    placeholder="Suffix Name"
-                                                    {...field}
-                                                />
+                                                <Input className="w-auto border-2 border-black" type="text" placeholder="Suffix Name" {...field} />
                                             </FormControl>
                                         </div>
                                         <FormMessage />
@@ -321,7 +330,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Sex:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Sex:
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('sex')}
@@ -362,7 +376,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Date of Birth:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Date of Birth:
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Input
@@ -392,7 +411,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Age Year:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Age Year:
+                                                    </FormLabel>
                                                 </div>
                                                 <FormControl>
                                                     <p className="justify-text h-8 w-10 rounded-sm border-2 border-black text-center">
@@ -411,7 +435,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Month:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Month:
+                                                    </FormLabel>
                                                 </div>
                                                 <FormControl>
                                                     <p className="justify-text h-8 w-10 rounded-sm border-2 border-black text-center">
@@ -430,7 +459,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Day:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Day:
+                                                    </FormLabel>
                                                 </div>
                                                 <FormControl>
                                                     <p className="justify-text h-8 w-10 rounded-sm border-2 border-black text-center">
@@ -452,7 +486,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Member of Indigenous People :</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Member of Indigenous People :
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('member_of_IP')}
@@ -494,47 +533,52 @@ export default function edit({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Indigenous People Tribe:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Indigenous People Tribe:
+                                                    </FormLabel>
                                                 </div>
                                                 <Select
-                                                    value={Number(form.watch('IP_tribe')) ?? ''}
+                                                    value={Number(form.watch('IP_tribe'))}
                                                     onValueChange={(val) => {
                                                         form.setValue(
                                                             'IP_tribe',
                                                             Number(val) as
-                                                            | 1
-                                                            | 2
-                                                            | 3
-                                                            | 4
-                                                            | 5
-                                                            | 6
-                                                            | 7
-                                                            | 8
-                                                            | 9
-                                                            | 10
-                                                            | 11
-                                                            | 12
-                                                            | 13
-                                                            | 14
-                                                            | 15
-                                                            | 16
-                                                            | 17
-                                                            | 18
-                                                            | 19
-                                                            | 20
-                                                            | 21
-                                                            | 22
-                                                            | 23
-                                                            | 24
-                                                            | 25
-                                                            | 26
-                                                            | 27
-                                                            | 28
-                                                            | 29
-                                                            | 30
-                                                            | 31
-                                                            | 32
-                                                            | 33,
+                                                                | 1
+                                                                | 2
+                                                                | 3
+                                                                | 4
+                                                                | 5
+                                                                | 6
+                                                                | 7
+                                                                | 8
+                                                                | 9
+                                                                | 10
+                                                                | 11
+                                                                | 12
+                                                                | 13
+                                                                | 14
+                                                                | 15
+                                                                | 16
+                                                                | 17
+                                                                | 18
+                                                                | 19
+                                                                | 20
+                                                                | 21
+                                                                | 22
+                                                                | 23
+                                                                | 24
+                                                                | 25
+                                                                | 26
+                                                                | 27
+                                                                | 28
+                                                                | 29
+                                                                | 30
+                                                                | 31
+                                                                | 32
+                                                                | 33,
                                                         );
                                                     }}
                                                     className="w-auto"
@@ -601,7 +645,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Indigenous People Tribe:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Indigenous People Tribe:
+                                                    </FormLabel>
                                                 </div>
                                                 <Select
                                                     disabled
@@ -610,39 +659,39 @@ export default function edit({ provinces, regions, citymuns }) {
                                                         form.setValue(
                                                             'IP_tribe',
                                                             parseInt(val) as
-                                                            | 1
-                                                            | 2
-                                                            | 3
-                                                            | 4
-                                                            | 5
-                                                            | 6
-                                                            | 7
-                                                            | 8
-                                                            | 9
-                                                            | 10
-                                                            | 11
-                                                            | 12
-                                                            | 13
-                                                            | 14
-                                                            | 15
-                                                            | 16
-                                                            | 17
-                                                            | 18
-                                                            | 19
-                                                            | 20
-                                                            | 21
-                                                            | 22
-                                                            | 23
-                                                            | 24
-                                                            | 25
-                                                            | 26
-                                                            | 27
-                                                            | 28
-                                                            | 29
-                                                            | 30
-                                                            | 31
-                                                            | 32
-                                                            | 33,
+                                                                | 1
+                                                                | 2
+                                                                | 3
+                                                                | 4
+                                                                | 5
+                                                                | 6
+                                                                | 7
+                                                                | 8
+                                                                | 9
+                                                                | 10
+                                                                | 11
+                                                                | 12
+                                                                | 13
+                                                                | 14
+                                                                | 15
+                                                                | 16
+                                                                | 17
+                                                                | 18
+                                                                | 19
+                                                                | 20
+                                                                | 21
+                                                                | 22
+                                                                | 23
+                                                                | 24
+                                                                | 25
+                                                                | 26
+                                                                | 27
+                                                                | 28
+                                                                | 29
+                                                                | 30
+                                                                | 31
+                                                                | 32
+                                                                | 33,
                                                         );
                                                     }}
                                                     className="w-auto"
@@ -779,7 +828,7 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel className="max-w-3xs break-word">
+                                                <FormLabel className="break-word max-w-3xs">
                                                     Facility Name of the Disease Reporting Unit based National Health Facility Registry:
                                                 </FormLabel>
                                             </div>
@@ -816,12 +865,7 @@ export default function edit({ provinces, regions, citymuns }) {
                                                 <FormLabel>Phone Number:</FormLabel>
                                             </div>{' '}
                                             <FormControl>
-                                                <Input
-                                                    className="w-auto border-2 border-black"
-                                                    type="text"
-                                                    placeholder="Phone Number"
-                                                    {...field}
-                                                />
+                                                <Input className="w-auto border-2 border-black" type="text" placeholder="Phone Number" {...field} />
                                             </FormControl>
                                         </div>
                                         <FormMessage />
@@ -845,7 +889,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Region):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Region):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -878,7 +927,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Province):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Province):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -912,7 +966,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (City/Municipality):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (City/Municipality):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -946,7 +1005,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Barangay):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Barangay):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('pat_address_brgy')}
@@ -984,7 +1048,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Street Name / House Number / Purok / Sitio):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Street Name / House Number / Purok / Sitio):
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Textarea
@@ -1008,12 +1077,15 @@ export default function edit({ provinces, regions, citymuns }) {
                         <div className="flex items-center space-x-2">
                             <Checkbox
                                 id="addresscheck"
-                                checked={sameAddress} onCheckedChange={(checked) => {
+                                checked={sameAddress}
+                                onCheckedChange={(checked) => {
                                     setSameAddress(!!checked);
                                 }}
                                 className="rounded-sm border-2 border-black"
                             />
-                            <Label htmlFor="addresscheck" className="text-sm leading-none font-medium">Check same as current address</Label>
+                            <Label htmlFor="addresscheck" className="text-sm leading-none font-medium">
+                                Check same as current address
+                            </Label>
                         </div>
                         <div className="flex flex-row items-start gap-x-8">
                             <FormField
@@ -1023,7 +1095,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Region):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Region):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -1056,7 +1133,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Province):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Province):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -1090,7 +1172,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (City/Municipality):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (City/Municipality):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -1124,7 +1211,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Barangay):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Barangay):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('pat_perm_address_brgy')}
@@ -1162,7 +1254,12 @@ export default function edit({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Street Name / House Number / Purok / Sitio):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Street Name / House Number / Purok / Sitio):
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Textarea

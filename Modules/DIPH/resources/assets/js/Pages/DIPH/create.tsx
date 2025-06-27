@@ -13,24 +13,53 @@ import { Head, router, usePage } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
 import { DIPHForm, diphFormSchema } from './data/schema';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Add Diphtheria Case',
-        href: '/diph/diph/create',
-    },
-];
+type Patient = {
+    case_id: string;
+    patient_number: string;
+    facilitycode: string;
+};
 
 export default function create() {
-    const { patient_number } = usePage().props;
+    const { patient } = usePage().props as unknown as {
+        patient: { data: { case_id: string; facilitycode: string; patient_number: string }[] };
+    };
 
-    const pat_number = patient_number.map((p) => p.patient_number);
+    const { disease_code } = usePage().props as unknown as {
+        disease_code: { data: { type_of_consultation: string } };
+    };
 
+    const patientdata = patient.data[0];
+    const diseasecode = disease_code.data[0].type_of_consultation;
 
+    const case_id = patientdata.case_id;
+    const patient_number = patientdata.patient_number;
+    const facilitycode = patientdata.facilitycode;
+
+    const epi_id = facilitycode + '-' + diseasecode + '-' + case_id;
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Dashboard',
+            href: '/dashboard',
+        },
+        {
+            title: 'Patient List',
+            href: '/patient',
+        },
+        {
+            title: 'Consultation List',
+            href: '/consultation',
+        },
+        {
+            title: 'Add Diphtheria Case',
+            href: `/diph/create?search=${case_id}`,
+        },
+    ];
     const form = useForm<DIPHForm>({
         resolver: zodResolver(diphFormSchema),
         defaultValues: {
-            // case_id: '',
-            patient_number: pat_number[0] as string,
+            case_id: case_id,
+            patient_number: patient_number,
             admitted: undefined,
             date_admitted: undefined,
             caregiver: '',
@@ -66,6 +95,7 @@ export default function create() {
             diphtheriatoxin: undefined,
             diphtheriatoxin_date: undefined,
             final_classi: undefined,
+            epi_id: epi_id,
             // user_id: undefined,
             // timestamp: undefined,
             // verification_level: undefined,
@@ -170,7 +200,13 @@ export default function create() {
                                         <FormItem>
                                             <div className="flex w-full items-start gap-x-8">
                                                 <div className="flex flex-col">
-                                                    <FormLabel className="mb-1">Patient Admitted:</FormLabel>
+                                                    <FormLabel className="mb-1">
+                                                        {' '}
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Patient Admitted:
+                                                    </FormLabel>
                                                 </div>
                                                 <RadioGroup
                                                     value={form.watch('admitted') ?? ''}
@@ -649,7 +685,6 @@ export default function create() {
                             </h4>
                             {diphtheria_dose === 'Y' ? (
                                 <>
-
                                     <div className="flex flex-row items-start gap-x-32">
                                         <FormField
                                             control={form.control}
@@ -672,7 +707,9 @@ export default function create() {
 
                                                         <RadioGroup
                                                             value={form.watch('total_dose') ?? ''}
-                                                            onValueChange={(val) => form.setValue('total_dose', val as 'None' | 1 | 2 | 3 | 'Unknown')}
+                                                            onValueChange={(val) =>
+                                                                form.setValue('total_dose', val as 'None' | 1 | 2 | 3 | 'Unknown')
+                                                            }
                                                             className="flex flex-row space-x-4"
                                                         >
                                                             {['None', 1, 2, 3, 'Unknown'].map((option) => (
@@ -691,7 +728,6 @@ export default function create() {
                                         />
                                     </div>
                                     <div>
-
                                         <FormField
                                             control={form.control}
                                             name="date_last_vaccination"
@@ -750,7 +786,9 @@ export default function create() {
                                                         <RadioGroup
                                                             disabled
                                                             value={form.watch('total_dose') ?? ''}
-                                                            onValueChange={(val) => form.setValue('total_dose', val as 'None' | 1 | 2 | 3 | 'Unknown')}
+                                                            onValueChange={(val) =>
+                                                                form.setValue('total_dose', val as 'None' | 1 | 2 | 3 | 'Unknown')
+                                                            }
                                                             className="flex flex-row space-x-4"
                                                         >
                                                             {['None', 1, 2, 3, 'Unknown'].map((option) => (
@@ -1096,7 +1134,8 @@ export default function create() {
                                             </FormItem>
                                         )}
                                     />
-                                ))}</div>
+                                ))}
+                            </div>
                             <div className="flex flex-row items-start gap-x-12">
                                 {[
                                     { id: 'swallowing', label: 'Swallowing' },

@@ -1,18 +1,9 @@
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { LoadingSpinner } from '@/components/ui/loadingSpinner';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
-import axios from 'axios';
 import { Head, Link, usePage } from '@inertiajs/react';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
 
-import { Label } from "@/components/ui/label";
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -25,10 +16,8 @@ import {
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table';
-import { MoreHorizontal, PencilLine, PlusCircleIcon, Trash2 } from 'lucide-react';
+import { Eye, MoreHorizontal, PencilLine, Trash2 } from 'lucide-react';
 import * as React from 'react';
-
-import { Input } from '@/components/ui/input';
 
 import TableSortHeader from '@/components/data-table/data-table-sort-header.jsx';
 import { DataTableViewOptions } from '@/components/data-table/data-table-view-options';
@@ -36,12 +25,12 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-import { toast } from 'sonner';
 import useDebouncedSearch from '@/hooks/use-debounced-search';
 import useSorting from '@/hooks/use-sorting';
+import axios from 'axios';
 import { Printer } from 'lucide-react';
-import { Eye } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import TableNoSortHeader from '../../../../../../../resources/js/components/data-table/data-table-no-sort-header';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -70,7 +59,7 @@ export default function Diph() {
     const [jsonData, setJsonData] = useState(null);
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [caseID, setcaseID] = useState('');
+    const [message, setMessage] = useState('');
 
     const { flash } = usePage().props;
 
@@ -79,20 +68,13 @@ export default function Diph() {
             toast(flash?.success);
         }
 
-        if (caseID) {
-            setLoading(true);
-            setJsonData(null); // Clear previous data
-            axios.post(`/api/jsonfile`, { 'case_id': caseID, 'pidsr_status': 'SENT' }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
-                .then(res => setJsonData(res.data))
-                .catch(err => console.error('Error fetching JSON:', err))
-                .finally(() => setLoading(false));
+        // if (open) {
+        //     window.location.reload();
+        // }
+        if (message) {
+            toast(message);
         }
-    }, [flash?.success, open, caseID]);
+    }, [flash?.success, open, message]);
 
     // const fetchData = async () => {
     //     try {
@@ -104,19 +86,65 @@ export default function Diph() {
     //     }
     // };
 
+    // async function fetchData(caseID) {
+    //     if (caseID) {
+    //         setLoading(true);
+    //         setJsonData(null); // Clear previous data
+    //         await axios
+    //             .post(
+    //                 `/api/jsonfile`,
+    //                 { case_id: caseID, pidsr_status: 'SENT' },
+    //                 {
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                         Accept: 'application/json',
+    //                     },
+    //                 },
+    //             )
+    //             .then(async (res) => {
+    //                 setJsonData(res.data);
+    //             })
+    //             .catch((err) => console.error('Error fetching JSON:', err))
+    //             .finally(() => {
+    //                 setLoading(false);
+    //             });
+    //     }
+    // }
+
+    async function fetchData(caseID) {
+        if (caseID) {
+            setLoading(true);
+            setJsonData(null); // Clear previous data
+            await axios
+                .post(
+                    `/api/jsonfile`,
+                    { case_id: caseID, pidsr_status: 'SENT' },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json',
+                        },
+                    },
+                )
+                .then((res) => setJsonData(res.data))
+                .catch((err) => console.error('Error fetching JSON:', err))
+                .finally(()=>setLoading(false));
+        }
+    }
 
     const { data: diph } = usePage().props.diph;
 
     type Diph = {
         id: string;
-        case_id: number;
+        case_id: string;
         admitted: string;
-        date_admitted: string,
-        specimen_id: string,
-        consultation_id: string,
+        date_admitted: string;
+        specimen_id: string;
+        consultation_id: string;
         patient: {
             id: string;
-            patient_number: string,
+            // patient_number: string,
+            // firstname:string,
             full_name: string;
         } | null;
     };
@@ -138,7 +166,7 @@ export default function Diph() {
     const columns: ColumnDef<Diph>[] = [
         {
             id: 'actions',
-            header: ({ }) => <TableNoSortHeader title="Actions" />,
+            header: ({}) => <TableNoSortHeader title="Actions" />,
             cell: ({ row }) => (
                 <center>
                     <DropdownMenu>
@@ -155,37 +183,20 @@ export default function Diph() {
                                     Edit Diphtheria Case
                                 </DropdownMenuItem>
                             </Link>
+                            <DropdownMenuSeparator />
 
-                            <Dialog >
-                                <DialogTrigger asChild>
-                                    <Button
-                                        variant="ghost"
-                                        className="w-full justify-start px-2 py-1.5 text-sm font-normal hover:bg-accent hover:text-accent-foreground flex items-center gap-2"
-                                        onClick={setcaseID(row.original.case_id)}> <Eye className="h-4 w-4" />
-                                        View Raw JSON
-                                    </Button>
-                                </DialogTrigger>
-
-                                <DialogContent className="max-w-7xl text-sm">
-                                    <DialogHeader>
-                                        <DialogTitle>JSON Format</DialogTitle>
-                                    </DialogHeader>
-
-                                    <div className="overflow-auto max-h-[70vh]">
-                                        {loading ? (
-                                            <p>Loading...</p>
-                                        ) : jsonData ? (
-                                            <pre className="text-xs whitespace-pre-wrap break-words">{JSON.stringify(jsonData, null, 2)}</pre>
-                                        ) : (
-                                            <p>No data available.</p>
-                                        )}
-                                    </div>
-                                </DialogContent>
-
-                            </Dialog>
-
-
-
+                            <DropdownMenuItem
+                                variant="ghost"
+                                className="hover:bg-accent hover:text-accent-foreground flex w-full items-center justify-start gap-2 px-2 py-1.5 text-sm font-normal"
+                                onClick={() => {
+                                    setOpen(true);
+                                    fetchData(row.original.case_id);
+                                }}
+                            >
+                                <Eye className="h-4 w-4" />
+                                View Raw JSON
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
 
                             <Link href={`/diph/${row.original.id}/print`}>
                                 <DropdownMenuItem>
@@ -198,25 +209,31 @@ export default function Diph() {
                             <DropdownMenuSeparator />
                             {!row.original.specimen_id && (
                                 <>
-                                    <sub><u>Laboratory</u></sub>
+                                    <sub>
+                                        <u>Laboratory</u>
+                                    </sub>
                                     <Link href={`/lab/create?id=${row.original.case_id}`}>
                                         <DropdownMenuItem>
                                             <PencilLine className="h-4 w-4" />
                                             Add Laboratory Data
                                         </DropdownMenuItem>
                                     </Link>
-                                    <DropdownMenuSeparator /></>
+                                    <DropdownMenuSeparator />
+                                </>
                             )}
                             {row.original.specimen_id && (
                                 <>
-                                    <sub><u>Laboratory</u></sub>
+                                    <sub>
+                                        <u>Laboratory</u>
+                                    </sub>
                                     <Link href={`/lab/${row.original.specimen_id}/edit`}>
                                         <DropdownMenuItem>
                                             <PencilLine className="h-4 w-4" />
                                             Edit Laboratory Data
                                         </DropdownMenuItem>
                                     </Link>
-                                    <DropdownMenuSeparator /></>
+                                    <DropdownMenuSeparator />
+                                </>
                             )}
                             {/* {row.original.diph?.[0]?.id && (
                                 <div><Link href={`/diph/${row.original.diph?.[0]?.id}/edit`}>
@@ -324,6 +341,23 @@ export default function Diph() {
             <Head title="Users" />
             <div className="w-full space-y-4 p-4">
                 <div className="flex items-center gap-2">
+                    <Dialog open={open} onOpenChange={setOpen}>
+                        <DialogContent className="max-w-7xl text-sm">
+                            <DialogHeader>
+                                <DialogTitle>JSON Format</DialogTitle>
+                            </DialogHeader>
+
+                            <div className="max-h-[70vh] overflow-auto">
+                                {loading ? (
+                                    <LoadingSpinner />
+                                ) : jsonData ? (
+                                    <pre className="text-xs break-words whitespace-pre-wrap">{JSON.stringify(jsonData, null, 2)}</pre>
+                                ) : (
+                                    <p>No data available.</p>
+                                )}
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                     {/* <TableToolbar
                         placeholder="Search user"
                         search={params?.search}

@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from "@/components/ui/label";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
@@ -10,25 +10,23 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Head, router } from '@inertiajs/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PatientForm, patientFormSchema } from './data/schema';
-import { title } from 'process';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard'
+        href: '/dashboard',
     },
     {
         title: 'Patient List',
-        href: '/patient'
+        href: '/patient',
     },
     {
         title: 'Add Patient',
         href: '/diph/patient/create',
     },
-
 ];
 
 export default function create({ provinces, regions, citymuns }) {
@@ -66,6 +64,7 @@ export default function create({ provinces, regions, citymuns }) {
     });
 
     const [sameAddress, setSameAddress] = useState(false);
+    const previousSameAddress = useRef<boolean>(sameAddress);
 
     function calculateAge(dobString) {
         const dob = new Date(dobString);
@@ -75,7 +74,6 @@ export default function create({ provinces, regions, citymuns }) {
         let months = today.getMonth() - dob.getMonth();
         let days = today.getDay() - dob.getDay();
 
-        console.log(years, months, days);
         if (days < 0) {
             months -= 1;
 
@@ -164,12 +162,12 @@ export default function create({ provinces, regions, citymuns }) {
 
     useEffect(() => {
         if (selectedRegionId === null || selectedRegionId === '') {
-            form.setValue('pat_address_prov', undefined);
-            form.setValue('pat_address_city', undefined);
+            form.setValue('pat_address_prov', '');
+            form.setValue('pat_address_city', '');
         }
         if (selectedPermRegionId === null || selectedPermRegionId === '') {
-            form.setValue('pat_perm_address_prov', undefined);
-            form.setValue('pat_perm_address_city', undefined);
+            form.setValue('pat_perm_address_prov', '');
+            form.setValue('pat_perm_address_city', '');
         }
         if (sameAddress) {
             form.setValue('pat_perm_address_reg', form.watch('pat_address_reg'));
@@ -177,14 +175,15 @@ export default function create({ provinces, regions, citymuns }) {
             form.setValue('pat_perm_address_city', form.watch('pat_address_city'));
             form.setValue('pat_perm_address_brgy', form.watch('pat_address_brgy'));
             form.setValue('pat_perm_address_street_name', form.watch('pat_address_street_name'));
-        }
-        else {
+        } else if(previousSameAddress.current){
             form.setValue('pat_perm_address_reg', '');
             form.setValue('pat_perm_address_prov', '');
             form.setValue('pat_perm_address_city', '');
             form.setValue('pat_perm_address_brgy', '');
             form.setValue('pat_perm_address_street_name', '');
         }
+
+        previousSameAddress.current = sameAddress;
     }, [selectedRegionId, selectedPermRegionId, sameAddress]);
 
     return (
@@ -205,7 +204,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>First Name:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    First Name:
+                                                </FormLabel>
                                             </div>
                                             <FormControl className="flex items-center">
                                                 <Input className="w-auto border-2 border-black" type="text" placeholder="First Name" {...field} />
@@ -222,15 +226,15 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Middle Name:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Middle Name:
+                                                </FormLabel>
                                             </div>
                                             <FormControl className="flex items-center">
-                                                <Input
-                                                    className="w-auto border-2 border-black"
-                                                    type="text"
-                                                    placeholder="Middle Name"
-                                                    {...field}
-                                                />
+                                                <Input className="w-auto border-2 border-black" type="text" placeholder="Middle Name" {...field} />
                                             </FormControl>
                                         </div>
                                         <FormMessage />
@@ -244,7 +248,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Last Name:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Last Name:
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Input className="w-auto border-2 border-black" type="text" placeholder="Last Name" {...field} />
@@ -266,12 +275,7 @@ export default function create({ provinces, regions, citymuns }) {
                                                 <FormLabel>Suffix Name:</FormLabel>
                                             </div>
                                             <FormControl>
-                                                <Input
-                                                    className="w-auto border-2 border-black"
-                                                    type="text"
-                                                    placeholder="Suffix Name"
-                                                    {...field}
-                                                />
+                                                <Input className="w-auto border-2 border-black" type="text" placeholder="Suffix Name" {...field} />
                                             </FormControl>
                                         </div>
                                         <FormMessage />
@@ -285,7 +289,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Sex:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Sex:
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('sex')}
@@ -326,7 +335,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Date of Birth:</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Date of Birth:
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Input
@@ -356,12 +370,15 @@ export default function create({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Age Year:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Age Year:
+                                                    </FormLabel>
                                                 </div>
                                                 <FormControl>
-                                                    <p className="justify-text h-8 w-10 rounded-sm border-2 border-black text-center">
-                                                        {age?.years}
-                                                    </p>
+                                                    <p className="justify-text h-8 w-10 rounded-sm border-2 border-black text-center">{age?.years}</p>
                                                 </FormControl>
                                             </div>
                                             <FormMessage />
@@ -375,7 +392,12 @@ export default function create({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Month:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Month:
+                                                    </FormLabel>
                                                 </div>
                                                 <FormControl>
                                                     <p className="justify-text h-8 w-10 rounded-sm border-2 border-black text-center">
@@ -394,12 +416,15 @@ export default function create({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Day:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Day:
+                                                    </FormLabel>
                                                 </div>
                                                 <FormControl>
-                                                    <p className="justify-text h-8 w-10 rounded-sm border-2 border-black text-center">
-                                                        {age?.days}
-                                                    </p>
+                                                    <p className="justify-text h-8 w-10 rounded-sm border-2 border-black text-center">{age?.days}</p>
                                                 </FormControl>
                                             </div>
                                             <FormMessage />
@@ -416,7 +441,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Member of Indigenous People :</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Member of Indigenous People :
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('member_of_IP')}
@@ -458,7 +488,12 @@ export default function create({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Indigenous People Tribe:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Indigenous People Tribe:
+                                                    </FormLabel>
                                                 </div>
                                                 <Select
                                                     value={form.watch('IP_tribe')}
@@ -466,39 +501,39 @@ export default function create({ provinces, regions, citymuns }) {
                                                         form.setValue(
                                                             'IP_tribe',
                                                             Number(val) as
-                                                            | 1
-                                                            | 2
-                                                            | 3
-                                                            | 4
-                                                            | 5
-                                                            | 6
-                                                            | 7
-                                                            | 8
-                                                            | 9
-                                                            | 10
-                                                            | 11
-                                                            | 12
-                                                            | 13
-                                                            | 14
-                                                            | 15
-                                                            | 16
-                                                            | 17
-                                                            | 18
-                                                            | 19
-                                                            | 20
-                                                            | 21
-                                                            | 22
-                                                            | 23
-                                                            | 24
-                                                            | 25
-                                                            | 26
-                                                            | 27
-                                                            | 28
-                                                            | 29
-                                                            | 30
-                                                            | 31
-                                                            | 32
-                                                            | 33,
+                                                                | 1
+                                                                | 2
+                                                                | 3
+                                                                | 4
+                                                                | 5
+                                                                | 6
+                                                                | 7
+                                                                | 8
+                                                                | 9
+                                                                | 10
+                                                                | 11
+                                                                | 12
+                                                                | 13
+                                                                | 14
+                                                                | 15
+                                                                | 16
+                                                                | 17
+                                                                | 18
+                                                                | 19
+                                                                | 20
+                                                                | 21
+                                                                | 22
+                                                                | 23
+                                                                | 24
+                                                                | 25
+                                                                | 26
+                                                                | 27
+                                                                | 28
+                                                                | 29
+                                                                | 30
+                                                                | 31
+                                                                | 32
+                                                                | 33,
                                                         );
                                                     }}
                                                     className="w-auto"
@@ -565,7 +600,12 @@ export default function create({ provinces, regions, citymuns }) {
                                         <FormItem>
                                             <div className="flex w-full items-center gap-x-2">
                                                 <div className="flex flex-col">
-                                                    <FormLabel>Indigenous People Tribe:</FormLabel>
+                                                    <FormLabel>
+                                                        <div className="text-red-500">
+                                                            <b>*</b>
+                                                        </div>
+                                                        Indigenous People Tribe:
+                                                    </FormLabel>
                                                 </div>
                                                 <Select
                                                     disabled
@@ -574,39 +614,39 @@ export default function create({ provinces, regions, citymuns }) {
                                                         form.setValue(
                                                             'IP_tribe',
                                                             Number(val) as
-                                                            | 1
-                                                            | 2
-                                                            | 3
-                                                            | 4
-                                                            | 5
-                                                            | 6
-                                                            | 7
-                                                            | 8
-                                                            | 9
-                                                            | 10
-                                                            | 11
-                                                            | 12
-                                                            | 13
-                                                            | 14
-                                                            | 15
-                                                            | 16
-                                                            | 17
-                                                            | 18
-                                                            | 19
-                                                            | 20
-                                                            | 21
-                                                            | 22
-                                                            | 23
-                                                            | 24
-                                                            | 25
-                                                            | 26
-                                                            | 27
-                                                            | 28
-                                                            | 29
-                                                            | 30
-                                                            | 31
-                                                            | 32
-                                                            | 33,
+                                                                | 1
+                                                                | 2
+                                                                | 3
+                                                                | 4
+                                                                | 5
+                                                                | 6
+                                                                | 7
+                                                                | 8
+                                                                | 9
+                                                                | 10
+                                                                | 11
+                                                                | 12
+                                                                | 13
+                                                                | 14
+                                                                | 15
+                                                                | 16
+                                                                | 17
+                                                                | 18
+                                                                | 19
+                                                                | 20
+                                                                | 21
+                                                                | 22
+                                                                | 23
+                                                                | 24
+                                                                | 25
+                                                                | 26
+                                                                | 27
+                                                                | 28
+                                                                | 29
+                                                                | 30
+                                                                | 31
+                                                                | 32
+                                                                | 33,
                                                         );
                                                     }}
                                                     className="w-auto"
@@ -743,7 +783,10 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel className="max-w-3xs break-word">
+                                                <FormLabel className="break-word max-w-3xs">
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
                                                     Facility Name of the Disease Reporting Unit based National Health Facility Registry:
                                                 </FormLabel>
                                             </div>
@@ -780,12 +823,7 @@ export default function create({ provinces, regions, citymuns }) {
                                                 <FormLabel>Phone Number:</FormLabel>
                                             </div>{' '}
                                             <FormControl>
-                                                <Input
-                                                    className="w-auto border-2 border-black"
-                                                    type="text"
-                                                    placeholder="Phone Number"
-                                                    {...field}
-                                                />
+                                                <Input className="w-auto border-2 border-black" type="text" placeholder="Phone Number" {...field} />
                                             </FormControl>
                                         </div>
                                         <FormMessage />
@@ -809,7 +847,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Region):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Region):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -842,7 +885,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Province):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Province):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -876,7 +924,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (City/Municipality):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (City/Municipality):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -910,7 +963,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Barangay):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Barangay):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('pat_address_brgy')}
@@ -948,11 +1006,16 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Street Name / House Number / Purok / Sitio):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Street Name / House Number / Purok / Sitio):
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Textarea
-                                                    className="border-2 border-black"
+                                                    className="border-2 border-black resize-none h-24 w-[400px]"
                                                     type="text"
                                                     placeholder="Street Name / House Number / Purok / Sitio"
                                                     {...field}
@@ -972,12 +1035,15 @@ export default function create({ provinces, regions, citymuns }) {
                         <div className="flex items-center space-x-2">
                             <Checkbox
                                 id="addresscheck"
-                                checked={sameAddress} onCheckedChange={(checked) => {
+                                checked={sameAddress}
+                                onCheckedChange={(checked) => {
                                     setSameAddress(!!checked);
                                 }}
                                 className="rounded-sm border-2 border-black"
                             />
-                            <Label htmlFor="addresscheck" className="text-sm leading-none font-medium">Check same as current address</Label>
+                            <Label htmlFor="addresscheck" className="text-sm leading-none font-medium">
+                                Check same as current address
+                            </Label>
                         </div>
                         <div className="flex flex-row items-start gap-x-8">
                             <FormField
@@ -987,7 +1053,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Region):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Region):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -1012,37 +1083,44 @@ export default function create({ provinces, regions, citymuns }) {
                                 )}
                             />
                         </div>
-                        <div className="flex flex-row items-start gap-x-8"><FormField
-                            control={form.control}
-                            name="pat_perm_address_prov"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex w-full items-center gap-x-2">
-                                        <div className="flex flex-col">
-                                            <FormLabel>Patient Current Address (Province):</FormLabel>
+                        <div className="flex flex-row items-start gap-x-8">
+                            <FormField
+                                control={form.control}
+                                name="pat_perm_address_prov"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex w-full items-center gap-x-2">
+                                            <div className="flex flex-col">
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Province):
+                                                </FormLabel>
+                                            </div>
+                                            <Select
+                                                value={String(field.value ?? '')}
+                                                onValueChange={(val) => {
+                                                    form.setValue('pat_perm_address_prov', String(val) ?? '');
+                                                }}
+                                                disabled={!selectedPermRegionId}
+                                            >
+                                                <SelectTrigger className="w-[300px]">
+                                                    <SelectValue placeholder="Please Select" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {filteredPermProvinces.map((prov) => (
+                                                        <SelectItem key={String(prov.id)} value={String(prov.id)} id={String(prov.id)}>
+                                                            {prov.province_name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
                                         </div>
-                                        <Select
-                                            value={String(field.value ?? '')}
-                                            onValueChange={(val) => {
-                                                form.setValue('pat_perm_address_prov', String(val) ?? '');
-                                            }}
-                                            disabled={!selectedPermRegionId}
-                                        >
-                                            <SelectTrigger className="w-[300px]">
-                                                <SelectValue placeholder="Please Select" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {filteredPermProvinces.map((prov) => (
-                                                    <SelectItem key={String(prov.id)} value={String(prov.id)} id={String(prov.id)}>
-                                                        {prov.province_name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                    <FormMessage />
-                                </FormItem>
-                            )} />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
                         <div className="flex flex-row items-start gap-x-8">
                             <FormField
@@ -1052,7 +1130,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (City/Municipality):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (City/Municipality):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={String(field.value ?? '')}
@@ -1086,7 +1169,12 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Barangay):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Barangay):
+                                                </FormLabel>
                                             </div>
                                             <Select
                                                 value={form.watch('pat_perm_address_brgy')}
@@ -1124,11 +1212,16 @@ export default function create({ provinces, regions, citymuns }) {
                                     <FormItem>
                                         <div className="flex w-full items-center gap-x-2">
                                             <div className="flex flex-col">
-                                                <FormLabel>Patient Current Address (Street Name / House Number / Purok / Sitio):</FormLabel>
+                                                <FormLabel>
+                                                    <div className="text-red-500">
+                                                        <b>*</b>
+                                                    </div>
+                                                    Patient Current Address (Street Name / House Number / Purok / Sitio):
+                                                </FormLabel>
                                             </div>
                                             <FormControl>
                                                 <Textarea
-                                                    className="border-2 border-black"
+                                                    className="border-2 border-black resize-none h-24 w-[400px]"
                                                     type="text"
                                                     placeholder="Street Name / House Number / Purok / Sitio"
                                                     {...field}

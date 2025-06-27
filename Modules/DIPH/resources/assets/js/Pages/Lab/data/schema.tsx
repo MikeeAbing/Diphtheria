@@ -52,7 +52,8 @@ export const labFormSchema = z
             })
             .optional(),
         typeoforganism: z.string({ invalid_type_error: 'Must be of type string' }).max(100).optional(),
-        interpretation: z.string({ invalid_type_error: 'Must be of type string' }).optional()
+        interpretation: z.string({ invalid_type_error: 'Must be of type string' }).optional(),
+        epi_id: z.string({required_error:'EPI ID is missing. Network issue...'})
     });
 
-export type LabForm = z.infer<typeof labFormSchema>; 
+export type LabForm = z.infer<typeof labFormSchema>;

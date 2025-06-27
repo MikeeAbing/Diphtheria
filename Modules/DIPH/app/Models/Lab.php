@@ -39,4 +39,8 @@ class Lab extends Model
         'last_modified_date_RITM',
         'API_labdata_ID',
     ];
+
+    public function diph(){
+        return $this->belongsTo(DIPH::class, 'case_id', 'case_id');
+    }
 }

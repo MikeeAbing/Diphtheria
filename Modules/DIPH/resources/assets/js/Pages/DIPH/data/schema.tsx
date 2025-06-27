@@ -14,10 +14,10 @@ import { z } from 'zod';
 const datetimeRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
 export const diphFormSchema = z
     .object({
-        // case_id: z.string().max(50).optional(),
+        case_id: z.string().max(50).optional(),
         patient_number: z.string({ required_error: 'Patient Number is missing' }).max(30),
         // disease_age: z.number().int().max(100),
-        admitted: z.enum(['Y', 'N'], { required_error: 'Choose either Yes or No', invalid_type_error: 'Must either be Yes or No' }),
+        admitted: z.enum(['Y', 'N'], { required_error: 'Choose either Yes or No', invalid_type_error: 'Must either be Yes or No' }).optional(),
         date_admitted: z
             .string()
             .refine((val) => val === '' || /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(val), {
@@ -86,8 +86,7 @@ export const diphFormSchema = z
                 message: 'Invalid date format. Please use YYYY-MM-DD or leave it empty.',
             })
             .optional(),
-        sourceinformation: z
-            .coerce
+        sourceinformation: z.coerce
             .number()
             .refine((val) => [1, 2, 3].includes(val), {
                 message: 'Source of Information must be only from among the following choices: Card, Recall, TCL',
@@ -98,14 +97,13 @@ export const diphFormSchema = z
         //         invalid_type_error: 'Source of Information must be only from among the following choices: Card, Recall, TCL',
         //     })
         //     .optional(),
-        known_exposure:
-            z
-                .coerce
-                .number()
-                .refine((val) => [1, 2, 3, 4].includes(val), {
-                    message: 'Known Exposure must only be from among the following choices: Confirmed Case, Probable Case, Carrier, or International Traveler',
-                })
-                .optional(),
+        known_exposure: z.coerce
+            .number()
+            .refine((val) => [1, 2, 3, 4].includes(val), {
+                message:
+                    'Known Exposure must only be from among the following choices: Confirmed Case, Probable Case, Carrier, or International Traveler',
+            })
+            .optional(),
         // z.preprocess(
         //     (val) => Number(val),
         //     z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]), {
@@ -140,13 +138,10 @@ export const diphFormSchema = z
                 invalid_type_error: 'Travel Details must be of type string',
             })
             .max(150),
-        date_onset: z
-            .string()
-            .refine((val) => val === '' || /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(val), {
-                message: 'Invalid date format. Please use YYYY-MM-DD or leave it empty.',
-            })
-            .optional(),
-            pidsr_status: z.string().max(10).optional(),
+        date_onset: z.string().refine((val) => val === '' || /^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(val), {
+            message: 'Invalid date format. Please use YYYY-MM-DD or leave it empty.',
+        }),
+        pidsr_status: z.string().max(10).optional(),
         fever: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),
         cough: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),
         sorethroat: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),
@@ -155,12 +150,10 @@ export const diphFormSchema = z
         breathing: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),
         other_symptoms: z.enum(['Y', 'N'], { invalid_type_error: 'Must either be Yes or No' }).optional(),
         other_symptoms_specify: z.string().max(150).optional(),
-        outcome:
-            z
-                .coerce
-                .number()
-                .refine((val) => [1, 2, 3].includes(val))
-                .optional(),
+        outcome: z.coerce
+            .number()
+            .refine((val) => [1, 2, 3].includes(val))
+            .optional(),
         // z.preprocess(
         //     (val) => Number(val),
         //     z.union([z.literal(1), z.literal(2), z.literal(3)])).optional(),
@@ -191,14 +184,13 @@ export const diphFormSchema = z
         //         message: 'Invalid date format. Please use YYYY-MM-DD.',
         //     })
         //     .optional(),
-        final_classi:
-            z
-                .coerce
-                .number()
-                .refine((val) => [1, 2, 3, 4, 5].includes(val), {
-                    message: 'Must be one of 1, 2, 3, 4, or 5',
-                })
-                .optional()
+        final_classi: z.coerce
+            .number()
+            .refine((val) => [1, 2, 3, 4, 5].includes(val), {
+                message: 'Must be one of 1, 2, 3, 4, or 5',
+            })
+            .optional(),
+        epi_id: z.string({ required_error: 'EPI ID is required. Network error...' }),
         // z.preprocess(
         //     (val) => Number(val),
         //     z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)])).optional(),
@@ -325,6 +317,30 @@ export const diphFormSchema = z
                 path: ['antibiotic_date'],
                 code: z.ZodIssueCode.custom,
                 message: 'Date of antibiotic therapy is required',
+            });
+        }
+        if (values.date_report === undefined && values.date_report === '') {
+            ctx.addIssue({
+                path: ['reporter'],
+                code: z.ZodIssueCode.custom,
+                message: 'Name of reporter must be provided',
+            });
+            ctx.addIssue({
+                path: ['reporter_no'],
+                code: z.ZodIssueCode.custom,
+                message: 'Contact number of reporter must be provided',
+            });
+        }
+        if (values.date_investigation === undefined && values.date_investigation === '') {
+            ctx.addIssue({
+                path: ['investigator'],
+                code: z.ZodIssueCode.custom,
+                message: 'Name of investigator must be provided',
+            });
+            ctx.addIssue({
+                path: ['investigator_no'],
+                code: z.ZodIssueCode.custom,
+                message: 'Contact number of investigator must be provided',
             });
         }
     });

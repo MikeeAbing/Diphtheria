@@ -12,12 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('case_report', function (Blueprint $table) {
-            //Ensure patient_number exists
-            $table->string('patient_number')->change();
+            //Ensure case_id exists
+            $table->string('case_id')->change();
+
+            // //Add foreign key constraint
+            // $table->foreign('patient_number')
+            // ->references('patient_number')
+            // ->on('patient_info')
+            // ->onDelete('cascade')
+            // ->onUpdate('cascade');
 
             //Add foreign key constraint
-            $table->foreign('patient_number')
-            ->references('patient_number')
+            $table->foreign('case_id')
+            ->references('case_id')
             ->on('patient_info')
             ->onDelete('cascade')
             ->onUpdate('cascade');
